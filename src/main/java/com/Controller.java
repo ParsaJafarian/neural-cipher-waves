@@ -1,4 +1,4 @@
-package com.wavesneuralnetwork;
+package com;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

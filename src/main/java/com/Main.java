@@ -1,4 +1,4 @@
-package com.wavesneuralnetwork;
+package com;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
