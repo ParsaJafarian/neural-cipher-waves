@@ -4,6 +4,8 @@ module com.wavesneuralnetwork {
 
     requires org.kordamp.bootstrapfx.core;
 
-    opens com.wavesneuralnetwork to javafx.fxml;
-    exports com.wavesneuralnetwork;
+    opens com to javafx.fxml;
+    exports com;
+    exports com.nn;
+    opens com.nn to javafx.fxml;
 }
