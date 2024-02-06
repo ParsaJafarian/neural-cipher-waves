@@ -2,14 +2,12 @@ package com.nn;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Neural network class for creating and training neural networks.
  */
 public class Network {
-    private final double learningRate;
     private final int[] sizes;
     private final int numLayers;
     private final Matrix[] weights, biases;
@@ -44,7 +42,6 @@ public class Network {
             biases[i] = new Matrix(sizes[i + 1], 1).map(x -> Math.random() * 2 - 1);
         }
 
-        this.learningRate = learningRate;
         this.sizes = sizes;
         this.numLayers = sizes.length;
         this.activationFunction = activationFunction;
@@ -85,16 +82,77 @@ public class Network {
         return outputs;
     }
 
+    private static void shuffleArray(Matrix[] array) {
+        int index;
+        Matrix temp;
+        Random random = new Random();
+        for (int i = array.length - 1; i > 0; i--)
+        {
+            index = random.nextInt(i + 1);
+            temp = array[index];
+            array[index] = array[i];
+            array[i] = temp;
+        }
+    }
+
+    public void sgd(Matrix[] trainingData, int epochs, int miniBatchSize, double learningRate) {
+
+        //shuffle the training data
+        for (int i = 0; i < epochs; i++) {
+            shuffleArray(trainingData);
+            for (int j = 0; j < trainingData.length; j += miniBatchSize) {
+                Matrix[] miniBatch = Arrays.copyOfRange(trainingData, j, j + miniBatchSize);
+                updateMiniBatch(miniBatch, learningRate);
+            }
+        }
+    }
+
+    private void updateMiniBatch(Matrix[] miniBatch, double learningRate) {
+        Matrix[] nablaB = new Matrix[biases.length];
+        Matrix[] nablaW = new Matrix[weights.length];
+        for (int i = 0; i < biases.length; i++) {
+            nablaB[i] = new Matrix(biases[i].getRows(), biases[i].getCols());
+        }
+        for (int i = 0; i < weights.length; i++) {
+            nablaW[i] = new Matrix(weights[i].getRows(), weights[i].getCols());
+        }
+
+        for (Matrix x : miniBatch) {
+            Matrix[] deltaNablaB, deltaNablaW;
+            deltaNablaB = new Matrix[biases.length];
+            deltaNablaW = new Matrix[weights.length];
+            for (int i = 0; i < biases.length; i++) {
+                deltaNablaB[i] = new Matrix(biases[i].getRows(), biases[i].getCols());
+            }
+            for (int i = 0; i < weights.length; i++) {
+                deltaNablaW[i] = new Matrix(weights[i].getRows(), weights[i].getCols());
+            }
+
+//            backprop(x, deltaNablaB, deltaNablaW);
+
+            for (int i = 0; i < biases.length; i++)
+                nablaB[i] = nablaB[i].add(deltaNablaB[i]);
+            for (int i = 0; i < weights.length; i++)
+                nablaW[i] = nablaW[i].add(deltaNablaW[i]);
+        }
+
+        for (int i = 0; i < biases.length; i++)
+            biases[i] = biases[i].sub(nablaB[i].multiply(learningRate / miniBatch.length));
+        for (int i = 0; i < weights.length; i++)
+            weights[i] = weights[i].sub(nablaW[i].multiply(learningRate / miniBatch.length));
+    }
+
+    public Matrix costDerivative(@NotNull Matrix outputActivations, Matrix y) {
+        return outputActivations.sub(y);
+    }
+
+
     public int getNumLayers() {
         return numLayers;
     }
 
     public int[] getSizes() {
         return sizes;
-    }
-
-    public double getLearningRate() {
-        return learningRate;
     }
 
     public Matrix[] getWeights() {
@@ -112,7 +170,6 @@ public class Network {
     @Override
     public String toString() {
         return "Network{" +
-                "learningRate=" + learningRate +
                 ", sizes=" + Arrays.toString(sizes) +
                 ", numLayers=" + numLayers +
                 ", weights=" + Arrays.toString(weights) +

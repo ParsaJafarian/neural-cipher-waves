@@ -182,4 +182,16 @@ class Matrix {
                 }
         return index;
     }
+
+    /**
+     * @param k scalar to multiply the matrix by
+     * @return a new matrix that is the result of multiplying this matrix by k
+     */
+    public Matrix multiply(double k) {
+        Matrix result = new Matrix(rows, cols);
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                result.data[i][j] = data[i][j] * k;
+        return result;
+    }
 }
