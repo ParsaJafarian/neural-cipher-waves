@@ -3,6 +3,7 @@ module com.wavesneuralnetwork {
     requires javafx.fxml;
 
     requires org.kordamp.bootstrapfx.core;
+    requires org.jetbrains.annotations;
 
     opens com to javafx.fxml;
     exports com;
