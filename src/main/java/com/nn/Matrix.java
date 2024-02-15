@@ -80,7 +80,7 @@ class Matrix {
      * @param m matrix to subtract
      * @return a new matrix that is the difference of this matrix and m
      */
-    public Matrix sub(@NotNull Matrix m) {
+    public Matrix subtract(@NotNull Matrix m) {
         if (rows != m.rows || cols != m.cols)
             throw new IllegalArgumentException("Invalid matrix size");
 
@@ -107,7 +107,7 @@ class Matrix {
      * @param m matrix to multiply
      * @return a new matrix that is the Hadamard product of this matrix and m
      */
-    public Matrix hadamard(@NotNull Matrix m) {
+    public Matrix multiply(@NotNull Matrix m) {
         if (rows != m.rows || cols != m.cols)
             throw new IllegalArgumentException("Invalid matrix size");
 
@@ -132,6 +132,18 @@ class Matrix {
             for (int j = 0; j < m.cols; j++)
                 for (int k = 0; k < cols; k++)
                     result.data[i][j] += data[i][k] * m.data[k][j];
+        return result;
+    }
+
+    /**
+     * @param scalar scalar to multiply
+     * @return a new matrix that is the product of this matrix and the scalar
+     */
+    public Matrix multiply(double scalar) {
+        Matrix result = new Matrix(rows, cols);
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                result.data[i][j] = data[i][j] * scalar;
         return result;
     }
 
