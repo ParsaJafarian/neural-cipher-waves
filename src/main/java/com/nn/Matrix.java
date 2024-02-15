@@ -104,6 +104,7 @@ class Matrix {
 
     /**
      * Hadamard product is the element-wise product of two matrices
+     *
      * @param m matrix to multiply
      * @return a new matrix that is the Hadamard product of this matrix and m
      */
@@ -120,6 +121,7 @@ class Matrix {
 
     /**
      * Dot product is the matrix product of two matrices
+     *
      * @param m matrix to multiply
      * @return a new matrix that is the dot product of this matrix and m
      */
@@ -149,6 +151,7 @@ class Matrix {
 
     /**
      * map applies a function to each element of the matrix
+     *
      * @param f function to apply
      * @return a new matrix that is the result of applying the function to each element of this matrix
      */
@@ -181,7 +184,7 @@ class Matrix {
      * @return the index of the maximum element in the matrix
      */
     public int maxIndex() {
-        if(cols != 1)
+        if (cols != 1)
             throw new IllegalArgumentException("Invalid matrix size");
 
         double max = Double.NEGATIVE_INFINITY;
