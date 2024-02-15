@@ -4,16 +4,36 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Neural network class for creating and training neural networks.
  */
 public class Network {
-    private final double learningRate;
+    private double learningRate;
+    private static final HashMap<String, CostFunction> costFunctions = new HashMap<>() {{
+        put("quadratic", CostFunction.QUADRATIC);
+    }};
+    /**
+     * An array of sizes of the layers in the network.
+     * Each element represents a layer while the value represents the number of neurons in that layer.
+     */
     private final int[] sizes;
     private final int numLayers;
-    private final Matrix[] weights, biases;
-    private final String activationFunction;
+    /**
+     * An array of weights matrices for each layer in the network.
+     * The weights matrix for each layer is of size (n x m) where n is the number of neurons
+     * in the next layer and m is the number of neurons in the current layer.
+     */
+    private final Matrix[] weights;
+    /**
+     * An array of biases vectors for each layer in the network.
+     * The biases vector for each layer is of size (n x 1) where n is the number of neurons in that layer.
+     */
+    private final Matrix[] biases;
+    private final ActivationFunction activationFunction;
+    private final CostFunction costFunction;
     private static final HashMap<String, ActivationFunction> activationFunctions = new HashMap<>() {{
         put("sigmoid", ActivationFunction.SIGMOID);
         put("tanh", ActivationFunction.TANH);
@@ -21,11 +41,14 @@ public class Network {
     }};
 
     /**
-     * @param learningRate learning rate of the network
+     * Constructor for the network.
+     *
+     * @param learningRate       learning rate of the network
      * @param activationFunction activation function of the network
-     * @param sizes sizes of the layers in the network
+     * @param costFunction       cost function of the network
+     * @param sizes              sizes of the layers in the network.
      */
-    public Network(double learningRate, String activationFunction, int @NotNull ... sizes) {
+    public Network(double learningRate, String activationFunction, String costFunction, int @NotNull ... sizes) {
         if (learningRate <= 0.0)
             throw new IllegalArgumentException("Learning rate must be positive");
         if (sizes.length < 2)
@@ -34,6 +57,8 @@ public class Network {
             throw new IllegalArgumentException("Invalid layer sizes");
         if (!activationFunctions.containsKey(activationFunction))
             throw new IllegalArgumentException("Activation function not found");
+        if (!costFunctions.containsKey(costFunction))
+            throw new IllegalArgumentException("Cost function not found");
 
         //initialize weights and biases
         this.weights = new Matrix[sizes.length - 1];
@@ -47,7 +72,8 @@ public class Network {
         this.learningRate = learningRate;
         this.sizes = sizes;
         this.numLayers = sizes.length;
-        this.activationFunction = activationFunction;
+        this.activationFunction = activationFunctions.get(activationFunction);
+        this.costFunction = costFunctions.get(costFunction);
 
 //        for (int i = 0; i < sizes.length; i++) {
 //            ActivationFunction function = activationFunctions.get(activationFunction);
@@ -58,19 +84,23 @@ public class Network {
 
     /**
      * Constructor with default activation function of sigmoid.
+     *
      * @param learningRate learning rate of the network
-     * @param sizes sizes of the layers in the network
+     * @param sizes        sizes of the layers in the network
      */
     public Network(double learningRate, int... sizes) {
-        this(learningRate, "sigmoid", sizes);
+        this(learningRate, "sigmoid", "quadratic", sizes);
     }
 
     /**
      * Feed forward the inputs through the network with the current weights and biases and activation function.
-     * @param inputs input to the network
+     *
+     * @param inputs      input to the network
+     * @param activations array to store the activations of the network (passed in as an empty array)
+     * @param zs          array to store the z values of the network (passed in as an empty array)
      * @return the output of the network
      */
-    public Matrix feedForward(@NotNull Matrix inputs) {
+    private Matrix feedForward(@NotNull Matrix inputs, Matrix[] activations, Matrix[] zs) {
         //if input size is not equal to the first layer size and its not a column vector, throw an exception
         if (inputs.getRows() != sizes[0] || inputs.getCols() != 1)
             throw new IllegalArgumentException("Invalid input size");
@@ -78,11 +108,122 @@ public class Network {
         Matrix outputs = inputs.clone();
 
         for (int i = 0; i < numLayers - 1; i++) {
-            //o = activationFunction(w * i + b)
-            outputs = activationFunctions.get(activationFunction).function(weights[i].dot(inputs).add(biases[i]));
+            Matrix z = weights[i].dot(outputs).add(biases[i]);
+            zs[i] = z;
+            outputs = activationFunctions.get(activationFunction).function(z);
+            activations[i] = outputs;
         }
 
         return outputs;
+    }
+
+    private Matrix feedForward(@NotNull Matrix inputs) {
+        return feedForward(inputs, new Matrix[numLayers - 1], new Matrix[numLayers - 1]);
+    }
+
+    private static void shuffleData(Matrix[] ar) {
+        // If running on Java 6 or older, use `new Random()` on RHS here
+        Random rnd = ThreadLocalRandom.current();
+        for (int i = ar.length - 1; i > 0; i--) {
+            int index = rnd.nextInt(i + 1);
+            // Simple swap
+            Matrix a = ar[index];
+            ar[index] = ar[i];
+            ar[i] = a;
+        }
+    }
+
+    public void sgd(Matrix[] trainingData, Matrix[] testData, int epochs, int miniBatchSize, double learningRate) {
+        for (int i = 0; i < epochs; i++) {
+            shuffleData(trainingData);
+
+            for (int j = 0; j < trainingData.length; j += miniBatchSize) {
+                Matrix[] miniBatch = Arrays.copyOfRange(trainingData, j, j + miniBatchSize);
+                updateMiniBatch(miniBatch, learningRate);
+            }
+
+            System.out.println("Epoch " + i + " complete");
+            if (testData != null) {
+                System.out.println("Accuracy: " + evaluate(testData) + " / " + testData.length);
+            }
+        }
+    }
+
+    private double evaluate(Matrix @NotNull [] testData) {
+        if(testData.length == 0)
+            throw new IllegalArgumentException("Test data is empty");
+
+        int correct = 0;
+        for (Matrix data : testData) {
+            Matrix output = feedForward(data);
+            if (output.maxIndex() == data.maxIndex())
+                correct++;
+        }
+        return (double) correct / testData.length;
+    }
+
+    private void updateMiniBatch(Matrix[] miniBatch, double learningRate) {
+        Matrix[] nablaB = new Matrix[biases.length];
+        Matrix[] nablaW = new Matrix[weights.length];
+
+        for (int i = 0; i < nablaB.length; i++)
+            nablaB[i] = new Matrix(biases[i].getRows(), biases[i].getCols());
+
+        for (int i = 0; i < nablaW.length; i++)
+            nablaW[i] = new Matrix(weights[i].getRows(), weights[i].getCols());
+
+        for (Matrix inputs : miniBatch) {
+            Matrix[] deltaNablaB, deltaNablaW;
+            deltaNablaB = new Matrix[biases.length];
+            deltaNablaW = new Matrix[weights.length];
+
+            for (int i = 0; i < deltaNablaB.length; i++)
+                deltaNablaB[i] = new Matrix(biases[i].getRows(), biases[i].getCols());
+
+            for (int i = 0; i < deltaNablaW.length; i++)
+                deltaNablaW[i] = new Matrix(weights[i].getRows(), weights[i].getCols());
+
+            backpropagation(inputs, deltaNablaB, deltaNablaW);
+
+            for (int i = 0; i < nablaB.length; i++)
+                nablaB[i] = nablaB[i].add(deltaNablaB[i]);
+
+            for (int i = 0; i < nablaW.length; i++)
+                nablaW[i] = nablaW[i].add(deltaNablaW[i]);
+        }
+
+        for (int i = 0; i < biases.length; i++)
+            biases[i] = biases[i].subtract(nablaB[i].multiply(learningRate / miniBatch.length));
+
+        for (int i = 0; i < weights.length; i++)
+            weights[i] = weights[i].subtract(nablaW[i].multiply(learningRate / miniBatch.length));
+
+    }
+
+    private void backpropagation(Matrix inputs, Matrix[] deltaNablaB, Matrix[] deltaNablaW) {
+        //feedforward
+        Matrix[] activations = new Matrix[numLayers - 1];
+        Matrix[] zs = new Matrix[numLayers - 1];
+
+        //feedforward (store the activations and zs)
+        feedForward(inputs, activations, zs);
+
+        //backward pass
+        //delta = (a - y) (+) f'(z)
+        Matrix delta = costFunction.derivative(inputs, activations[activations.length - 1]).multiply(activationFunction.derivative(zs[zs.length - 1]));
+
+        deltaNablaB[deltaNablaB.length - 1] = delta;
+        deltaNablaW[deltaNablaW.length - 1] = delta.dot(activations[activations.length - 2].transpose());
+
+        for (int i = 2; i < numLayers; i++) {
+            Matrix z = zs[zs.length - i];
+            Matrix sp = activationFunction.derivative(z);
+            //delta = (w^T * delta) (+) f'(z)
+            delta = weights[weights.length - i + 1].transpose().dot(delta).multiply(sp);
+            deltaNablaB[deltaNablaB.length - i] = delta;
+            //deltaNablaW = delta * a^(l-1)
+            deltaNablaW[deltaNablaW.length - i] = delta.dot(activations[activations.length - i - 1].transpose());
+        }
     }
 
     public int getNumLayers() {
@@ -93,10 +234,6 @@ public class Network {
         return sizes;
     }
 
-    public double getLearningRate() {
-        return learningRate;
-    }
-
     public Matrix[] getWeights() {
         return weights;
     }
@@ -105,14 +242,13 @@ public class Network {
         return biases;
     }
 
-    public String getActivationFunction() {
+    public ActivationFunction getActivationFunction() {
         return activationFunction;
     }
 
     @Override
     public String toString() {
         return "Network{" +
-                "learningRate=" + learningRate +
                 ", sizes=" + Arrays.toString(sizes) +
                 ", numLayers=" + numLayers +
                 ", weights=" + Arrays.toString(weights) +
@@ -121,4 +257,11 @@ public class Network {
                 '}';
     }
 
+    public double getLearningRate() {
+        return learningRate;
+    }
+
+    public void setLearningRate(double learningRate) {
+        this.learningRate = learningRate;
+    }
 }
