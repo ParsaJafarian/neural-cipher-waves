@@ -25,9 +25,17 @@ enum ActivationFunction {
             return m.map(x -> 1 / (1 + Math.exp(-((double) x))));
         }
 
+        public double function(double x) {
+            return 1 / (1 + Math.exp(-x));
+        }
+
         @Override
         public Matrix derivative(Matrix m) {
             return m.map(x -> (double) x * (1 - (double) x));
+        }
+
+        public double derivative(double x) {
+            return x * (1 - x);
         }
     },
     /**
@@ -43,9 +51,17 @@ enum ActivationFunction {
             return m.map(x -> Math.tanh((double) x));
         }
 
+        public double function(double x) {
+            return Math.tanh(x);
+        }
+
         @Override
         public Matrix derivative(Matrix m) {
             return m.map(x -> 1 - Math.pow((double) x, 2));
+        }
+
+        public double derivative(double x) {
+            return 1 - Math.pow(x, 2);
         }
     },
     /**
@@ -61,9 +77,17 @@ enum ActivationFunction {
             return m.map(x -> Math.max(0, (double) x));
         }
 
+        public double function(double x) {
+            return Math.max(0, x);
+        }
+
         @Override
         public Matrix derivative(Matrix m) {
             return m.map(x -> (double) x > 0 ? 1 : 0);
+        }
+
+        public double derivative(double x) {
+            return x > 0 ? 1 : 0;
         }
     };
 
@@ -73,10 +97,14 @@ enum ActivationFunction {
      */
     public abstract Matrix function(Matrix m);
 
+    public abstract double function(double x);
+
     /**
      * @param m matrix to apply the derivative function to
      * @return a new matrix that is the result of applying the derivative of the function to each element of the input matrix
      */
     public abstract Matrix derivative(Matrix m);
+
+    public abstract double derivative(double x);
 
 }

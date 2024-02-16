@@ -69,7 +69,6 @@ public class Network {
             biases[i] = new Matrix(sizes[i + 1], 1).map(x -> Math.random() * 2 - 1);
         }
 
-        this.learningRate = learningRate;
         this.sizes = sizes;
         this.numLayers = sizes.length;
         this.activationFunction = activationFunctions.get(activationFunction);
