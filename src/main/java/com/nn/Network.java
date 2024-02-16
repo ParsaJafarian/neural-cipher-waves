@@ -73,6 +73,7 @@ public class Network {
         this.numLayers = sizes.length;
         this.activationFunction = activationFunctions.get(activationFunction);
         this.costFunction = costFunctions.get(costFunction);
+        this.learningRate = learningRate;
 
     }
 

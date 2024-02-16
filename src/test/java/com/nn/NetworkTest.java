@@ -28,7 +28,7 @@ public class NetworkTest {
         assert n.getCostFunction() == CostFunction.QUADRATIC;
 
         // Check Learning Rate
-        assert n.getLearningRate() == 2;
+        assert n.getLearningRate() == 2.0;
     }
 
     @Test
@@ -47,6 +47,4 @@ public class NetworkTest {
             assert output.data[i][0] <= 1;
         }
     }
-
-
 }

@@ -1,5 +1,6 @@
 package com;
 
+import com.nn.Network;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,6 +19,8 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        Network n = new Network(10, 3, 1);
+        System.out.println(n.getLearningRate());
         launch();
     }
 }
