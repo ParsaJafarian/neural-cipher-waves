@@ -75,11 +75,6 @@ public class Network {
         this.activationFunction = activationFunctions.get(activationFunction);
         this.costFunction = costFunctions.get(costFunction);
 
-//        for (int i = 0; i < sizes.length; i++) {
-//            ActivationFunction function = activationFunctions.get(activationFunction);
-//            Matrix nextInputs = i == 0 ? new Matrix(sizes[i], 1) : new Matrix(sizes[i - 1], 1);
-//            layers[i] = new Layer(sizes[i], nextInputs, function);
-//        }
     }
 
     /**
@@ -101,7 +96,7 @@ public class Network {
      * @return the output of the network
      */
     private Matrix feedForward(@NotNull Matrix inputs, Matrix[] activations, Matrix[] zs) {
-        //if input size is not equal to the first layer size and its not a column vector, throw an exception
+        //if input size is not equal to the first layer size and it's not a column vector, throw an exception
         if (inputs.getRows() != sizes[0] || inputs.getCols() != 1)
             throw new IllegalArgumentException("Invalid input size");
 
@@ -110,18 +105,18 @@ public class Network {
         for (int i = 0; i < numLayers - 1; i++) {
             Matrix z = weights[i].dot(outputs).add(biases[i]);
             zs[i] = z;
-            outputs = activationFunctions.get(activationFunction).function(z);
+            outputs = activationFunction.function(z);
             activations[i] = outputs;
         }
 
         return outputs;
     }
 
-    private Matrix feedForward(@NotNull Matrix inputs) {
+    Matrix feedForward(@NotNull Matrix inputs) {
         return feedForward(inputs, new Matrix[numLayers - 1], new Matrix[numLayers - 1]);
     }
 
-    private static void shuffleData(Matrix[] ar) {
+    private static void shuffleData(Matrix @NotNull [] ar) {
         // If running on Java 6 or older, use `new Random()` on RHS here
         Random rnd = ThreadLocalRandom.current();
         for (int i = ar.length - 1; i > 0; i--) {
@@ -133,13 +128,13 @@ public class Network {
         }
     }
 
-    public void sgd(Matrix[] trainingData, Matrix[] testData, int epochs, int miniBatchSize, double learningRate) {
+    public void sgd(Matrix[] trainingData, Matrix[] testData, int epochs, int miniBatchSize) {
         for (int i = 0; i < epochs; i++) {
             shuffleData(trainingData);
 
             for (int j = 0; j < trainingData.length; j += miniBatchSize) {
                 Matrix[] miniBatch = Arrays.copyOfRange(trainingData, j, j + miniBatchSize);
-                updateMiniBatch(miniBatch, learningRate);
+                updateMiniBatch(miniBatch);
             }
 
             System.out.println("Epoch " + i + " complete");
@@ -162,7 +157,7 @@ public class Network {
         return (double) correct / testData.length;
     }
 
-    private void updateMiniBatch(Matrix[] miniBatch, double learningRate) {
+    private void updateMiniBatch(Matrix[] miniBatch) {
         Matrix[] nablaB = new Matrix[biases.length];
         Matrix[] nablaW = new Matrix[weights.length];
 
@@ -200,7 +195,7 @@ public class Network {
 
     }
 
-    private void backpropagation(Matrix inputs, Matrix[] deltaNablaB, Matrix[] deltaNablaW) {
+     void backpropagation(Matrix inputs, Matrix @NotNull [] deltaNablaB, Matrix @NotNull [] deltaNablaW) {
         //feedforward
         Matrix[] activations = new Matrix[numLayers - 1];
         Matrix[] zs = new Matrix[numLayers - 1];
@@ -235,11 +230,11 @@ public class Network {
     }
 
     public Matrix[] getWeights() {
-        return weights;
+        return weights.clone();
     }
 
     public Matrix[] getBiases() {
-        return biases;
+        return biases.clone();
     }
 
     public ActivationFunction getActivationFunction() {
@@ -263,5 +258,9 @@ public class Network {
 
     public void setLearningRate(double learningRate) {
         this.learningRate = learningRate;
+    }
+
+    public CostFunction getCostFunction() {
+        return costFunction;
     }
 }

@@ -20,7 +20,7 @@ import java.util.function.Function;
 class Matrix {
     private final int rows;
     private final int cols;
-    private final double[][] data;
+    final double[][] data;
 
     /**
      * @param rows number of rows
@@ -29,8 +29,6 @@ class Matrix {
     public Matrix(int rows, int cols) {
         if (rows <= 0 || cols <= 0)
             throw new IllegalArgumentException("Invalid matrix size");
-        if (rows == 1 && cols == 1)
-            throw new IllegalArgumentException("Use a scalar instead of a matrix");
 
         this.rows = rows;
         this.cols = cols;
@@ -178,6 +176,16 @@ class Matrix {
                 ", cols=" + cols +
                 ", data=" + Arrays.toString(data) +
                 '}';
+    }
+
+    public boolean equals(@NotNull Matrix m) {
+        if (rows != m.rows || cols != m.cols)
+            return false;
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                if (data[i][j] != m.data[i][j])
+                    return false;
+        return true;
     }
 
     /**
