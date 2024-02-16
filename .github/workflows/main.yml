@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: 1 - Checkout main branch from GitHub
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Runs a single command using the runners shell
       - name: 2 - Set up JDK 18
@@ -37,8 +37,11 @@ jobs:
       - name: 3 - Build Maven Project
         run: mvn -B package --file pom.xml
 
-      - name: 4 - List the current directory
+      - name: 4 - Test the Maven Project
+        run: mvn test
+
+      - name: 5 - List the current directory
         run: ls -a 
 
-      - name: 5 - List the target directory
+      - name: 6 - List the target directory
         run: ls -a target  
