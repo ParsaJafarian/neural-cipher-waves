@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.LinkedList;
 
 public class Main extends Application {
     @Override
@@ -19,8 +20,6 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        Network n = new Network(10, 3, 1);
-        System.out.println(n.getLearningRate());
         launch();
     }
 }

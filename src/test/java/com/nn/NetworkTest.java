@@ -50,7 +50,7 @@ public class NetworkTest {
 
     @Test
     public void testSGD() {
-        Network n = new Network(0.05, 2, 1); //2 input neurons, 1 output neuron
+        Network n = new Network(0.05, 2,1, 1); //2 input neurons, 1 output neuron
         Matrix[][] trainingData = new Matrix[10][2];
 
         double[] x =  {1,2,3,4,5,6,7,8,9,10};

@@ -106,7 +106,7 @@ public class Network {
             Matrix z = weights[i].dot(outputs).add(biases[i]);
             zs[i] = z;
             outputs = activationFunction.f(z);
-            activations[i] = outputs;
+            activations[i+1] = outputs;
         }
 
         return outputs;
@@ -197,6 +197,7 @@ public class Network {
             for (int i = 0; i < deltaNablaW.length; i++)
                 deltaNablaW[i] = new Matrix(weights[i].getRows(), weights[i].getCols());
 
+            //error in backpropa
             backpropagation(inputs, deltaNablaB, deltaNablaW);
 
             for (int i = 0; i < nablaB.length; i++)
@@ -226,8 +227,10 @@ public class Network {
         Matrix x = inputs[0];
         Matrix y = inputs[1];
 
-        Matrix[] activations = new Matrix[numLayers - 1];
-        Matrix[] zs = new Matrix[numLayers - 1];
+        Matrix[] activations = new Matrix[numLayers]; //store the activations including the input
+        activations[0] = x; //store the input as the first layer of activations
+
+        Matrix[] zs = new Matrix[numLayers - 1]; //store the z values of the network
 
         //feedforward (store the activations and zs)
         feedForward(x, activations, zs);
@@ -241,21 +244,21 @@ public class Network {
         deltaNablaB[deltaNablaB.length - 1] = delta;
         deltaNablaW[deltaNablaW.length - 1] = delta.dot(activations[activations.length - 2].transpose());
 
-        for (int i = 2; i < numLayers; i++) {
-            z = zs[zs.length - i];
-            a = activations[activations.length - i];
+        for (int l = 2; l < numLayers; l++) {
+            z = zs[zs.length - l];
+            a = activations[activations.length - l - 1];
 
             //f'(z)
             Matrix sp = activationFunction.der(z);
 
             //delta = (w^T * delta) (+) f'(z)
-            delta = weights[weights.length - i + 1].transpose().dot(delta).multiply(sp);
+            delta = weights[weights.length - l + 1].transpose().dot(delta).multiply(sp);
 
             //deltaNablaB = delta
-            deltaNablaB[deltaNablaB.length - i] = delta;
+            deltaNablaB[deltaNablaB.length - l] = delta;
 
             //deltaNablaW = delta * a^(l-1)
-            deltaNablaW[deltaNablaW.length - i] = delta.dot(a.transpose());
+            deltaNablaW[deltaNablaW.length - l] = delta.dot(a.transpose());
         }
     }
 
