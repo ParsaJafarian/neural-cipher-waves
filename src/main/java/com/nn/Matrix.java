@@ -27,7 +27,7 @@ class Matrix {
      * @param rows number of rows
      * @param cols number of columns
      */
-    public Matrix(int rows, int cols) {
+    private Matrix(int rows, int cols) {
         if (rows <= 0 || cols <= 0)
             throw new IllegalArgumentException("Invalid matrix size");
 

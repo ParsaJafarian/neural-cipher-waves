@@ -12,14 +12,14 @@ public class NetworkTest {
         assert n.getSizes()[1] == 1;
 
         // Check Biases
-        assert n.getBiases().length == 1;
-        assert n.getBiases()[0].getRows() == 1; // 1 because the output layer has 1 neuron
-        assert n.getBiases()[0].getCols() == 1; // 1 because Biases are column vectors
+        assert n.getBiases().size() == 1;
+        assert n.getBiases().getFirst().getRows() == 1; // 1 because the output layer has 1 neuron
+        assert n.getBiases().getFirst().getCols() == 1; // 1 because the output layer has 1 neuron
 
         // Check Weights
-        assert n.getWeights().length == 1;
-        assert n.getWeights()[0].getRows() == 1; // 1 because the output layer has 1 neuron
-        assert n.getWeights()[0].getCols() == 3; // 3 because the input layer has 3 neurons
+        assert n.getWeights().size() == 1;
+        assert n.getBiases().getFirst().getRows() == 1; // 1 because the output layer has 1 neuron
+        assert n.getWeights().getFirst().getCols() == 3; // 3 because the input layer has 3 neurons
 
         // Check Activation Function
         assert n.getActivationFunction() == ActivationFunction.SIGMOID;
@@ -50,7 +50,7 @@ public class NetworkTest {
 
     @Test
     public void testSGD() {
-        Network n = new Network(0.05, 2,1, 1); //2 input neurons, 1 output neuron
+        Network n = new Network(0.05, 2, 1); //2 input neurons, 1 output neuron
         Matrix[][] trainingData = new Matrix[10][2];
 
         double[] x =  {1,2,3,4,5,6,7,8,9,10};

@@ -8,7 +8,7 @@ public class MatrixTest {
 
     @Test
     public void testConstructor() {
-        Matrix m = new Matrix(2, 3);
+        Matrix m = Matrix.ones(2, 3);
         assert m.getRows() == 2;
         assert m.getCols() == 3;
     }

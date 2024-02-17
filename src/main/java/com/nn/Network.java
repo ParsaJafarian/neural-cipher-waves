@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -22,16 +23,16 @@ public class Network {
     private final int[] sizes;
     private final int numLayers;
     /**
-     * An array of weights matrices for each layer in the network.
+     * A list of weights matrices for each layer in the network.
      * The weights matrix for each layer is of size (n x m) where n is the number of neurons
      * in the current layer and m is the number of neurons in the previous layer.
      */
-    private final Matrix[] weights;
+    private final LinkedList<Matrix> weights;
     /**
-     * An array of biases vectors for each layer in the network.
+     * A list of biases vectors for each layer in the network.
      * The biases vector for each layer is of size (n x 1) where n is the number of neurons in that layer.
      */
-    private final Matrix[] biases;
+    private final LinkedList<Matrix> biases;
     private final ActivationFunction activationFunction;
     private final CostFunction costFunction;
     private static final HashMap<String, ActivationFunction> activationFunctions = new HashMap<>() {{
@@ -61,12 +62,12 @@ public class Network {
             throw new IllegalArgumentException("Cost function not found");
 
         //initialize weights and biases
-        this.weights = new Matrix[sizes.length - 1];
-        this.biases = new Matrix[sizes.length - 1];
+        weights = new LinkedList<>();
+        biases = new LinkedList<>();
 
         for (int i = 0; i < sizes.length - 1; i++) {
-            weights[i] = new Matrix(sizes[i + 1], sizes[i]).map(x -> Math.random() * 2 - 1);
-            biases[i] = new Matrix(sizes[i + 1], 1).map(x -> Math.random() * 2 - 1);
+            weights.add(Matrix.random(sizes[i + 1], sizes[i]));
+            biases.add(Matrix.random(sizes[i + 1], 1));
         }
 
         this.sizes = sizes;
@@ -95,7 +96,7 @@ public class Network {
      * @param zs          array to store the z values of the network (passed in as an empty array)
      * @return the output of the network
      */
-    private Matrix feedForward(@NotNull Matrix inputs, Matrix[] activations, Matrix[] zs) {
+    private Matrix feedForward(@NotNull Matrix inputs, LinkedList<Matrix> activations, LinkedList<Matrix> zs) {
         //if input size is not equal to the first layer size and it's not a column vector, throw an exception
         if (inputs.getRows() != sizes[0] || inputs.getCols() != 1)
             throw new IllegalArgumentException("Invalid input size");
@@ -103,17 +104,17 @@ public class Network {
         Matrix outputs = inputs.clone();
 
         for (int i = 0; i < numLayers - 1; i++) {
-            Matrix z = weights[i].dot(outputs).add(biases[i]);
-            zs[i] = z;
+            Matrix z = weights.get(i).dot(outputs).add(biases.get(i));
+            zs.add(z);
             outputs = activationFunction.f(z);
-            activations[i+1] = outputs;
+            activations.add(outputs);
         }
 
         return outputs;
     }
 
     Matrix feedForward(@NotNull Matrix inputs) {
-        return feedForward(inputs, new Matrix[numLayers - 1], new Matrix[numLayers - 1]);
+        return feedForward(inputs, new LinkedList<>(), new LinkedList<>());
     }
 
     private static void shuffleData(Matrix @NotNull [][] ar) {
@@ -177,41 +178,40 @@ public class Network {
     }
 
     private void updateMiniBatch(Matrix[][] miniBatch) {
-        Matrix[] nablaB = new Matrix[biases.length];
-        Matrix[] nablaW = new Matrix[weights.length];
+        LinkedList<Matrix> nablaB = new LinkedList<>();
+        LinkedList<Matrix> nablaW = new LinkedList<>();
 
-        for (int i = 0; i < nablaB.length; i++)
-            nablaB[i] = new Matrix(biases[i].getRows(), biases[i].getCols());
+        for (int i = 0; i < biases.size(); i++)
+            nablaB.add(Matrix.zeros(biases.get(i).getRows(), biases.get(i).getCols()));
 
-        for (int i = 0; i < nablaW.length; i++)
-            nablaW[i] = new Matrix(weights[i].getRows(), weights[i].getCols());
+        for (int i = 0; i < weights.size(); i++)
+            nablaW.add(Matrix.zeros(weights.get(i).getRows(), weights.get(i).getCols()));
 
         for (Matrix[] inputs : miniBatch) {
-            Matrix[] deltaNablaB, deltaNablaW;
-            deltaNablaB = new Matrix[biases.length];
-            deltaNablaW = new Matrix[weights.length];
+            LinkedList<Matrix> deltaNablaB = new LinkedList<>();
+            LinkedList<Matrix> deltaNablaW = new LinkedList<>();
 
-            for (int i = 0; i < deltaNablaB.length; i++)
-                deltaNablaB[i] = new Matrix(biases[i].getRows(), biases[i].getCols());
+            for (int i = 0; i < biases.size(); i++)
+                deltaNablaB.add(Matrix.zeros(biases.get(i).getRows(), biases.get(i).getCols()));
 
-            for (int i = 0; i < deltaNablaW.length; i++)
-                deltaNablaW[i] = new Matrix(weights[i].getRows(), weights[i].getCols());
+            for (int i = 0; i < weights.size(); i++)
+                deltaNablaW.add(Matrix.zeros(weights.get(i).getRows(), weights.get(i).getCols()));
 
             //error in backpropa
             backpropagation(inputs, deltaNablaB, deltaNablaW);
 
-            for (int i = 0; i < nablaB.length; i++)
-                nablaB[i] = nablaB[i].add(deltaNablaB[i]);
+            for (int i = 0; i < biases.size(); i++)
+                nablaB.set(i, nablaB.get(i).add(deltaNablaB.get(i)));
 
-            for (int i = 0; i < nablaW.length; i++)
-                nablaW[i] = nablaW[i].add(deltaNablaW[i]);
+            for (int i = 0; i < weights.size(); i++)
+                nablaW.set(i, nablaW.get(i).add(deltaNablaW.get(i)));
         }
 
-        for (int i = 0; i < biases.length; i++)
-            biases[i] = biases[i].subtract(nablaB[i].multiply(learningRate / miniBatch.length));
+        for (int i = 0; i < biases.size(); i++)
+            biases.set(i, biases.get(i).subtract(nablaB.get(i).multiply(learningRate / miniBatch.length)));
 
-        for (int i = 0; i < weights.length; i++)
-            weights[i] = weights[i].subtract(nablaW[i].multiply(learningRate / miniBatch.length));
+        for (int i = 0; i < weights.size(); i++)
+            weights.set(i, weights.get(i).subtract(nablaW.get(i).multiply(learningRate / miniBatch.length)));
 
     }
 
@@ -220,45 +220,49 @@ public class Network {
      * @param deltaNablaB array to store the gradients of the biases
      * @param deltaNablaW array to store the gradients of the weights
      */
-    private void backpropagation(Matrix @NotNull [] inputs, Matrix @NotNull [] deltaNablaB, Matrix @NotNull [] deltaNablaW) {
+    private void backpropagation(Matrix @NotNull [] inputs, LinkedList<Matrix> deltaNablaB, LinkedList<Matrix> deltaNablaW) {
         if(inputs.length != 2)
             throw new IllegalArgumentException("Invalid input size");
 
         Matrix x = inputs[0];
         Matrix y = inputs[1];
 
-        Matrix[] activations = new Matrix[numLayers]; //store the activations including the input
-        activations[0] = x; //store the input as the first layer of activations
+        LinkedList<Matrix> activations = new LinkedList<>();
+        activations.add(x);
 
-        Matrix[] zs = new Matrix[numLayers - 1]; //store the z values of the network
+        LinkedList<Matrix> zs = new LinkedList<>();
 
         //feedforward (store the activations and zs)
         feedForward(x, activations, zs);
 
         //backward pass
         //delta = (a - y) (+) f'(z)
-        Matrix a = activations[activations.length - 1];
-        Matrix z = zs[zs.length - 1];
+        Matrix a = activations.getLast();
+        Matrix z = zs.getLast();
         Matrix delta = costFunction.der(y, a).multiply(activationFunction.der(z));
 
-        deltaNablaB[deltaNablaB.length - 1] = delta;
-        deltaNablaW[deltaNablaW.length - 1] = delta.dot(activations[activations.length - 2].transpose());
+        //deltaNablaB^L = delta^L
+        deltaNablaB.set(deltaNablaB.size() - 1, delta);
+        //deltaNablaW^L = delta^L * a^(L-1)
+        deltaNablaW.set(deltaNablaW.size() - 1, delta.dot(activations.get(activations.size() - 2).transpose()));
 
         for (int l = 2; l < numLayers; l++) {
-            z = zs[zs.length - l];
-            a = activations[activations.length - l - 1];
+            //z^(l)
+            z = zs.get(zs.size() - l);
+            //a^(l-1)
+            a = activations.get(activations.size() - l - 1);
 
-            //f'(z)
+            //f'(z^l)
             Matrix sp = activationFunction.der(z);
 
-            //delta = (w^T * delta) (+) f'(z)
-            delta = weights[weights.length - l + 1].transpose().dot(delta).multiply(sp);
+            //delta^(l)= ((w^(l+1))^T * delta^(l+1)) (+) f'(z^l)
+            delta = weights.get(weights.size() - l + 1).transpose().dot(delta).multiply(sp);
 
-            //deltaNablaB = delta
-            deltaNablaB[deltaNablaB.length - l] = delta;
+            //deltaNablaB^l = delta^l
+            deltaNablaB.set(deltaNablaB.size() - l, delta);
 
-            //deltaNablaW = delta * a^(l-1)
-            deltaNablaW[deltaNablaW.length - l] = delta.dot(a.transpose());
+            //deltaNablaW^l = delta^l * a^(l-1)
+            deltaNablaW.set(deltaNablaW.size() - l, delta.dot(a.transpose()));
         }
     }
 
@@ -270,12 +274,12 @@ public class Network {
         return sizes;
     }
 
-    public Matrix[] getWeights() {
-        return weights.clone();
+    public LinkedList<Matrix> getWeights() {
+        return weights;
     }
 
-    public Matrix[] getBiases() {
-        return biases.clone();
+    public LinkedList<Matrix> getBiases() {
+        return biases;
     }
 
     public ActivationFunction getActivationFunction() {
@@ -287,8 +291,8 @@ public class Network {
         return "Network{" +
                 ", sizes=" + Arrays.toString(sizes) +
                 ", numLayers=" + numLayers +
-                ", weights=" + Arrays.toString(weights) +
-                ", biases=" + Arrays.toString(biases) +
+                ", weights=" + weights +
+                ", biases=" + biases +
                 ", activationFunction='" + activationFunction + '\'' +
                 '}';
     }
