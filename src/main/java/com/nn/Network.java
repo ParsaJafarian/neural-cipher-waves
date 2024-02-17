@@ -1,5 +1,6 @@
 package com.nn;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -136,16 +137,15 @@ public class Network {
      * @param miniBatchSize size of each mini batch
      */
     public void sgd(Matrix[][] trainingData, Matrix[][] testData, int epochs, int miniBatchSize) {
-        if(trainingData.length == 0)
+        if (trainingData.length == 0)
             throw new IllegalArgumentException("Training data is empty");
         if (testData != null && testData.length == 0)
             throw new IllegalArgumentException("Test data is empty");
-        if(Arrays.stream(trainingData).anyMatch(x -> x.length != 2))
+        if (Arrays.stream(trainingData).anyMatch(x -> x.length != 2))
             throw new IllegalArgumentException("Invalid training data structure");
 
 
-
-        for (int i = 0; i < epochs; i++) {
+        for (int i = 1; i <= epochs; i++) {
             shuffleData(trainingData);
 
             for (int j = 0; j < trainingData.length; j += miniBatchSize) {
@@ -155,11 +155,15 @@ public class Network {
 
             System.out.println("Epoch " + i + " complete");
             if (testData != null) {
-                System.out.println("Accuracy: " + evaluate(testData) + " / " + testData.length);
+                System.out.println("Accuracy: " + evaluate(testData) * 100 + "%");
             }
         }
     }
 
+    /**
+     * @param testData the test data. Structure: [[input matrix, output matrix], ...]
+     * @return the accuracy of the network on the test data
+     */
     private double evaluate(Matrix[][] testData) {
         if (testData.length == 0)
             throw new IllegalArgumentException("Test data is empty");
@@ -177,28 +181,34 @@ public class Network {
         return (double) correct / testData.length;
     }
 
-    private void updateMiniBatch(Matrix[][] miniBatch) {
+    public double predict(Matrix input) {
+        return feedForward(input).maxIndex();
+    }
+
+    /**
+     * @return an array of two linked lists. The first linked list contains the nablas for the biases and the second linked list contains the nablas for the weights
+     */
+    @Contract(" -> new")
+    private LinkedList<Matrix> @NotNull [] createNablas() {
         LinkedList<Matrix> nablaB = new LinkedList<>();
         LinkedList<Matrix> nablaW = new LinkedList<>();
 
-        for (int i = 0; i < biases.size(); i++)
-            nablaB.add(Matrix.zeros(biases.get(i).getRows(), biases.get(i).getCols()));
+        for (Matrix bias : biases) nablaB.add(Matrix.zeros(bias.getRows(), bias.getCols()));
+        for (Matrix matrix : weights) nablaW.add(Matrix.zeros(matrix.getRows(), matrix.getCols()));
 
-        for (int i = 0; i < weights.size(); i++)
-            nablaW.add(Matrix.zeros(weights.get(i).getRows(), weights.get(i).getCols()));
+        return new LinkedList[]{nablaB, nablaW};
+    }
+
+    private void updateMiniBatch(Matrix[] @NotNull [] miniBatch) {
+        LinkedList<Matrix>[] nablas = createNablas();
+        LinkedList<Matrix> nablaB = nablas[0];
+        LinkedList<Matrix> nablaW = nablas[1];
 
         for (Matrix[] inputs : miniBatch) {
-            LinkedList<Matrix> deltaNablaB = new LinkedList<>();
-            LinkedList<Matrix> deltaNablaW = new LinkedList<>();
 
-            for (int i = 0; i < biases.size(); i++)
-                deltaNablaB.add(Matrix.zeros(biases.get(i).getRows(), biases.get(i).getCols()));
-
-            for (int i = 0; i < weights.size(); i++)
-                deltaNablaW.add(Matrix.zeros(weights.get(i).getRows(), weights.get(i).getCols()));
-
-            //error in backpropa
-            backpropagation(inputs, deltaNablaB, deltaNablaW);
+            LinkedList<Matrix>[] deltaNablas = backpropagation(inputs);
+            LinkedList<Matrix> deltaNablaB = deltaNablas[0];
+            LinkedList<Matrix> deltaNablaW = deltaNablas[1];
 
             for (int i = 0; i < biases.size(); i++)
                 nablaB.set(i, nablaB.get(i).add(deltaNablaB.get(i)));
@@ -212,17 +222,18 @@ public class Network {
 
         for (int i = 0; i < weights.size(); i++)
             weights.set(i, weights.get(i).subtract(nablaW.get(i).multiply(learningRate / miniBatch.length)));
-
     }
 
     /**
      * @param inputs inputs to the network. It's an array of two matrices where the first matrix is the input and the second matrix is the expected output
-     * @param deltaNablaB array to store the gradients of the biases
-     * @param deltaNablaW array to store the gradients of the weights
      */
-    private void backpropagation(Matrix @NotNull [] inputs, LinkedList<Matrix> deltaNablaB, LinkedList<Matrix> deltaNablaW) {
-        if(inputs.length != 2)
+    private LinkedList<Matrix>[] backpropagation(Matrix @NotNull [] inputs) {
+        if (inputs.length != 2)
             throw new IllegalArgumentException("Invalid input size");
+
+        LinkedList<Matrix>[] nablas = createNablas();
+        LinkedList<Matrix> nablaB = nablas[0];
+        LinkedList<Matrix> nablaW = nablas[1];
 
         Matrix x = inputs[0];
         Matrix y = inputs[1];
@@ -236,34 +247,32 @@ public class Network {
         feedForward(x, activations, zs);
 
         //backward pass
-        //delta = (a - y) (+) f'(z)
+        //delta^L = (a^L - y) (+) f'(z^L)
         Matrix a = activations.getLast();
         Matrix z = zs.getLast();
         Matrix delta = costFunction.der(y, a).multiply(activationFunction.der(z));
 
         //deltaNablaB^L = delta^L
-        deltaNablaB.set(deltaNablaB.size() - 1, delta);
+        nablaB.set(nablaB.size() - 1, delta);
         //deltaNablaW^L = delta^L * a^(L-1)
-        deltaNablaW.set(deltaNablaW.size() - 1, delta.dot(activations.get(activations.size() - 2).transpose()));
+        nablaW.set(nablaW.size() - 1, delta.dot(activations.get(activations.size() - 2).transpose()));
 
         for (int l = 2; l < numLayers; l++) {
-            //z^(l)
-            z = zs.get(zs.size() - l);
-            //a^(l-1)
-            a = activations.get(activations.size() - l - 1);
-
-            //f'(z^l)
-            Matrix sp = activationFunction.der(z);
+            z = zs.get(zs.size() - l); //z^(l)
+            a = activations.get(activations.size() - l - 1); //a^(l-1)
+            Matrix sp = activationFunction.der(z); //f'(z^l)
 
             //delta^(l)= ((w^(l+1))^T * delta^(l+1)) (+) f'(z^l)
             delta = weights.get(weights.size() - l + 1).transpose().dot(delta).multiply(sp);
 
             //deltaNablaB^l = delta^l
-            deltaNablaB.set(deltaNablaB.size() - l, delta);
+            nablaB.set(nablaB.size() - l, delta);
 
             //deltaNablaW^l = delta^l * a^(l-1)
-            deltaNablaW.set(deltaNablaW.size() - l, delta.dot(a.transpose()));
+            nablaW.set(nablaW.size() - l, delta.dot(a.transpose()));
         }
+
+        return new LinkedList[]{nablaB, nablaW};
     }
 
     public int getNumLayers() {

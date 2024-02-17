@@ -18,7 +18,7 @@ import java.util.function.Function;
  *     <li>Max index</li>
  * </ul>
  */
-class Matrix {
+public class Matrix {
     private final int rows;
     private final int cols;
     private final double[][] data;
