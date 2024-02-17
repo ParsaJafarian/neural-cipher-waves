@@ -2,6 +2,12 @@ package com.nn;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 public class NetworkTest {
 
     @Test
@@ -34,8 +40,7 @@ public class NetworkTest {
     @Test
     public void testFeedForward() {
         Network n = new Network(2, 3, 10, 10);
-        Matrix input = new Matrix(new double[][]{{1}, {2}, {3}});
-        input.map(x -> (double) 1); // Set all inputs to 1
+        Matrix input = Matrix.ones(3, 1); // 3 input neurons
 
         Matrix output = n.feedForward(input);
         assert output.getRows() == 10;
@@ -46,25 +51,56 @@ public class NetworkTest {
             assert output.getData()[i][0] >= 0;
             assert output.getData()[i][0] <= 1;
         }
+
+        System.out.println(Arrays.deepToString(n.getWeights().getFirst().getData()));
+        System.out.println(Arrays.deepToString(n.getBiases().getFirst().getData()));
     }
 
     @Test
     public void testSGD() {
-        Network n = new Network(0.05, 2, 1); //2 input neurons, 1 output neuron
+        Network n = new Network(0.001, 1, 1); //2 input neurons, 1 output neurons
         Matrix[][] trainingData = new Matrix[10][2];
+        Matrix[][] testData = new Matrix[10][2];
 
-        double[] x =  {1,2,3,4,5,6,7,8,9,10};
-        double[] y =  {2,4,6,8,10,12,14,16,18,20};
+        //Problem: classify x < 0 as 0 and x >= 0 as 1
 
-        //Problem: network should recognize the pattern z = 2x + y
+        double[] xTrain = new double[]{-1, -2, -3, -4, -5, 1, 2, 3, 4, 5};
+        double[] yTrain = new double[]{0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
+
+        double[] xTest = new double[]{-500, -400, -300, -200, -100, 100, 200, 300, 400, 500};
+        double[] yTest = new double[]{0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
 
         for (int i = 0; i < 10; i++) {
-            double z = 2 * x[i] + y[i];
-            trainingData[i][0] = new Matrix(new double[][]{{x[i]}, {y[i]}});
-            trainingData[i][1] = new Matrix(new double[][]{{z}});
+            trainingData[i][0] = new Matrix(new double[][]{{xTrain[i]}});
+            trainingData[i][1] = new Matrix(new double[][]{{yTrain[i]}});
         }
 
-        n.sgd(trainingData, null, 2, 1);
+        //initialize test data
+        for (int i = 0; i < 10; i++) {
+            testData[i][0] = new Matrix(new double[][]{{xTest[i]}});
+            testData[i][1] = new Matrix(new double[][]{{yTest[i]}});
+        }
+
+        //Save initial weights and biases
+        LinkedList<Matrix> initialWeights = n.getWeights();
+        LinkedList<Matrix> initialBiases = n.getBiases();
+
+        n.sgd(trainingData, testData, 1, 2);
+
+        //check if weights and biases have been updated
+        assert initialWeights.size() == n.getWeights().size();
+        assert initialBiases.size() == n.getBiases().size();
+
+        //For each weights and biases, check if their data are not the same
+        for (int i = 0; i < initialWeights.size(); i++)
+            assertNotEquals(initialWeights.get(i).getData(), n.getWeights().get(i).getData());
+
+        for (int i = 0; i < initialBiases.size(); i++)
+            assertNotEquals(initialBiases.get(i).getData(), n.getBiases().get(i).getData());
+
+        //Check if the network has learned
+        int correct = 0;
+
 
     }
 }
