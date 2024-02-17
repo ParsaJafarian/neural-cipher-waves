@@ -43,8 +43,28 @@ public class NetworkTest {
 
         // Check if the output is between 0 and 1
         for (int i = 0; i < output.getRows(); i++) {
-            assert output.data[i][0] >= 0;
-            assert output.data[i][0] <= 1;
+            assert output.getData()[i][0] >= 0;
+            assert output.getData()[i][0] <= 1;
         }
+    }
+
+    @Test
+    public void testSGD() {
+        Network n = new Network(0.05, 2, 1); //2 input neurons, 1 output neuron
+        Matrix[][] trainingData = new Matrix[10][2];
+
+        double[] x =  {1,2,3,4,5,6,7,8,9,10};
+        double[] y =  {2,4,6,8,10,12,14,16,18,20};
+
+        //Problem: network should recognize the pattern z = 2x + y
+
+        for (int i = 0; i < 10; i++) {
+            double z = 2 * x[i] + y[i];
+            trainingData[i][0] = new Matrix(new double[][]{{x[i]}, {y[i]}});
+            trainingData[i][1] = new Matrix(new double[][]{{z}});
+        }
+
+        n.sgd(trainingData, null, 2, 1);
+
     }
 }

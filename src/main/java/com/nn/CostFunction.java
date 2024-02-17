@@ -1,6 +1,6 @@
 package com.nn;
 
-public enum CostFunction {
+public enum CostFunction{
 
     /**
      * Quadratic cost function.
@@ -11,17 +11,17 @@ public enum CostFunction {
      */
     QUADRATIC {
         @Override
-        public Matrix function(Matrix y, Matrix a) {
+        public Matrix f(Matrix y, Matrix a) {
             return a.subtract(y).map(x -> Math.pow((double) x, 2) / 2);
         }
 
         @Override
-        public Matrix derivative(Matrix y, Matrix a) {
+        public Matrix der(Matrix y, Matrix a) {
             return a.subtract(y);
         }
     };
 
-    public abstract Matrix function(Matrix y, Matrix a);
+    public abstract Matrix f(Matrix y, Matrix a);
 
-    public abstract Matrix derivative(Matrix y, Matrix a);
+    public abstract Matrix der(Matrix y, Matrix a);
 }

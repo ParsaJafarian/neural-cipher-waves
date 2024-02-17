@@ -24,7 +24,7 @@ public class Network {
     /**
      * An array of weights matrices for each layer in the network.
      * The weights matrix for each layer is of size (n x m) where n is the number of neurons
-     * in the next layer and m is the number of neurons in the current layer.
+     * in the current layer and m is the number of neurons in the previous layer.
      */
     private final Matrix[] weights;
     /**
@@ -105,7 +105,7 @@ public class Network {
         for (int i = 0; i < numLayers - 1; i++) {
             Matrix z = weights[i].dot(outputs).add(biases[i]);
             zs[i] = z;
-            outputs = activationFunction.function(z);
+            outputs = activationFunction.f(z);
             activations[i] = outputs;
         }
 
@@ -116,24 +116,39 @@ public class Network {
         return feedForward(inputs, new Matrix[numLayers - 1], new Matrix[numLayers - 1]);
     }
 
-    private static void shuffleData(Matrix @NotNull [] ar) {
+    private static void shuffleData(Matrix @NotNull [][] ar) {
         // If running on Java 6 or older, use `new Random()` on RHS here
         Random rnd = ThreadLocalRandom.current();
         for (int i = ar.length - 1; i > 0; i--) {
             int index = rnd.nextInt(i + 1);
             // Simple swap
-            Matrix a = ar[index];
+            Matrix[] a = ar[index];
             ar[index] = ar[i];
             ar[i] = a;
         }
     }
 
-    public void sgd(Matrix[] trainingData, Matrix[] testData, int epochs, int miniBatchSize) {
+    /**
+     * @param trainingData  the training data. Structure: [[input matrix, output matrix], ...]
+     * @param testData      the test data. Structure: [[input matrix, output matrix], ...]
+     * @param epochs        number of epochs to train the network
+     * @param miniBatchSize size of each mini batch
+     */
+    public void sgd(Matrix[][] trainingData, Matrix[][] testData, int epochs, int miniBatchSize) {
+        if(trainingData.length == 0)
+            throw new IllegalArgumentException("Training data is empty");
+        if (testData != null && testData.length == 0)
+            throw new IllegalArgumentException("Test data is empty");
+        if(Arrays.stream(trainingData).anyMatch(x -> x.length != 2))
+            throw new IllegalArgumentException("Invalid training data structure");
+
+
+
         for (int i = 0; i < epochs; i++) {
             shuffleData(trainingData);
 
             for (int j = 0; j < trainingData.length; j += miniBatchSize) {
-                Matrix[] miniBatch = Arrays.copyOfRange(trainingData, j, j + miniBatchSize);
+                Matrix[][] miniBatch = Arrays.copyOfRange(trainingData, j, j + miniBatchSize);
                 updateMiniBatch(miniBatch);
             }
 
@@ -144,20 +159,24 @@ public class Network {
         }
     }
 
-    private double evaluate(Matrix @NotNull [] testData) {
-        if(testData.length == 0)
+    private double evaluate(Matrix[][] testData) {
+        if (testData.length == 0)
             throw new IllegalArgumentException("Test data is empty");
 
         int correct = 0;
-        for (Matrix data : testData) {
-            Matrix output = feedForward(data);
-            if (output.maxIndex() == data.maxIndex())
+        //each data consists of the input and the actual output [input, output] where input and output are matrices
+        for (Matrix[] data : testData) {
+            Matrix x = data[0];
+            Matrix y = data[1];
+            //data[0] is the input, data[1] is the actual output
+            Matrix output = feedForward(x);
+            if (output.maxIndex() == y.maxIndex())
                 correct++;
         }
         return (double) correct / testData.length;
     }
 
-    private void updateMiniBatch(Matrix[] miniBatch) {
+    private void updateMiniBatch(Matrix[][] miniBatch) {
         Matrix[] nablaB = new Matrix[biases.length];
         Matrix[] nablaW = new Matrix[weights.length];
 
@@ -167,7 +186,7 @@ public class Network {
         for (int i = 0; i < nablaW.length; i++)
             nablaW[i] = new Matrix(weights[i].getRows(), weights[i].getCols());
 
-        for (Matrix inputs : miniBatch) {
+        for (Matrix[] inputs : miniBatch) {
             Matrix[] deltaNablaB, deltaNablaW;
             deltaNablaB = new Matrix[biases.length];
             deltaNablaW = new Matrix[weights.length];
@@ -195,29 +214,48 @@ public class Network {
 
     }
 
-     void backpropagation(Matrix inputs, Matrix @NotNull [] deltaNablaB, Matrix @NotNull [] deltaNablaW) {
-        //feedforward
+    /**
+     * @param inputs inputs to the network. It's an array of two matrices where the first matrix is the input and the second matrix is the expected output
+     * @param deltaNablaB array to store the gradients of the biases
+     * @param deltaNablaW array to store the gradients of the weights
+     */
+    private void backpropagation(Matrix @NotNull [] inputs, Matrix @NotNull [] deltaNablaB, Matrix @NotNull [] deltaNablaW) {
+        if(inputs.length != 2)
+            throw new IllegalArgumentException("Invalid input size");
+
+        Matrix x = inputs[0];
+        Matrix y = inputs[1];
+
         Matrix[] activations = new Matrix[numLayers - 1];
         Matrix[] zs = new Matrix[numLayers - 1];
 
         //feedforward (store the activations and zs)
-        feedForward(inputs, activations, zs);
+        feedForward(x, activations, zs);
 
         //backward pass
         //delta = (a - y) (+) f'(z)
-        Matrix delta = costFunction.derivative(inputs, activations[activations.length - 1]).multiply(activationFunction.derivative(zs[zs.length - 1]));
+        Matrix a = activations[activations.length - 1];
+        Matrix z = zs[zs.length - 1];
+        Matrix delta = costFunction.der(y, a).multiply(activationFunction.der(z));
 
         deltaNablaB[deltaNablaB.length - 1] = delta;
         deltaNablaW[deltaNablaW.length - 1] = delta.dot(activations[activations.length - 2].transpose());
 
         for (int i = 2; i < numLayers; i++) {
-            Matrix z = zs[zs.length - i];
-            Matrix sp = activationFunction.derivative(z);
+            z = zs[zs.length - i];
+            a = activations[activations.length - i];
+
+            //f'(z)
+            Matrix sp = activationFunction.der(z);
+
             //delta = (w^T * delta) (+) f'(z)
             delta = weights[weights.length - i + 1].transpose().dot(delta).multiply(sp);
+
+            //deltaNablaB = delta
             deltaNablaB[deltaNablaB.length - i] = delta;
+
             //deltaNablaW = delta * a^(l-1)
-            deltaNablaW[deltaNablaW.length - i] = delta.dot(activations[activations.length - i - 1].transpose());
+            deltaNablaW[deltaNablaW.length - i] = delta.dot(a.transpose());
         }
     }
 

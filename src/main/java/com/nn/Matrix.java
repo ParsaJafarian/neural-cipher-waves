@@ -1,5 +1,6 @@
 package com.nn;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -20,7 +21,7 @@ import java.util.function.Function;
 class Matrix {
     private final int rows;
     private final int cols;
-    final double[][] data;
+    private final double[][] data;
 
     /**
      * @param rows number of rows
@@ -41,12 +42,38 @@ class Matrix {
     public Matrix(double[] @NotNull [] data) {
         if (data.length == 0 || data[0].length == 0)
             throw new IllegalArgumentException("Invalid matrix size");
-        if (data.length == 1 && data[0].length == 1)
-            throw new IllegalArgumentException("Use a scalar instead of a matrix");
 
         this.rows = data.length;
         this.cols = data[0].length;
         this.data = data;
+    }
+
+    public static @NotNull Matrix ones(int rows, int cols) {
+        Matrix result = new Matrix(rows, cols);
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                result.data[i][j] = 1;
+        return result;
+    }
+
+    @Contract(value = "_, _ -> new", pure = true)
+    public static @NotNull Matrix zeros(int rows, int cols) {
+        return new Matrix(rows, cols);
+    }
+
+    public static @NotNull Matrix random(int rows, int cols) {
+        Matrix result = new Matrix(rows, cols);
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                result.data[i][j] = Math.random();
+        return result;
+    }
+
+    /**
+     * @return a deep copy of the data
+     */
+    public double[][] getData() {
+        return data.clone();
     }
 
     /**
