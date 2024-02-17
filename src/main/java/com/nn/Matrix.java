@@ -21,13 +21,13 @@ import java.util.function.Function;
 public class Matrix {
     private final int rows;
     private final int cols;
-    private final double[][] data;
+    protected final double[][] data;
 
     /**
      * @param rows number of rows
      * @param cols number of columns
      */
-    private Matrix(int rows, int cols) {
+    protected Matrix(int rows, int cols) {
         if (rows <= 0 || cols <= 0)
             throw new IllegalArgumentException("Invalid matrix size");
 
@@ -46,6 +46,27 @@ public class Matrix {
         this.rows = data.length;
         this.cols = data[0].length;
         this.data = data;
+    }
+
+    public Matrix(int[][] d) {
+        this.rows = d.length;
+        this.cols = d[0].length;
+        this.data = new double[rows][cols];
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                this.data[i][j] = d[i][j];
+    }
+
+    /**
+     * Turns a nxm matrix into a (n*m)x1 matrix
+     * @return a new matrix that is the vectorized version of this matrix
+     */
+    public Matrix flatten() {
+        Matrix result = new Matrix(rows * cols, 1);
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                result.data[i * cols + j][0] = data[i][j];
+        return result;
     }
 
     public static @NotNull Matrix ones(int rows, int cols) {
@@ -198,11 +219,14 @@ public class Matrix {
 
     @Override
     public String toString() {
-        return "Matrix{" +
-                "rows=" + rows +
-                ", cols=" + cols +
-                ", data=" + Arrays.toString(data) +
-                '}';
+        StringBuilder matrix = new StringBuilder();
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < cols; j++) {
+                matrix.append(data[i][j]).append(" ");
+            }
+            matrix.append("\n");
+        }
+        return matrix.toString();
     }
 
     public boolean equals(@NotNull Matrix m) {
@@ -231,5 +255,9 @@ public class Matrix {
                     index = i;
                 }
         return index;
+    }
+
+    public void setValue(int r, int c, int i) {
+        data[r][c] = i;
     }
 }

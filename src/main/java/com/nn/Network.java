@@ -3,6 +3,7 @@ package com.nn;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -146,6 +147,17 @@ public class Network {
 
 
         for (int i = 1; i <= epochs; i++) {
+            System.out.println("Epoch " + i + " started");
+            System.out.println("<---------------------Weights--------------------->");
+            for(Matrix m: weights) {
+                System.out.println(m);
+            }
+            System.out.println("<---------------------Biases--------------------->");
+            for(Matrix m: biases) {
+                System.out.println(m);
+            }
+
+
             shuffleData(trainingData);
 
             for (int j = 0; j < trainingData.length; j += miniBatchSize) {
@@ -154,6 +166,14 @@ public class Network {
             }
 
             System.out.println("Epoch " + i + " complete");
+            System.out.println("<---------------------Weights--------------------->");
+            for(Matrix m: weights) {
+                System.out.println(m);
+            }
+            System.out.println("<---------------------Biases--------------------->");
+            for(Matrix m: biases) {
+                System.out.println(m);
+            }
             if (testData != null) {
                 System.out.println("Accuracy: " + evaluate(testData) * 100 + "%");
             }
