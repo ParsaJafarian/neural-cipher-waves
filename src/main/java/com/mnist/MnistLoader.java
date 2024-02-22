@@ -3,6 +3,7 @@ package com.mnist;
 import com.nn.Matrix;
 
 import java.io.*;
+import java.util.Arrays;
 
 public class MnistLoader  {
 
@@ -39,7 +40,8 @@ public class MnistLoader  {
             Matrix x = Matrix.zeros(rows, cols);
             for (int r = 0; r < rows; r++)
                 for (int c = 0; c < cols; c++)
-                    x.setValue(r, c, dataInputStream.readUnsignedByte());
+                    //Normalize the pixel values to be between 0 and 1
+                    x.setValue(r, c, (double) dataInputStream.readUnsignedByte() /255);
 
             data[i][0] = x.flatten();
             data[i][1] = y;

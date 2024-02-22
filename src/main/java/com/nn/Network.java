@@ -3,12 +3,12 @@ package com.nn;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Neural network class for creating and training neural networks.
@@ -16,7 +16,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Network {
     private double learningRate;
     private static final HashMap<String, CostFunction> costFunctions = new HashMap<>() {{
-        put("quadratic", CostFunction.QUADRATIC);
+        put("mse", CostFunction.MSE);
+        put("mae", CostFunction.MAE);
     }};
     /**
      * An array of sizes of the layers in the network.
@@ -137,7 +138,7 @@ public class Network {
      * @param epochs        number of epochs to train the network
      * @param miniBatchSize size of each mini batch
      */
-    public void sgd(Matrix[][] trainingData, Matrix[][] testData, int epochs, int miniBatchSize) {
+    public void sgd(Matrix[] @NotNull [] trainingData, Matrix[] @NotNull [] testData, int epochs, int miniBatchSize) {
         if (trainingData.length == 0)
             throw new IllegalArgumentException("Training data is empty");
         if (testData != null && testData.length == 0)
@@ -148,32 +149,49 @@ public class Network {
 
         for (int i = 1; i <= epochs; i++) {
             System.out.println("Epoch " + i + " started");
-            System.out.println("<---------------------Weights--------------------->");
-            for(Matrix m: weights) {
-                System.out.println(m);
-            }
-            System.out.println("<---------------------Biases--------------------->");
-            for(Matrix m: biases) {
-                System.out.println(m);
-            }
+//            System.out.println("<---------------------Weights--------------------->");
+//            for (Matrix m : weights) {
+//                System.out.println(m);
+//            }
+//            System.out.println("<---------------------Biases--------------------->");
+//            for (Matrix m : biases) {
+//                System.out.println(m);
+//            }
 
 
-            shuffleData(trainingData);
+            AtomicBoolean isNaN = new AtomicBoolean(false);
 
             for (int j = 0; j < trainingData.length; j += miniBatchSize) {
+                shuffleData(trainingData);
                 Matrix[][] miniBatch = Arrays.copyOfRange(trainingData, j, j + miniBatchSize);
                 updateMiniBatch(miniBatch);
+                for (Matrix m : weights) {
+                    if (m.hasNan()) {
+                        isNaN.set(true);
+                        break;
+                    }
+                }
+                for (Matrix m : biases) {
+                    if (m.hasNan()) {
+                        isNaN.set(true);
+                        break;
+                    }
+                }
+                if (isNaN.get()) {
+                    System.out.println("NaN detected in weights or biases in epoch " + i + " mini batch " + j/miniBatchSize);
+                    break;
+                }
             }
 
             System.out.println("Epoch " + i + " complete");
-            System.out.println("<---------------------Weights--------------------->");
-            for(Matrix m: weights) {
-                System.out.println(m);
-            }
-            System.out.println("<---------------------Biases--------------------->");
-            for(Matrix m: biases) {
-                System.out.println(m);
-            }
+//            System.out.println("<---------------------Weights--------------------->");
+//            for (Matrix m : weights) {
+//                System.out.println(m);
+//            }
+//            System.out.println("<---------------------Biases--------------------->");
+//            for (Matrix m : biases) {
+//                System.out.println(m);
+//            }
             if (testData != null) {
                 System.out.println("Accuracy: " + evaluate(testData) * 100 + "%");
             }
@@ -223,6 +241,7 @@ public class Network {
         LinkedList<Matrix>[] nablas = createNablas();
         LinkedList<Matrix> nablaB = nablas[0];
         LinkedList<Matrix> nablaW = nablas[1];
+
 
         for (Matrix[] inputs : miniBatch) {
 
