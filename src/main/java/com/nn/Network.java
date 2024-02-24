@@ -24,6 +24,8 @@ public class Network {
      */
     private final int[] sizes;
     private final int numLayers;
+
+    private LinkedList<Matrix> activations;
     /**
      * A list of weights matrices for each layer in the network.
      * The weights matrix for each layer is of size (n x m) where n is the number of neurons
@@ -66,6 +68,7 @@ public class Network {
         //initialize weights and biases
         weights = new LinkedList<>();
         biases = new LinkedList<>();
+        activations = new LinkedList<>();
 
         for (int i = 0; i < sizes.length - 1; i++) {
             weights.add(Matrix.random(sizes[i + 1], sizes[i]));
@@ -94,14 +97,17 @@ public class Network {
      * Feed forward the inputs through the network with the current weights and biases and activation function.
      *
      * @param inputs      input to the network
-     * @param activations array to store the activations of the network (passed in as an empty array)
      * @param zs          array to store the z values of the network (passed in as an empty array)
      * @return the output of the network
      */
-    private Matrix feedForward(@NotNull Matrix inputs, LinkedList<Matrix> activations, LinkedList<Matrix> zs) {
+    private Matrix feedForward(@NotNull Matrix inputs, LinkedList<Matrix> zs) {
         //if input size is not equal to the first layer size and it's not a column vector, throw an exception
         if (inputs.getRows() != sizes[0] || inputs.getCols() != 1)
             throw new IllegalArgumentException("Invalid input size");
+
+        //clear the activations list and add the inputs to it
+        activations.clear();
+        activations.add(inputs);
 
         Matrix outputs = inputs.clone();
 
@@ -116,7 +122,7 @@ public class Network {
     }
 
     Matrix feedForward(@NotNull Matrix inputs) {
-        return feedForward(inputs, new LinkedList<>(), new LinkedList<>());
+        return feedForward(inputs, new LinkedList<>());
     }
 
     private static void shuffleData(Matrix @NotNull [][] ar) {
@@ -259,12 +265,10 @@ public class Network {
         Matrix y = inputs[1];
 
         LinkedList<Matrix> activations = new LinkedList<>();
-        activations.add(x);
-
         LinkedList<Matrix> zs = new LinkedList<>();
 
         //feedforward (store the activations and zs)
-        feedForward(x, activations, zs);
+        feedForward(x, zs);
 
         //backward pass
         //delta^L = (a^L - y) (+) f'(z^L)
@@ -336,5 +340,14 @@ public class Network {
 
     public CostFunction getCostFunction() {
         return costFunction;
+    }
+
+    /**
+     * @return a deep copy of the activations of the network
+     */
+    public LinkedList<Matrix> getActivations() {
+        LinkedList<Matrix> copy = new LinkedList<>();
+        activations.forEach(x -> copy.add(x.clone()));
+        return copy;
     }
 }
