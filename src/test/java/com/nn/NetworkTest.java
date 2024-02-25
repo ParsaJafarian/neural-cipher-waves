@@ -28,10 +28,10 @@ public class NetworkTest {
         assert n.getWeights().get(0).getCols() == 3; // 3 because the input layer has 3 neurons
 
         // Check Activation Function
-        assert n.getActivationFunction() == ActivationFunction.SIGMOID;
+        assert n.getActivationFunction() == Activation.SIGMOID;
 
         // Check Cost Function
-        assert n.getCostFunction() == CostFunction.MSE;
+        assert n.getCostFunction() == Loss.MSE;
 
         // Check Learning Rate
         assert n.getLearningRate() == 2.0;

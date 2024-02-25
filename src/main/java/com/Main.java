@@ -25,7 +25,7 @@ public class Main extends Application {
                         new Matrix(new double[][]{{1}})
                 }
         };
-        Network network = new Network(0.001, "sigmoid", "quadratic", 10,5,1);
+        Network network = new Network(0.001, "sigmoid", "mse", 10,5,1);
         network.sgd(trainData,null, 2, 1);
         AnchorPane root = new AnchorPane();
         NetworkDisplay display = new NetworkDisplay(network);

@@ -11,7 +11,7 @@ package com.nn;
  *     </ul>
  * </p>
  */
-enum ActivationFunction{
+enum Activation {
     /**
      * Sigmoid activation function.
      * <br>

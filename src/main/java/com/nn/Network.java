@@ -15,9 +15,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class Network {
     private double learningRate;
-    private static final HashMap<String, CostFunction> costFunctions = new HashMap<>() {{
-        put("mse", CostFunction.MSE);
-        put("mae", CostFunction.MAE);
+    private static final HashMap<String, Loss> losses = new HashMap<>() {{
+        put("mse", Loss.MSE);
+        put("mae", Loss.MAE);
     }};
     /**
      * An array of sizes of the layers in the network.
@@ -26,7 +26,7 @@ public class Network {
     private final int[] sizes;
     private final int numLayers;
 
-    private ArrayList<Matrix> activations;
+    private final ArrayList<Matrix> activations;
     /**
      * A ArrayList of weights matrices for each layer in the network.
      * The weights matrix for each layer is of size (n x m) where n is the number of neurons
@@ -38,12 +38,12 @@ public class Network {
      * The biases vector for each layer is of size (n x 1) where n is the number of neurons in that layer.
      */
     private final ArrayList<Matrix> biases;
-    private final ActivationFunction activationFunction;
-    private final CostFunction costFunction;
-    private static final HashMap<String, ActivationFunction> activationFunctions = new HashMap<>() {{
-        put("sigmoid", ActivationFunction.SIGMOID);
-        put("tanh", ActivationFunction.TANH);
-        put("relu", ActivationFunction.RELU);
+    private final Activation activation;
+    private final Loss loss;
+    private static final HashMap<String, Activation> activationFunctions = new HashMap<>() {{
+        put("sigmoid", Activation.SIGMOID);
+        put("tanh", Activation.TANH);
+        put("relu", Activation.RELU);
     }};
 
     /**
@@ -63,7 +63,7 @@ public class Network {
             throw new IllegalArgumentException("Invalid layer sizes");
         if (!activationFunctions.containsKey(activationFunction))
             throw new IllegalArgumentException("Activation function not found");
-        if (!costFunctions.containsKey(costFunction))
+        if (!losses.containsKey(costFunction))
             throw new IllegalArgumentException("Cost function not found");
 
         //initialize weights and biases
@@ -78,8 +78,8 @@ public class Network {
 
         this.sizes = sizes;
         this.numLayers = sizes.length;
-        this.activationFunction = activationFunctions.get(activationFunction);
-        this.costFunction = costFunctions.get(costFunction);
+        this.activation = activationFunctions.get(activationFunction);
+        this.loss = losses.get(costFunction);
         this.learningRate = learningRate;
 
     }
@@ -91,7 +91,7 @@ public class Network {
      * @param sizes        sizes of the layers in the network
      */
     public Network(double learningRate, int... sizes) {
-        this(learningRate, "sigmoid", "quadratic", sizes);
+        this(learningRate, "sigmoid", "mse", sizes);
     }
 
     /**
@@ -115,7 +115,7 @@ public class Network {
         for (int i = 0; i < numLayers - 1; i++) {
             Matrix z = weights.get(i).dot(outputs).add(biases.get(i));
             zs.add(z);
-            outputs = activationFunction.f(z);
+            outputs = activation.f(z);
             activations.add(outputs);
         }
 
@@ -292,7 +292,7 @@ public class Network {
         //delta^L = (a^L - y) (+) f'(z^L)
         Matrix a = activations.get(activations.size() - 1); //a^L
         Matrix z = zs.get(zs.size() - 1); //z^L
-        Matrix delta = costFunction.der(y, a).multiply(activationFunction.der(z));
+        Matrix delta = loss.der(y, a).multiply(activation.der(z));
 
         //deltaNablaB^L = delta^L
         nablaB.set(nablaB.size() - 1, delta);
@@ -302,7 +302,7 @@ public class Network {
         for (int l = 2; l < numLayers; l++) {
             z = zs.get(zs.size() - l); //z^(l)
             a = activations.get(activations.size() - l - 1); //a^(l-1)
-            Matrix sp = activationFunction.der(z); //f'(z^l)
+            Matrix sp = activation.der(z); //f'(z^l)
 
             //delta^(l)= ((w^(l+1))^T * delta^(l+1)) (+) f'(z^l)
             delta = weights.get(weights.size() - l + 1).transpose().dot(delta).multiply(sp);
@@ -333,8 +333,8 @@ public class Network {
         return biases;
     }
 
-    public ActivationFunction getActivationFunction() {
-        return activationFunction;
+    public Activation getActivationFunction() {
+        return activation;
     }
 
     @Override
@@ -344,7 +344,7 @@ public class Network {
                 ", numLayers=" + numLayers +
                 ", weights=" + weights +
                 ", biases=" + biases +
-                ", activationFunction='" + activationFunction + '\'' +
+                ", activationFunction='" + activation + '\'' +
                 '}';
     }
 
@@ -356,8 +356,8 @@ public class Network {
         this.learningRate = learningRate;
     }
 
-    public CostFunction getCostFunction() {
-        return costFunction;
+    public Loss getCostFunction() {
+        return loss;
     }
 
     /**

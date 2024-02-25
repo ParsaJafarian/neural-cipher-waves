@@ -1,9 +1,12 @@
 package com.nn;
 
-public enum CostFunction{
+/**
+ * Enum for loss functions used in the neural network.
+ */
+public enum Loss {
 
     /**
-     * Quadratic cost function.
+     * Mean Squared Error loss function.
      * <br>
      * C = 1/2 * (y - a)^2
      * <br>
@@ -21,7 +24,7 @@ public enum CostFunction{
         }
     },
     /**
-     * Mean Absolute Error cost function.
+     * Mean Absolute Error loss function.
      * <br>
      * C = |y - a|
      * <br>
