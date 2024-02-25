@@ -49,11 +49,12 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="477.0" prefWidth="739.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="477.0" prefWidth="739.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Controller">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -165,6 +166,7 @@
                   <Label prefHeight="43.0" prefWidth="149.0" text="Prediction: " />
                </children>
             </VBox>
+            <Pane fx:id="networkPane" layoutY="101.0" prefHeight="252.0" prefWidth="509.0" />
          </children>
     </AnchorPane>
   </children>

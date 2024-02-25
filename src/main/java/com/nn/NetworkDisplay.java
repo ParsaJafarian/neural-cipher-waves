@@ -13,11 +13,12 @@ import java.util.ArrayList;
 /**
  * This class consists of the visible neural display accesible in Simulation
  */
-public class NetworkDisplay extends Pane {
+public class NetworkDisplay {
 
     private static final int WIDTH = 600;
     private static final int HEIGHT = 400;
     private static final int PANE_PADDING = 20;
+    private final Pane pane;
 
     private final Network network;
     private ArrayList<Matrix> activations;
@@ -28,9 +29,11 @@ public class NetworkDisplay extends Pane {
     /**
      * @param network the network to be displayed
      */
-    public NetworkDisplay(Network network) {
+    public NetworkDisplay(Pane pane, Network network) {
+        this.pane = pane;
 
-        this.setPrefSize(WIDTH, HEIGHT);
+        pane.setPrefSize(WIDTH, HEIGHT);
+
         this.network = network;
         this.neuronList = new ArrayList<>();
         this.activations = network.getActivations();
@@ -42,9 +45,6 @@ public class NetworkDisplay extends Pane {
 
         generateNeurons();
         generateWeight();
-
-        this.setLayoutX(400);
-        this.setLayoutY(20);
     }
 
     private void generateNeurons() {
@@ -69,12 +69,12 @@ public class NetworkDisplay extends Pane {
                 Circle neuron = new Circle(20);
                 neuron.setUserData(prop);
 
-                neuron.setCenterX(layerGap * (i + 0.5) - (this.getWidth()));
-                neuron.setCenterY(heightGap * (j + 0.5) - (this.getHeight()));
+                neuron.setCenterX(layerGap * (i + 0.5) - (pane.getWidth()));
+                neuron.setCenterY(heightGap * (j + 0.5) - (pane.getHeight()));
                 value.setTranslateX(layerGap * (i + 0.5) - (10));
                 value.setTranslateY(heightGap * (j + 0.5) - (5));
 
-                this.getChildren().addAll(neuron, value);
+                pane.getChildren().addAll(neuron, value);
                 neuronList.get(i).add(neuron);
 
             }
@@ -106,9 +106,17 @@ public class NetworkDisplay extends Pane {
                     line.setOnMouseClicked((e) -> {
                         System.out.println(value.get());
                     });
-                    this.getChildren().add(line);
+                    pane.getChildren().add(line);
                     line.toBack();
                 }
+            }
+        }
+    }
+
+    public void update() {
+        for (int i = 0; i < activations.size(); i++) {
+            for (int j = 0; j < activations.get(i).getRows(); j++) {
+                ((SimpleDoubleProperty) neuronList.get(i).get(j).getUserData()).set(activations.get(i).get(j, 0));
             }
         }
     }
