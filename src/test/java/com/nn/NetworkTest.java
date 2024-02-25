@@ -31,7 +31,7 @@ public class NetworkTest {
         assert n.getActivationFunction() == ActivationFunction.SIGMOID;
 
         // Check Cost Function
-        assert n.getCostFunction() == CostFunction.QUADRATIC;
+        assert n.getCostFunction() == CostFunction.MSE;
 
         // Check Learning Rate
         assert n.getLearningRate() == 2.0;

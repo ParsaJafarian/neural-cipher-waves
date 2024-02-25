@@ -83,7 +83,7 @@ enum ActivationFunction{
 
         @Override
         public Matrix der(Matrix m) {
-            return m.map(x -> (double) x > 0 ? 1 : 0);
+            return m.map(x -> (double) ( x > 0 ? 1 : 0));
         }
 
         public double der(double x) {

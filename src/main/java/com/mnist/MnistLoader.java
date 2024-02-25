@@ -3,6 +3,7 @@ package com.mnist;
 import com.nn.Matrix;
 
 import java.io.*;
+import java.util.Arrays;
 
 public class MnistLoader  {
 

@@ -200,11 +200,11 @@ public class Matrix {
      * @param f function to apply
      * @return a new matrix that is the result of applying the function to each element of this matrix
      */
-    public Matrix map(Function f) {
+    public Matrix map(Function<Double, Double> f) {
         Matrix result = new Matrix(rows, cols);
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < cols; j++)
-                result.data[i][j] = (double) f.apply(data[i][j]);
+                result.data[i][j] = f.apply(data[i][j]);
         return result;
     }
 
@@ -267,5 +267,13 @@ public class Matrix {
 
     public void set(int r, int c, int i) {
         data[r][c] = i;
+    }
+
+    public boolean hasNan() {
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                if (Double.isNaN(data[i][j]))
+                    return true;
+        return false;
     }
 }
