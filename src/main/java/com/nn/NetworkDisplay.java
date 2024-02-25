@@ -1,6 +1,5 @@
 package com.nn;
 
-import javafx.animation.AnimationTimer;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.control.Label;
@@ -10,7 +9,6 @@ import javafx.scene.shape.Line;
 
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 /**
  * This class consists of the visible neural display accesible in Simulation
@@ -22,11 +20,10 @@ public class NetworkDisplay extends Pane {
     private static final int PANE_PADDING = 20;
 
     private final Network network;
-    private LinkedList<Matrix> activations;
+    private ArrayList<Matrix> activations;
 
     private final ArrayList<Line> lineWeights = new ArrayList<>();
     private ArrayList<ArrayList<Circle>> neuronList;
-    AnimationTimer timer = new myTimer();
 
     /**
      * @param network the network to be displayed
@@ -37,13 +34,17 @@ public class NetworkDisplay extends Pane {
         this.network = network;
         this.neuronList = new ArrayList<>();
         this.activations = network.getActivations();
+        if (this.activations.isEmpty()) {
+            for (int i = 0; i < network.getSizes().length; i++) {
+                this.activations.add(new Matrix(network.getSizes()[i], 1));
+            }
+        }
 
         generateNeurons();
+        generateWeight();
 
         this.setLayoutX(400);
         this.setLayoutY(20);
-
-        timer.start();
     }
 
     private void generateNeurons() {
@@ -61,7 +62,7 @@ public class NetworkDisplay extends Pane {
 
                 Label value = new Label();
                 value.setId("neuronNet");
-                DoubleProperty prop = new SimpleDoubleProperty(activations.get(i).getData()[j][0]);
+                DoubleProperty prop = new SimpleDoubleProperty(activations.get(i).get(j, 0));
 
                 value.textProperty().bind(prop.asString("%.2f"));
 
@@ -82,14 +83,13 @@ public class NetworkDisplay extends Pane {
     }
 
     private void generateWeight() {
+        //for each layer that has weights
         for (int l = 0; l < network.getWeights().size(); l++) {
-
-            for (int currNeuron = 0; currNeuron < network.getSizes()[l]; currNeuron++) {
-
+            for (int currNeuron = 0; currNeuron < network.getSizes()[l + 1]; currNeuron++) {
                 for (int prevNeuron = 0; prevNeuron < activations.get(l).getRows(); prevNeuron++) {
 
-                    double k = network.getWeights().get(l).getData()[currNeuron][prevNeuron];
-//                    k = Math.abs(k);
+                    double k = network.getWeights().get(l).get(currNeuron, prevNeuron);
+                    k = Math.abs(k);
                     Line line = new Line();
 
                     DoubleProperty value = new SimpleDoubleProperty(k);
@@ -108,27 +108,8 @@ public class NetworkDisplay extends Pane {
                     });
                     this.getChildren().add(line);
                     line.toBack();
-
                 }
             }
-
-        }
-    }
-
-    private void update() {
-        for (Line line : lineWeights) {
-            //(DoubleProperty)line.getUserData()=  layers[layer].getWeights()[currNeuron][prevNeuron];
-        }
-        for (ArrayList<Circle> neuronlist : neuronList) {
-        }
-    }
-
-    private class myTimer extends AnimationTimer {
-
-
-        @Override
-        public void handle(long now) {
-            update();
         }
     }
 }
