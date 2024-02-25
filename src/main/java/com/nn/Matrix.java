@@ -3,7 +3,6 @@ package com.nn;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.function.Function;
 
 /**
@@ -257,7 +256,16 @@ public class Matrix {
         return index;
     }
 
-    public void setValue(int r, int c, int i) {
+    /**
+     * @param r row
+     * @param c column
+     * @return the value at the specified row and column
+     */
+    public double get(int r, int c) {
+        return data[r][c];
+    }
+
+    public void set(int r, int c, int i) {
         data[r][c] = i;
     }
 }
