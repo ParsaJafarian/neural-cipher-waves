@@ -39,7 +39,7 @@ public class MnistLoader  {
             Matrix x = Matrix.zeros(rows, cols);
             for (int r = 0; r < rows; r++)
                 for (int c = 0; c < cols; c++)
-                    x.setValue(r, c, dataInputStream.readUnsignedByte());
+                    x.set(r, c, dataInputStream.readUnsignedByte());
 
             data[i][0] = x.flatten();
             data[i][1] = y;

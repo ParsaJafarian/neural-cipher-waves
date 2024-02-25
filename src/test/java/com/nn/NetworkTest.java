@@ -3,7 +3,7 @@ package com.nn;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -19,13 +19,13 @@ public class NetworkTest {
 
         // Check Biases
         assert n.getBiases().size() == 1;
-        assert n.getBiases().getFirst().getRows() == 1; // 1 because the output layer has 1 neuron
-        assert n.getBiases().getFirst().getCols() == 1; // 1 because the output layer has 1 neuron
+        assert n.getBiases().get(0).getRows() == 1; // 1 because the output layer has 1 neuron
+        assert n.getBiases().get(0).getCols() == 1; // 1 because the output layer has 1 neuron
 
         // Check Weights
         assert n.getWeights().size() == 1;
-        assert n.getBiases().getFirst().getRows() == 1; // 1 because the output layer has 1 neuron
-        assert n.getWeights().getFirst().getCols() == 3; // 3 because the input layer has 3 neurons
+        assert n.getBiases().get(0).getRows() == 1; // 1 because the output layer has 1 neuron
+        assert n.getWeights().get(0).getCols() == 3; // 3 because the input layer has 3 neurons
 
         // Check Activation Function
         assert n.getActivationFunction() == ActivationFunction.SIGMOID;
@@ -52,8 +52,8 @@ public class NetworkTest {
             assert output.getData()[i][0] <= 1;
         }
 
-        System.out.println(Arrays.deepToString(n.getWeights().getFirst().getData()));
-        System.out.println(Arrays.deepToString(n.getBiases().getFirst().getData()));
+        System.out.println(Arrays.deepToString(n.getWeights().get(0).getData()));
+        System.out.println(Arrays.deepToString(n.getBiases().get(0).getData()));
     }
 
     @Test
@@ -82,8 +82,8 @@ public class NetworkTest {
         }
 
         //Save initial weights and biases
-        LinkedList<Matrix> initialWeights = n.getWeights();
-        LinkedList<Matrix> initialBiases = n.getBiases();
+        ArrayList<Matrix> initialWeights = n.getWeights();
+        ArrayList<Matrix> initialBiases = n.getBiases();
 
         n.sgd(trainingData, testData, 1, 2);
 

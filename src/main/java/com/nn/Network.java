@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -25,18 +25,18 @@ public class Network {
     private final int[] sizes;
     private final int numLayers;
 
-    private LinkedList<Matrix> activations;
+    private ArrayList<Matrix> activations;
     /**
-     * A list of weights matrices for each layer in the network.
+     * A ArrayList of weights matrices for each layer in the network.
      * The weights matrix for each layer is of size (n x m) where n is the number of neurons
      * in the current layer and m is the number of neurons in the previous layer.
      */
-    private final LinkedList<Matrix> weights;
+    private final ArrayList<Matrix> weights;
     /**
-     * A list of biases vectors for each layer in the network.
+     * A ArrayList of biases vectors for each layer in the network.
      * The biases vector for each layer is of size (n x 1) where n is the number of neurons in that layer.
      */
-    private final LinkedList<Matrix> biases;
+    private final ArrayList<Matrix> biases;
     private final ActivationFunction activationFunction;
     private final CostFunction costFunction;
     private static final HashMap<String, ActivationFunction> activationFunctions = new HashMap<>() {{
@@ -66,9 +66,9 @@ public class Network {
             throw new IllegalArgumentException("Cost function not found");
 
         //initialize weights and biases
-        weights = new LinkedList<>();
-        biases = new LinkedList<>();
-        activations = new LinkedList<>();
+        weights = new ArrayList<>();
+        biases = new ArrayList<>();
+        activations = new ArrayList<>();
 
         for (int i = 0; i < sizes.length - 1; i++) {
             weights.add(Matrix.random(sizes[i + 1], sizes[i]));
@@ -100,12 +100,12 @@ public class Network {
      * @param zs          array to store the z values of the network (passed in as an empty array)
      * @return the output of the network
      */
-    private Matrix feedForward(@NotNull Matrix inputs, LinkedList<Matrix> zs) {
+    private Matrix feedForward(@NotNull Matrix inputs, ArrayList<Matrix> zs) {
         //if input size is not equal to the first layer size and it's not a column vector, throw an exception
         if (inputs.getRows() != sizes[0] || inputs.getCols() != 1)
             throw new IllegalArgumentException("Invalid input size");
 
-        //clear the activations list and add the inputs to it
+        //clear the activations ArrayList and add the inputs to it
         activations.clear();
         activations.add(inputs);
 
@@ -122,7 +122,7 @@ public class Network {
     }
 
     Matrix feedForward(@NotNull Matrix inputs) {
-        return feedForward(inputs, new LinkedList<>());
+        return feedForward(inputs, new ArrayList<>());
     }
 
     private static void shuffleData(Matrix @NotNull [][] ar) {
@@ -212,29 +212,29 @@ public class Network {
     }
 
     /**
-     * @return an array of two linked lists. The first linked list contains the nablas for the biases and the second linked list contains the nablas for the weights
+     * @return an array of two linked ArrayLists. The first linked ArrayList contains the nablas for the biases and the second linked ArrayList contains the nablas for the weights
      */
     @Contract(" -> new")
-    private LinkedList<Matrix> @NotNull [] createNablas() {
-        LinkedList<Matrix> nablaB = new LinkedList<>();
-        LinkedList<Matrix> nablaW = new LinkedList<>();
+    private ArrayList<Matrix> @NotNull [] createNablas() {
+        ArrayList<Matrix> nablaB = new ArrayList<>();
+        ArrayList<Matrix> nablaW = new ArrayList<>();
 
         for (Matrix bias : biases) nablaB.add(Matrix.zeros(bias.getRows(), bias.getCols()));
         for (Matrix matrix : weights) nablaW.add(Matrix.zeros(matrix.getRows(), matrix.getCols()));
 
-        return new LinkedList[]{nablaB, nablaW};
+        return new ArrayList[]{nablaB, nablaW};
     }
 
     private void updateMiniBatch(Matrix[] @NotNull [] miniBatch) {
-        LinkedList<Matrix>[] nablas = createNablas();
-        LinkedList<Matrix> nablaB = nablas[0];
-        LinkedList<Matrix> nablaW = nablas[1];
+        ArrayList<Matrix>[] nablas = createNablas();
+        ArrayList<Matrix> nablaB = nablas[0];
+        ArrayList<Matrix> nablaW = nablas[1];
 
         for (Matrix[] inputs : miniBatch) {
 
-            LinkedList<Matrix>[] deltaNablas = backpropagation(inputs);
-            LinkedList<Matrix> deltaNablaB = deltaNablas[0];
-            LinkedList<Matrix> deltaNablaW = deltaNablas[1];
+            ArrayList<Matrix>[] deltaNablas = backpropagation(inputs);
+            ArrayList<Matrix> deltaNablaB = deltaNablas[0];
+            ArrayList<Matrix> deltaNablaW = deltaNablas[1];
 
             for (int i = 0; i < biases.size(); i++)
                 nablaB.set(i, nablaB.get(i).add(deltaNablaB.get(i)));
@@ -253,27 +253,26 @@ public class Network {
     /**
      * @param inputs inputs to the network. It's an array of two matrices where the first matrix is the input and the second matrix is the expected output
      */
-    private LinkedList<Matrix>[] backpropagation(Matrix @NotNull [] inputs) {
+    private ArrayList<Matrix>[] backpropagation(Matrix @NotNull [] inputs) {
         if (inputs.length != 2)
             throw new IllegalArgumentException("Invalid input size");
 
-        LinkedList<Matrix>[] nablas = createNablas();
-        LinkedList<Matrix> nablaB = nablas[0];
-        LinkedList<Matrix> nablaW = nablas[1];
+        ArrayList<Matrix>[] nablas = createNablas();
+        ArrayList<Matrix> nablaB = nablas[0];
+        ArrayList<Matrix> nablaW = nablas[1];
 
         Matrix x = inputs[0];
         Matrix y = inputs[1];
 
-        LinkedList<Matrix> activations = new LinkedList<>();
-        LinkedList<Matrix> zs = new LinkedList<>();
+        ArrayList<Matrix> zs = new ArrayList<>();
 
         //feedforward (store the activations and zs)
         feedForward(x, zs);
 
         //backward pass
         //delta^L = (a^L - y) (+) f'(z^L)
-        Matrix a = activations.getLast();
-        Matrix z = zs.getLast();
+        Matrix a = activations.get(activations.size() - 1); //a^L
+        Matrix z = zs.get(zs.size() - 1); //z^L
         Matrix delta = costFunction.der(y, a).multiply(activationFunction.der(z));
 
         //deltaNablaB^L = delta^L
@@ -296,7 +295,7 @@ public class Network {
             nablaW.set(nablaW.size() - l, delta.dot(a.transpose()));
         }
 
-        return new LinkedList[]{nablaB, nablaW};
+        return new ArrayList[]{nablaB, nablaW};
     }
 
     public int getNumLayers() {
@@ -307,11 +306,11 @@ public class Network {
         return sizes;
     }
 
-    public LinkedList<Matrix> getWeights() {
+    public ArrayList<Matrix> getWeights() {
         return weights;
     }
 
-    public LinkedList<Matrix> getBiases() {
+    public ArrayList<Matrix> getBiases() {
         return biases;
     }
 
@@ -345,9 +344,10 @@ public class Network {
     /**
      * @return a deep copy of the activations of the network
      */
-    public LinkedList<Matrix> getActivations() {
-        LinkedList<Matrix> copy = new LinkedList<>();
-        activations.forEach(x -> copy.add(x.clone()));
-        return copy;
+    public ArrayList<Matrix> getActivations() {
+//        ArrayList<Matrix> copy = new ArrayList<>();
+//        activations.forEach(x -> copy.add(x.clone()));
+//        return copy;
+        return activations;
     }
 }
