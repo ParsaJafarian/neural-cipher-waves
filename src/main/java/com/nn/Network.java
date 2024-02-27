@@ -1,5 +1,6 @@
 package com.nn;
 
+import javafx.beans.property.SimpleObjectProperty;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,15 +11,15 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.nn.Activation.activationFunctions;
+import static com.nn.Loss.losses;
+
 /**
  * Neural network class for creating and training neural networks.
  */
 public class Network {
     private double learningRate;
-    private static final HashMap<String, Loss> losses = new HashMap<>() {{
-        put("mse", Loss.MSE);
-        put("mae", Loss.MAE);
-    }};
+
     /**
      * An array of sizes of the layers in the network.
      * Each element represents a layer while the value represents the number of neurons in that layer.
@@ -38,13 +39,8 @@ public class Network {
      * The biases vector for each layer is of size (n x 1) where n is the number of neurons in that layer.
      */
     private final ArrayList<Matrix> biases;
-    private final Activation activation;
-    private final Loss loss;
-    private static final HashMap<String, Activation> activationFunctions = new HashMap<>() {{
-        put("sigmoid", Activation.SIGMOID);
-        put("tanh", Activation.TANH);
-        put("relu", Activation.RELU);
-    }};
+    private Activation activation;
+    private Loss loss;
 
     /**
      * Constructor for the network.
@@ -61,8 +57,7 @@ public class Network {
             throw new IllegalArgumentException("Network must have at least 2 layers");
         if (Arrays.stream(sizes).anyMatch(x -> x <= 0))
             throw new IllegalArgumentException("Invalid layer sizes");
-        if (!activationFunctions.containsKey(activationFunction))
-            throw new IllegalArgumentException("Activation function not found");
+
         if (!losses.containsKey(costFunction))
             throw new IllegalArgumentException("Cost function not found");
 
@@ -333,9 +328,6 @@ public class Network {
         return biases;
     }
 
-    public Activation getActivationFunction() {
-        return activation;
-    }
 
     @Override
     public String toString() {
@@ -356,7 +348,21 @@ public class Network {
         this.learningRate = learningRate;
     }
 
-    public Loss getCostFunction() {
+    public void setActivation(String activationFunction){
+        if (!activationFunctions.containsKey(activationFunction))
+            throw new IllegalArgumentException("Activation function not found");
+        this.activation = activationFunctions.get(activationFunction);
+    }
+
+    /**
+     * @return the activation function
+     */
+    public Activation getActivation() {
+        return activation;
+    }
+
+
+    public Loss getLoss() {
         return loss;
     }
 
@@ -368,5 +374,11 @@ public class Network {
 //        activations.forEach(x -> copy.add(x.clone()));
 //        return copy;
         return activations;
+    }
+
+    public void setLoss(String value) {
+        if (!losses.containsKey(value))
+            throw new IllegalArgumentException("Loss function not found");
+        this.loss = losses.get(value);
     }
 }

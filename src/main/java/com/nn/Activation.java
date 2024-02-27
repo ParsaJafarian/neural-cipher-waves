@@ -1,5 +1,7 @@
 package com.nn;
 
+import java.util.HashMap;
+
 /**
  * Enum for activation functions used in the neural network.
  * <p>
@@ -90,6 +92,12 @@ enum Activation {
             return x > 0 ? 1 : 0;
         }
     };
+
+    public static final HashMap<String, Activation> activationFunctions = new HashMap<>() {{
+        put("sigmoid", Activation.SIGMOID);
+        put("tanh", Activation.TANH);
+        put("relu", Activation.RELU);
+    }};
 
     /**
      * @param m matrix to apply the function to

@@ -31,7 +31,7 @@ public class MnistLoader  {
 
         for(int i = 0; i < numberOfItems; i++) {
             //Set the label (y vector)
-            int[][] yData = new int[10][1];
+            double[][] yData = new double[10][1];
             int label = labelInputStream.readUnsignedByte();
             yData[label][0] = 1;
             Matrix y = new Matrix(yData);

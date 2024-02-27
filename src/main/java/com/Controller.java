@@ -39,9 +39,6 @@ public class Controller {
 
         startStopBtn.setText("Train");
 
-        network = new Network(learningRateCB.getValue(), activationCB.getValue(), lossCB.getValue(), 4,6,1);
-        networkDisplay = new NetworkDisplay(networkPane, network);
-
         Matrix[][] trainData = new Matrix[][]{
                 new Matrix[]{
                         Matrix.random(4,1),
@@ -49,8 +46,15 @@ public class Controller {
                 }
         };
 
+        network = new Network(learningRateCB.getValue(), activationCB.getValue(), lossCB.getValue(), 4,6,1);
+        networkDisplay = new NetworkDisplay(networkPane, network);
+
         startStopBtn.setOnAction(e -> {
-            network.sgd(trainData, null, 1, 1);
+            network.setLearningRate(learningRateCB.getValue());
+            network.setActivation(activationCB.getValue());
+            network.setLoss(lossCB.getValue());
+
+            network.sgd(trainData, null, 2, 1);
             //update display
             networkDisplay.update();
         });

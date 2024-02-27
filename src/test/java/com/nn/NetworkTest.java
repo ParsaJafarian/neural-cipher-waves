@@ -28,10 +28,10 @@ public class NetworkTest {
         assert n.getWeights().get(0).getCols() == 3; // 3 because the input layer has 3 neurons
 
         // Check Activation Function
-        assert n.getActivationFunction() == Activation.SIGMOID;
+        assert n.getActivation() == Activation.SIGMOID;
 
         // Check Cost Function
-        assert n.getCostFunction() == Loss.MSE;
+        assert n.getLoss() == Loss.MSE;
 
         // Check Learning Rate
         assert n.getLearningRate() == 2.0;
@@ -48,8 +48,8 @@ public class NetworkTest {
 
         // Check if the output is between 0 and 1
         for (int i = 0; i < output.getRows(); i++) {
-            assert output.getData()[i][0] >= 0;
-            assert output.getData()[i][0] <= 1;
+            assert output.get(i, 0) >= 0;
+            assert output.get(i, 0) <= 1;
         }
 
         System.out.println(Arrays.deepToString(n.getWeights().get(0).getData()));
