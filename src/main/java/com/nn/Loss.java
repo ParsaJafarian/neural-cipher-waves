@@ -45,7 +45,7 @@ public enum Loss {
         }
     };
 
-    public static final HashMap<String, Loss> losses = new java.util.HashMap<>() {{
+    private static final HashMap<String, Loss> losses = new java.util.HashMap<>() {{
         put("mse", Loss.MSE);
         put("mae", Loss.MAE);
     }};
@@ -53,4 +53,18 @@ public enum Loss {
     public abstract Matrix f(Matrix y, Matrix a);
 
     public abstract Matrix der(Matrix y, Matrix a);
+
+    public static Loss getLoss(String loss) {
+        if (!losses.containsKey(loss))
+            throw new IllegalArgumentException("Loss function not found");
+        return losses.get(loss);
+    }
+
+    public boolean equals(Loss l){
+        return this.toString().equals(l.toString());
+    }
+
+    public boolean equals(String s){
+        return this.toString().equals(s);
+    }
 }

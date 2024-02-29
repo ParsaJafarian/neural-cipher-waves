@@ -1,18 +1,13 @@
 package com.nn;
 
-import javafx.beans.property.SimpleObjectProperty;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static com.nn.Activation.activationFunctions;
-import static com.nn.Loss.losses;
 
 /**
  * Neural network class for creating and training neural networks.
@@ -24,8 +19,8 @@ public class Network {
      * An array of sizes of the layers in the network.
      * Each element represents a layer while the value represents the number of neurons in that layer.
      */
-    private final int[] sizes;
-    private final int numLayers;
+    private int[] sizes;
+    private int numLayers;
 
     private final ArrayList<Matrix> activations;
     /**
@@ -47,19 +42,10 @@ public class Network {
      *
      * @param learningRate       learning rate of the network
      * @param activationFunction activation function of the network
-     * @param costFunction       cost function of the network
+     * @param loss               cost function of the network
      * @param sizes              sizes of the layers in the network.
      */
-    public Network(double learningRate, String activationFunction, String costFunction, int @NotNull ... sizes) {
-        if (learningRate <= 0.0)
-            throw new IllegalArgumentException("Learning rate must be positive");
-        if (sizes.length < 2)
-            throw new IllegalArgumentException("Network must have at least 2 layers");
-        if (Arrays.stream(sizes).anyMatch(x -> x <= 0))
-            throw new IllegalArgumentException("Invalid layer sizes");
-
-        if (!losses.containsKey(costFunction))
-            throw new IllegalArgumentException("Cost function not found");
+    public Network(double learningRate, String activationFunction, String loss, int @NotNull ... sizes) {
 
         //initialize weights and biases
         weights = new ArrayList<>();
@@ -71,12 +57,27 @@ public class Network {
             biases.add(Matrix.random(sizes[i + 1], 1));
         }
 
+        this.setSizes(sizes);
+        this.setActivation(activationFunction);
+        this.setLoss(loss);
+        this.setLearningRate(learningRate);
+    }
+
+    public void setSizes(int... sizes) {
+        if (sizes.length < 2)
+            throw new IllegalArgumentException("Network must have at least 2 layers");
+        if (Arrays.stream(sizes).anyMatch(x -> x <= 0))
+            throw new IllegalArgumentException("Invalid layer sizes");
+
+        this.weights.clear();
+        this.biases.clear();
+        for (int i = 0; i < sizes.length - 1; i++) {
+            weights.add(Matrix.random(sizes[i + 1], sizes[i]));
+            biases.add(Matrix.random(sizes[i + 1], 1));
+        }
+
         this.sizes = sizes;
         this.numLayers = sizes.length;
-        this.activation = activationFunctions.get(activationFunction);
-        this.loss = losses.get(costFunction);
-        this.learningRate = learningRate;
-
     }
 
     /**
@@ -92,8 +93,8 @@ public class Network {
     /**
      * Feed forward the inputs through the network with the current weights and biases and activation function.
      *
-     * @param inputs      input to the network
-     * @param zs          array to store the z values of the network (passed in as an empty array)
+     * @param inputs input to the network
+     * @param zs     array to store the z values of the network (passed in as an empty array)
      * @return the output of the network
      */
     private Matrix feedForward(@NotNull Matrix inputs, ArrayList<Matrix> zs) {
@@ -179,7 +180,7 @@ public class Network {
                     }
                 }
                 if (isNaN.get()) {
-                    System.out.println("NaN detected in weights or biases in epoch " + i + " mini batch " + j/miniBatchSize);
+                    System.out.println("NaN detected in weights or biases in epoch " + i + " mini batch " + j / miniBatchSize);
                     break;
                 }
             }
@@ -345,13 +346,13 @@ public class Network {
     }
 
     public void setLearningRate(double learningRate) {
+        if (learningRate <= 0.0)
+            throw new IllegalArgumentException("Learning rate must be positive");
         this.learningRate = learningRate;
     }
 
-    public void setActivation(String activationFunction){
-        if (!activationFunctions.containsKey(activationFunction))
-            throw new IllegalArgumentException("Activation function not found");
-        this.activation = activationFunctions.get(activationFunction);
+    public void setActivation(String activation) {
+        this.activation = Activation.getActivation(activation);
     }
 
     /**
@@ -377,8 +378,7 @@ public class Network {
     }
 
     public void setLoss(String value) {
-        if (!losses.containsKey(value))
-            throw new IllegalArgumentException("Loss function not found");
-        this.loss = losses.get(value);
+
+        this.loss = Loss.getLoss(value);
     }
 }

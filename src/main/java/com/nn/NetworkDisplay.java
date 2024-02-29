@@ -20,7 +20,7 @@ public class NetworkDisplay {
     private static final int PANE_PADDING = 20;
     private final Pane pane;
 
-    private final Network network;
+    private Network network;
     private ArrayList<Matrix> activations;
 
     private final ArrayList<Line> lineWeights = new ArrayList<>();
@@ -31,20 +31,9 @@ public class NetworkDisplay {
      */
     public NetworkDisplay(Pane pane, Network network) {
         this.pane = pane;
-
-        pane.setPrefSize(WIDTH, HEIGHT);
-
-        this.network = network;
+        this.pane.setPrefSize(WIDTH, HEIGHT);
         this.neuronList = new ArrayList<>();
-        this.activations = network.getActivations();
-        if (this.activations.isEmpty()) {
-            for (int i = 0; i < network.getSizes().length; i++) {
-                this.activations.add(new Matrix(network.getSizes()[i], 1));
-            }
-        }
-
-        generateNeurons();
-        generateWeight();
+        this.setNetwork(network);
     }
 
     private void generateNeurons() {
@@ -119,6 +108,28 @@ public class NetworkDisplay {
                 ((SimpleDoubleProperty) neuronList.get(i).get(j).getUserData()).set(activations.get(i).get(j, 0));
             }
         }
+    }
+
+    public void clear() {
+        pane.getChildren().clear();
+        if (activations != null) activations.clear();
+        neuronList.clear();
+        lineWeights.clear();
+    }
+
+    public void setNetwork(Network network) {
+        this.clear();
+        this.network = network;
+
+        activations = network.getActivations();
+        if (this.activations.isEmpty()) {
+            for (int i = 0; i < network.getSizes().length; i++) {
+                this.activations.add(new Matrix(network.getSizes()[i], 1));
+            }
+        }
+
+        generateNeurons();
+        generateWeight();
     }
 }
 

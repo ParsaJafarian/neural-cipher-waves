@@ -3,6 +3,7 @@ package com;
 import com.nn.Matrix;
 import com.nn.Network;
 import com.nn.NetworkDisplay;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.chart.LineChart;
@@ -12,6 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+
+import java.util.Objects;
 
 public class Controller {
     public HBox inputSection;
@@ -28,7 +31,7 @@ public class Controller {
 
     @FXML
     public void initialize() {
-        learningRateCB.getItems().addAll( 0.001, 0.01, 0.1, 1.0);
+        learningRateCB.getItems().addAll(0.001, 0.01, 0.1, 1.0);
         learningRateCB.getSelectionModel().select(0);
 
         activationCB.getItems().addAll("sigmoid", "relu", "tanh");
@@ -41,23 +44,30 @@ public class Controller {
 
         Matrix[][] trainData = new Matrix[][]{
                 new Matrix[]{
-                        Matrix.random(4,1),
+                        Matrix.random(4, 1),
                         new Matrix(new double[][]{{1}})
                 }
         };
 
-        network = new Network(learningRateCB.getValue(), activationCB.getValue(), lossCB.getValue(), 4,6,1);
+        network = new Network(learningRateCB.getValue(), activationCB.getValue(), lossCB.getValue(), 4, 6, 1);
         networkDisplay = new NetworkDisplay(networkPane, network);
 
-        startStopBtn.setOnAction(e -> {
-            network.setLearningRate(learningRateCB.getValue());
-            network.setActivation(activationCB.getValue());
-            network.setLoss(lossCB.getValue());
+        learningRateCB.valueProperty().addListener(this::onComboBoxChange);
+        activationCB.valueProperty().addListener(this::onComboBoxChange);
+        lossCB.valueProperty().addListener(this::onComboBoxChange);
 
-            network.sgd(trainData, null, 2, 1);
-            //update display
+        startStopBtn.setOnAction(e -> {
+            network.sgd(trainData, null, 1, 1);
             networkDisplay.update();
         });
 
+    }
+
+    private void onComboBoxChange(Object obs, Object oldVal, Object newVal) {
+        if(!Objects.equals(newVal, oldVal)) {
+//            network = new Network(learningRateCB.getValue(), activationCB.getValue(), lossCB.getValue(), 4, 6, 1);
+            networkPane.getChildren().clear(); //-> works
+//            networkDisplay = new NetworkDisplay(networkPane, network);
+        }
     }
 }
