@@ -1,10 +1,12 @@
 package com.cipher;
 
 
-
+import static java.lang.Character.*;
+import java.util.function.Function;
 public class CC_Engine {
+    public static final String puncset = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
     public static void main(String[] args) {
-        String enText = CC_encrypt("yo bro parsa this be real good for real imma have the best\ntime of my life for real ", 0);
+        String enText = CC_encrypt("yo bro parsa! this be real good for real... I'mma have the best\ntime of my life for real ", 3);
         System.out.println(enText);
         String deText = CC_decrypt(enText, 3);
         System.out.println(deText);
@@ -17,10 +19,19 @@ public class CC_Engine {
         for (char character : encryptee.toCharArray())
         {
             if (character != ' ' && character != '\n') {
-                int InPos = character - 'a';
-                int FiPos = (InPos + key) % 26;
-                char enChar = (char) ('a' + FiPos);
-                encrypted.append(enChar);
+                if (isLowerCase(character)) {
+                    int InPos = character - 'a';
+                    int FiPos = (InPos + key) % 26;
+                    char enChar = (char) ('a' + FiPos);
+                    encrypted.append(enChar);
+                } else if (isUpperCase(character)){
+                    int InPos = character - 'A';
+                    int FiPos = (InPos + key) % 26;
+                    char enChar = (char) ('A' + FiPos);
+                    encrypted.append(enChar);
+                } else{
+                    encrypted.append(character);
+                }
             }
             else {
                 encrypted.append(character);
