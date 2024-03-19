@@ -12,4 +12,6 @@ module com.wavesneuralnetwork {
     exports com;
     exports com.nn;
     opens com.nn to javafx.fxml;
+    exports com.cipher;
+    opens com.cipher to javafx.fxml;
 }

@@ -6,9 +6,9 @@ import java.util.function.Function;
 public class CC_Engine {
     public static final String puncset = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
     public static void main(String[] args) {
-        String enText = CC_encrypt("yo bro parsa! this be real good for real... I'mma have the best\ntime of my life for real ", 3);
+        String enText = CC_encrypt("Hi team, I woke up sick. I can't come to work today!", 2);
         System.out.println(enText);
-        String deText = CC_decrypt(enText, 3);
+        String deText = CC_decrypt(enText, 2);
         System.out.println(deText);
     }
     static String CC_decrypt(String encrypted, int key){
