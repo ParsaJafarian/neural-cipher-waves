@@ -63,7 +63,7 @@ public class Network {
         this.setLearningRate(learningRate);
     }
 
-    public void setSizes(int... sizes) {
+    public void setSizes(int @NotNull ... sizes) {
         if (sizes.length < 2)
             throw new IllegalArgumentException("Network must have at least 2 layers");
         if (Arrays.stream(sizes).anyMatch(x -> x <= 0))
@@ -204,7 +204,7 @@ public class Network {
      * @param testData the test data. Structure: [[input matrix, output matrix], ...]
      * @return the accuracy of the network on the test data
      */
-    private double evaluate(Matrix[][] testData) {
+    private double evaluate(Matrix[] @NotNull [] testData) {
         if (testData.length == 0)
             throw new IllegalArgumentException("Test data is empty");
 
@@ -288,7 +288,7 @@ public class Network {
         //delta^L = (a^L - y) (+) f'(z^L)
         Matrix a = activations.get(activations.size() - 1); //a^L
         Matrix z = zs.get(zs.size() - 1); //z^L
-        Matrix delta = loss.der(y, a).multiply(activation.der(z));
+        Matrix delta = loss.der(y, a).hadamard(activation.der(z));
 
         //deltaNablaB^L = delta^L
         nablaB.set(nablaB.size() - 1, delta);
@@ -301,7 +301,7 @@ public class Network {
             Matrix sp = activation.der(z); //f'(z^l)
 
             //delta^(l)= ((w^(l+1))^T * delta^(l+1)) (+) f'(z^l)
-            delta = weights.get(weights.size() - l + 1).transpose().dot(delta).multiply(sp);
+            delta = weights.get(weights.size() - l + 1).transpose().dot(delta).hadamard(sp);
 
             //deltaNablaB^l = delta^l
             nablaB.set(nablaB.size() - l, delta);

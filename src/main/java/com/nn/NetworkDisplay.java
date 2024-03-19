@@ -122,11 +122,9 @@ public class NetworkDisplay {
         this.network = network;
 
         activations = network.getActivations();
-        if (this.activations.isEmpty()) {
-            for (int i = 0; i < network.getSizes().length; i++) {
+        if (this.activations.isEmpty())
+            for (int i = 0; i < network.getSizes().length; i++)
                 this.activations.add(new Matrix(network.getSizes()[i], 1));
-            }
-        }
 
         generateNeurons();
         generateWeight();
