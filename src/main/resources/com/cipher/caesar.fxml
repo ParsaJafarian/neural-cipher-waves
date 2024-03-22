@@ -142,17 +142,17 @@
                         </HBox>
                         <StackPane prefHeight="150.0" prefWidth="200.0">
                            <children>
-                              <ImageView fitHeight="800.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
+                              <ImageView fitHeight="422.0" fitWidth="425.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
                                  <image>
                                     <Image url="@outer.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fitHeight="359.0" fitWidth="303.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
+                              <ImageView fitHeight="341.0" fitWidth="330.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
                                  <image>
                                     <Image url="@inner.png" />
                                  </image>
                                  <StackPane.margin>
-                                    <Insets top="18.0" />
+                                    <Insets />
                                  </StackPane.margin>
                               </ImageView>
                            </children>
