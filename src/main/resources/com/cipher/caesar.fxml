@@ -37,9 +37,9 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -102,7 +102,7 @@
       </Label>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="683.0" prefWidth="1108.0" VBox.vgrow="ALWAYS">
       <children>
-            <HBox alignment="CENTER" layoutX="-1.0" prefHeight="707.0" prefWidth="1108.0">
+            <HBox alignment="CENTER" focusTraversable="true" layoutX="-1.0" prefHeight="707.0" prefWidth="1108.0">
                <children>
                   <VBox prefHeight="707.0" prefWidth="420.0">
                      <children>
@@ -120,29 +120,35 @@
                   </VBox>
                   <VBox prefHeight="707.0" prefWidth="500.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="33.0" prefWidth="191.0">
+                        <HBox alignment="CENTER" prefHeight="45.0" prefWidth="393.0">
                            <children>
-                              <ToggleButton contentDisplay="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" selected="true" text="Encrypt" textAlignment="CENTER">
+                              <RadioButton mnemonicParsing="false" prefHeight="45.0" prefWidth="125.0" selected="true" styleClass="toggle-button" stylesheets="@caesar.css" text="Encrypt   ">
                                  <toggleGroup>
-                                    <ToggleGroup fx:id="action" />
+                                    <ToggleGroup fx:id="ende" />
                                  </toggleGroup>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </ToggleButton>
-                              <ToggleButton contentDisplay="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" text="Decrypt" textAlignment="CENTER" toggleGroup="$action">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </RadioButton>
+                              <RadioButton mnemonicParsing="false" prefHeight="45.0" prefWidth="125.0" styleClass="toggle-button" stylesheets="@caesar.css" text="Decrypt   " toggleGroup="$ende">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>
-                              </ToggleButton>
+                              </RadioButton>
                            </children>
+                           <VBox.margin>
+                              <Insets bottom="25.0" left="15.0" right="15.0" top="15.0" />
+                           </VBox.margin>
                         </HBox>
                         <StackPane prefHeight="150.0" prefWidth="200.0">
                            <children>
-                              <ImageView fitHeight="422.0" fitWidth="425.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
+                              <ImageView fitHeight="495.0" fitWidth="422.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
                                  <image>
                                     <Image url="@outer.png" />
                                  </image>
