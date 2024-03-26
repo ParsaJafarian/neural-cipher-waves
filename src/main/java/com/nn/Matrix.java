@@ -153,7 +153,7 @@ public class Matrix {
      * @param m matrix to multiply
      * @return a new matrix that is the Hadamard product of this matrix and m
      */
-    public Matrix multiply(@NotNull Matrix m) {
+    public Matrix hadamard(@NotNull Matrix m) {
         if (rows != m.rows || cols != m.cols)
             throw new IllegalArgumentException("Invalid matrix size");
 

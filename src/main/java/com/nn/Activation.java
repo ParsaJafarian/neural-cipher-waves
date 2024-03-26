@@ -13,7 +13,7 @@ import java.util.HashMap;
  *     </ul>
  * </p>
  */
-enum Activation {
+public enum Activation {
     /**
      * Sigmoid activation function.
      * <br>
@@ -38,6 +38,10 @@ enum Activation {
 
         public double der(double x) {
             return x * (1 - x);
+        }
+
+        public String toString() {
+            return "sigmoid";
         }
     },
     /**
@@ -65,6 +69,10 @@ enum Activation {
         public double der(double x) {
             return 1 - Math.pow(x, 2);
         }
+
+        public String toString() {
+            return "tanh";
+        }
     },
     /**
      * ReLU activation function.
@@ -91,9 +99,13 @@ enum Activation {
         public double der(double x) {
             return x > 0 ? 1 : 0;
         }
+
+        public String toString() {
+            return "relu";
+        }
     };
 
-    public static final HashMap<String, Activation> activationFunctions = new HashMap<>() {{
+    static final HashMap<String, Activation> activationFunctions = new HashMap<>() {{
         put("sigmoid", Activation.SIGMOID);
         put("tanh", Activation.TANH);
         put("relu", Activation.RELU);
@@ -114,5 +126,21 @@ enum Activation {
     public abstract Matrix der(Matrix m);
 
     public abstract double der(double x);
+
+    public abstract String toString();
+
+    public boolean equals(Activation a){
+        return this.toString().equals(a.toString());
+    }
+
+    public boolean equals(String s){
+        return this.toString().equals(s);
+    }
+
+    public static Activation getActivation(String activation) {
+        if (!activationFunctions.containsKey(activation))
+            throw new IllegalArgumentException("Activation function not found");
+        return activationFunctions.get(activation);
+    }
 
 }

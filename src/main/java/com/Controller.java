@@ -3,6 +3,7 @@ package com;
 import com.nn.Matrix;
 import com.nn.Network;
 import com.nn.NetworkDisplay;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.chart.LineChart;
@@ -12,6 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+
+import java.util.Objects;
 
 public class Controller {
     public HBox inputSection;
@@ -28,7 +31,7 @@ public class Controller {
 
     @FXML
     public void initialize() {
-        learningRateCB.getItems().addAll( 0.001, 0.01, 0.1, 1.0);
+        learningRateCB.getItems().addAll(0.001, 0.01, 0.1, 1.0);
         learningRateCB.getSelectionModel().select(0);
 
         activationCB.getItems().addAll("sigmoid", "relu", "tanh");
@@ -41,7 +44,7 @@ public class Controller {
 
         Matrix[][] trainData = new Matrix[][]{
                 new Matrix[]{
-                        Matrix.random(4,1),
+                        Matrix.random(4, 1),
                         new Matrix(new double[][]{{1}})
                 }
         };
@@ -60,6 +63,5 @@ public class Controller {
         });
 
         clrBtn.setOnAction(e -> networkDisplay.clear());
-
     }
 }

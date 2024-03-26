@@ -20,7 +20,7 @@ public class NetworkDisplay {
     private static final int PANE_PADDING = 20;
     private final Pane pane;
 
-    private final Network network;
+    private Network network;
     private ArrayList<Matrix> activations;
 
     private final ArrayList<Line> lineWeights = new ArrayList<>();

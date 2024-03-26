@@ -45,19 +45,10 @@ public class Network {
      *
      * @param learningRate       learning rate of the network
      * @param activationFunction activation function of the network
-     * @param costFunction       cost function of the network
+     * @param loss               cost function of the network
      * @param sizes              sizes of the layers in the network.
      */
-    public Network(double learningRate, String activationFunction, String costFunction, int @NotNull ... sizes) {
-        if (learningRate <= 0.0)
-            throw new IllegalArgumentException("Learning rate must be positive");
-        if (sizes.length < 2)
-            throw new IllegalArgumentException("Network must have at least 2 layers");
-        if (Arrays.stream(sizes).anyMatch(x -> x <= 0))
-            throw new IllegalArgumentException("Invalid layer sizes");
-
-        if (!losses.containsKey(costFunction))
-            throw new IllegalArgumentException("Cost function not found");
+    public Network(double learningRate, String activationFunction, String loss, int @NotNull ... sizes) {
 
         //initialize weights and biases
         weights = new ArrayList<>();
@@ -76,7 +67,7 @@ public class Network {
         this.sizes = sizes;
         this.numLayers = sizes.length;
         this.activation = activationFunctions.get(activationFunction);
-        this.loss = losses.get(costFunction);
+        this.loss = losses.get(loss);
         this.learningRate = learningRate;
     }
 
@@ -93,8 +84,8 @@ public class Network {
     /**
      * Feed forward the inputs through the network with the current weights and biases and activation function.
      *
-     * @param inputs      input to the network
-     * @param zs          array to store the z values of the network (passed in as an empty array)
+     * @param inputs input to the network
+     * @param zs     array to store the z values of the network (passed in as an empty array)
      * @return the output of the network
      */
     private Matrix feedForward(@NotNull Matrix inputs, ArrayList<Matrix> zs) {
@@ -180,7 +171,7 @@ public class Network {
                     }
                 }
                 if (isNaN.get()) {
-                    System.out.println("NaN detected in weights or biases in epoch " + i + " mini batch " + j/miniBatchSize);
+                    System.out.println("NaN detected in weights or biases in epoch " + i + " mini batch " + j / miniBatchSize);
                     break;
                 }
             }
@@ -204,7 +195,7 @@ public class Network {
      * @param testData the test data. Structure: [[input matrix, output matrix], ...]
      * @return the accuracy of the network on the test data
      */
-    private double evaluate(Matrix[][] testData) {
+    private double evaluate(Matrix[] @NotNull [] testData) {
         if (testData.length == 0)
             throw new IllegalArgumentException("Test data is empty");
 
@@ -288,7 +279,7 @@ public class Network {
         //delta^L = (a^L - y) (+) f'(z^L)
         Matrix a = activations.get(activations.size() - 1); //a^L
         Matrix z = zs.get(zs.size() - 1); //z^L
-        Matrix delta = loss.der(y, a).multiply(activation.der(z));
+        Matrix delta = loss.der(y, a).hadamard(activation.der(z));
 
         //deltaNablaB^L = delta^L
         nablaB.set(nablaB.size() - 1, delta);
@@ -301,7 +292,7 @@ public class Network {
             Matrix sp = activation.der(z); //f'(z^l)
 
             //delta^(l)= ((w^(l+1))^T * delta^(l+1)) (+) f'(z^l)
-            delta = weights.get(weights.size() - l + 1).transpose().dot(delta).multiply(sp);
+            delta = weights.get(weights.size() - l + 1).transpose().dot(delta).hadamard(sp);
 
             //deltaNablaB^l = delta^l
             nablaB.set(nablaB.size() - l, delta);
