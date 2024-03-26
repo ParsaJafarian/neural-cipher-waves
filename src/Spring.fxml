@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" fx:id="back" maxHeight="200.0" minHeight="800.0" prefHeight="200.0" prefWidth="1500.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SpringController">
+   <children>
+      <Slider fx:id="freq" layoutX="918.0" layoutY="629.0" max="10.0" prefHeight="14.0" prefWidth="560.0" value="1.0" />
+      <Label layoutX="730.0" layoutY="613.0" prefHeight="46.0" prefWidth="170.0" text="Frequency" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="31.0" />
+         </font>
+      </Label>
+      <Slider fx:id="amp" layoutX="918.0" layoutY="699.0" max="400.0" prefHeight="14.0" prefWidth="560.0" value="200.0" />
+      <Label layoutX="730.0" layoutY="683.0" prefHeight="46.0" prefWidth="170.0" text="Length" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="31.0" />
+         </font>
+      </Label>
+      <Label layoutX="730.0" layoutY="336.0" prefHeight="52.0" prefWidth="237.0" text="Wave Function:" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="30.0" />
+         </font>
+      </Label>
+      <LineChart layoutX="745.0" layoutY="12.0" prefHeight="243.0" prefWidth="321.0">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </LineChart>
+      <Label layoutX="798.0" layoutY="242.0" text="Kinetic and Potential Energy" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="21.0" />
+         </font>
+      </Label>
+      <Button layoutX="25.0" layoutY="21.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="79.0" text="Exit" />
+      <Label fx:id="period" layoutX="730.0" layoutY="472.0" prefHeight="52.0" prefWidth="237.0" text="Period:" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="30.0" />
+         </font>
+      </Label>
+      <Label layoutX="730.0" layoutY="402.0" prefHeight="52.0" prefWidth="292.0" text="Angular Frequency:" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="30.0" />
+         </font>
+      </Label>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d7c7c7" height="5.0" layoutX="64.0" layoutY="228.0" stroke="BLACK" strokeType="INSIDE" width="42.0" />
+      <Rectangle arcHeight="5.0" fill="#d7c7c7" height="5.0" layoutX="84.0" layoutY="195.0" rotate="-60.0" stroke="BLACK" strokeType="INSIDE" width="80.0" />
+      <Rectangle arcHeight="5.0" fill="#d7c7c7" height="5.0" layoutX="261.0" layoutY="232.0" rotate="60.0" stroke="BLACK" strokeType="INSIDE" width="160.0" />
+      <Rectangle arcHeight="5.0" fill="#d7c7c7" height="5.0" layoutX="183.0" layoutY="233.0" rotate="-60.0" stroke="BLACK" strokeType="INSIDE" width="160.0" />
+      <Rectangle arcHeight="5.0" fill="#d7c7c7" height="5.0" layoutX="102.0" layoutY="231.0" rotate="60.0" stroke="BLACK" strokeType="INSIDE" width="160.0" />
+      <Rectangle arcHeight="5.0" fill="#d7c7c7" height="5.0" layoutX="341.0" layoutY="230.0" rotate="-60.0" stroke="BLACK" strokeType="INSIDE" width="160.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d7c7c7" height="5.0" layoutX="497.0" layoutY="230.0" stroke="BLACK" strokeType="INSIDE" width="42.0" />
+      <Rectangle arcHeight="5.0" fill="#d7c7c7" height="5.0" layoutX="440.0" layoutY="193.0" rotate="60.0" stroke="BLACK" strokeType="INSIDE" width="80.0" />
+      <Rectangle fx:id="block" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="120.0" stroke="BLACK" strokeType="INSIDE" width="120.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="200.0" layoutX="47.0" layoutY="127.0" stroke="BLACK" strokeType="INSIDE" width="18.0" />
+      <Label fx:id="constant" layoutX="730.0" layoutY="534.0" prefHeight="52.0" prefWidth="237.0" text="Spring Constant:" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="30.0" />
+         </font>
+      </Label>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="209.0" layoutX="-34.0" layoutY="124.0" stroke="BLACK" strokeType="INSIDE" width="86.0" />
+      <ImageView fitHeight="217.0" fitWidth="487.0" layoutX="85.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../../Screenshot%202024-02-27%20at%2012.22.55%E2%80%AFPM.png" />
+         </image>
+      </ImageView>
+      <Line fx:id="path" endX="300.0" endY="-0.5" layoutX="172.0" layoutY="231.0" startX="-108.0" startY="-0.5" stroke="RED" visible="false" />
+      <Label fx:id="equation" layoutX="957.0" layoutY="337.0" prefHeight="49.0" prefWidth="368.0" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="33.0" />
+         </font>
+      </Label>
+      <Label fx:id="angVel" layoutX="1018.0" layoutY="403.0" prefHeight="49.0" prefWidth="321.0" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="33.0" />
+         </font>
+      </Label>
+      <Label fx:id="period" layoutX="856.0" layoutY="473.0" prefHeight="49.0" prefWidth="398.0" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="33.0" />
+         </font>
+      </Label>
+      <Label fx:id="constant" layoutX="976.0" layoutY="535.0" prefHeight="49.0" prefWidth="200.0" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="33.0" />
+         </font>
+      </Label>
+      <Label layoutX="730.0" layoutY="740.0" prefHeight="46.0" prefWidth="208.0" text="Mass: 1 kg" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="31.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
