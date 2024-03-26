@@ -33,6 +33,7 @@
 -->
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -111,7 +112,7 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <TextArea prefHeight="680.0" prefWidth="420.0" promptText="Hi team, I woke up sick. I can't come to work today!" wrapText="true">
+                        <TextArea focusTraversable="false" prefHeight="680.0" prefWidth="420.0" promptText="Hi team, I woke up sick. I can't come to work today!" wrapText="true">
                            <padding>
                               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                            </padding>
@@ -122,7 +123,7 @@
                      <children>
                         <HBox alignment="CENTER" prefHeight="45.0" prefWidth="393.0">
                            <children>
-                              <RadioButton mnemonicParsing="false" prefHeight="45.0" prefWidth="125.0" selected="true" styleClass="toggle-button" stylesheets="@caesar.css" text="Encrypt   ">
+                              <RadioButton focusTraversable="false" mnemonicParsing="false" prefHeight="45.0" prefWidth="125.0" selected="true" styleClass="toggle-button" stylesheets="@caesar.css" text="Encrypt   ">
                                  <toggleGroup>
                                     <ToggleGroup fx:id="ende" />
                                  </toggleGroup>
@@ -133,7 +134,7 @@
                                     <Insets right="5.0" />
                                  </HBox.margin>
                               </RadioButton>
-                              <RadioButton mnemonicParsing="false" prefHeight="45.0" prefWidth="125.0" styleClass="toggle-button" stylesheets="@caesar.css" text="Decrypt   " toggleGroup="$ende">
+                              <RadioButton focusTraversable="false" mnemonicParsing="false" prefHeight="45.0" prefWidth="125.0" styleClass="toggle-button" stylesheets="@caesar.css" text="Decrypt   " toggleGroup="$ende">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -148,19 +149,24 @@
                         </HBox>
                         <StackPane prefHeight="150.0" prefWidth="200.0">
                            <children>
-                              <ImageView fitHeight="495.0" fitWidth="422.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
-                                 <image>
-                                    <Image url="@outer.png" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fitHeight="341.0" fitWidth="330.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
-                                 <image>
-                                    <Image url="@inner.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets />
-                                 </StackPane.margin>
-                              </ImageView>
+                              <Group fx:id="outer">
+                                 <children>
+                                    <ImageView fitHeight="495.0" fitWidth="422.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@outer.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </Group>
+                              <Group fx:id="inner">
+                                 <children>
+                                    <ImageView fitHeight="341.0" fitWidth="330.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@inner.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </Group>
                            </children>
                         </StackPane>
                      </children>
