@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<<<<<<< HEAD
+<?import javafx.scene.shape.Arc?>
+=======
+>>>>>>> be40b6c13f47d21efe445b9d3052c9f3f67b9f8e
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<<<<<<< HEAD
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1500.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PendulumController">
+   <children>
+      <Rectangle fx:id="border" arcHeight="5.0" arcWidth="5.0" fill="#a19e9c" height="760.0" stroke="#6f5327" strokeType="INSIDE" strokeWidth="5.0" width="722.0" x="23.0" y="21.0" />
+=======
+
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="PendulumController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a19e9c" height="760.0" layoutX="23.0" layoutY="21.0" stroke="#6f5327" strokeType="INSIDE" strokeWidth="5.0" width="722.0" />
+>>>>>>> be40b6c13f47d21efe445b9d3052c9f3f67b9f8e
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a17435" height="48.0" layoutX="32.0" layoutY="735.0" stroke="BLACK" strokeType="INSIDE" width="712.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#42371900" height="760.0" layoutX="28.0" layoutY="26.0" stroke="#e1d08f" strokeType="INSIDE" strokeWidth="5.0" width="722.0" />
+      <Line endX="609.0" layoutX="132.0" layoutY="735.0" startX="-98.0" strokeWidth="5.0" />
+      <Line endX="-76.0" endY="21.0" layoutX="190.0" layoutY="715.0" startX="-122.0" startY="62.0" strokeWidth="5.0" />
+      <Line endX="-76.0" endY="21.0" layoutX="290.0" layoutY="717.0" startX="-120.0" startY="59.0" strokeWidth="5.0" />
+      <Line endX="-76.0" endY="21.0" layoutX="390.0" layoutY="717.0" startX="-120.0" startY="59.0" strokeWidth="5.0" />
+      <Line endX="-76.0" endY="21.0" layoutX="490.0" layoutY="717.0" startX="-120.0" startY="59.0" strokeWidth="5.0" />
+      <Line endX="-76.0" endY="21.0" layoutX="590.0" layoutY="717.0" startX="-120.0" startY="59.0" strokeWidth="5.0" />
+      <Line endX="-76.0" endY="21.0" layoutX="690.0" layoutY="715.0" startX="-126.0" startY="61.0" strokeWidth="5.0" />
+      <Line endX="-76.0" endY="21.0" layoutX="790.0" layoutY="717.0" startX="-115.0" startY="60.0" strokeWidth="5.0" />
+<<<<<<< HEAD
+      <Line fx:id="rope" endX="-11.0" startX="-11.0" startY="411.0" strokeWidth="5.0" />
+      <Circle fx:id="object" fill="#ff1f1f" radius="59.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" />
+=======
+      <Line endX="-11.0" layoutX="377.0" layoutY="27.0" startX="-11.0" startY="411.0" strokeWidth="5.0" />
+      <Circle fill="#ff1f1f" layoutX="366.0" layoutY="496.0" radius="59.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" />
+>>>>>>> be40b6c13f47d21efe445b9d3052c9f3f67b9f8e
+      <ScrollPane layoutX="769.0" layoutY="25.0" prefHeight="509.0" prefWidth="390.0" style="-fx-border-color: black; -fx-border-width: 5;" vbarPolicy="ALWAYS">
+         <content>
+            <VBox prefHeight="485.0" prefWidth="363.0">
+               <children>
+                  <Button mnemonicParsing="false" prefHeight="213.0" prefWidth="516.0" text="Button" />
+                  <Button mnemonicParsing="false" prefHeight="213.0" prefWidth="516.0" text="Button" />
+                  <Button mnemonicParsing="false" prefHeight="213.0" prefWidth="516.0" text="Button" />
+                  <Button mnemonicParsing="false" prefHeight="213.0" prefWidth="516.0" text="Button" />
+                  <Button mnemonicParsing="false" prefHeight="213.0" prefWidth="516.0" text="Button" />
+                  <Button mnemonicParsing="false" prefHeight="213.0" prefWidth="516.0" text="Button" />
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+      <Label layoutX="804.0" layoutY="547.0" prefHeight="55.0" prefWidth="255.0" text="Angular Frequency:" textFill="#b5864b">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+      <Label layoutX="804.0" layoutY="594.0" prefHeight="55.0" prefWidth="255.0" text="Period:" textFill="#b5864b">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+      <Label layoutX="804.0" layoutY="640.0" prefHeight="55.0" prefWidth="255.0" text="Length:" textFill="#b5864b">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+      <Label layoutX="804.0" layoutY="683.0" prefHeight="55.0" prefWidth="255.0" text="Wavelength:" textFill="#b5864b">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+      <Label layoutX="804.0" layoutY="729.0" prefHeight="55.0" prefWidth="255.0" text="Equation:" textFill="#b5864b">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+      <Slider layoutX="1177.0" layoutY="43.0" prefHeight="46.0" prefWidth="309.0" />
+      <Label layoutX="1290.0" layoutY="77.0" prefHeight="48.0" prefWidth="84.0" text="Length" textFill="#b5864b">
+         <font>
+            <Font name="System Bold Italic" size="24.0" />
+         </font>
+      </Label>
+      <LineChart layoutX="1159.0" layoutY="132.0" prefHeight="336.0" prefWidth="330.0">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </LineChart>
+      <Label layoutX="1293.0" layoutY="444.0" prefHeight="48.0" prefWidth="78.0" text="Energy" textFill="#b5864b">
+         <font>
+            <Font name="System Bold Italic" size="24.0" />
+         </font>
+      </Label>
+<<<<<<< HEAD
+      <Arc fx:id="path" fill="#ffffff00" layoutX="392.0" layoutY="583.0" length="180.0" radiusX="314.0" radiusY="211.0" rotate="180.0" stroke="BLACK" strokeLineJoin="ROUND" strokeType="INSIDE" />
+      <Circle fx:id="pivot" centerX="392.0" centerY="34.0" fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
+      <Line fx:id="rope2" endX="-11.0" layoutX="10.0" layoutY="10.0" startX="-11.0" startY="411.0" strokeWidth="5.0" />
+      <Circle fx:id="object2" fill="#ff1f1f" layoutX="10.0" layoutY="10.0" radius="59.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" />
+=======
+>>>>>>> be40b6c13f47d21efe445b9d3052c9f3f67b9f8e
+   </children>
+</AnchorPane>
