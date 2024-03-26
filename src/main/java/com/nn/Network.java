@@ -1,11 +1,9 @@
 package com.nn;
 
-import javafx.beans.property.SimpleObjectProperty;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -71,12 +69,15 @@ public class Network {
             biases.add(Matrix.random(sizes[i + 1], 1));
         }
 
+        for (int size : sizes) {
+            activations.add(new Matrix(size, 1));
+        }
+
         this.sizes = sizes;
         this.numLayers = sizes.length;
         this.activation = activationFunctions.get(activationFunction);
         this.loss = losses.get(costFunction);
         this.learningRate = learningRate;
-
     }
 
     /**
@@ -380,5 +381,21 @@ public class Network {
         if (!losses.containsKey(value))
             throw new IllegalArgumentException("Loss function not found");
         this.loss = losses.get(value);
+    }
+
+    public void clear(){
+        //Clear activations because it is empty when network is first constructed
+        activations.clear();
+        for (int size : sizes) {
+            activations.add(new Matrix(size, 1));
+        }
+
+        weights.clear();
+        biases.clear();
+
+        for (int i = 0; i < sizes.length - 1; i++) {
+            weights.add(Matrix.random(sizes[i + 1], sizes[i]));
+            biases.add(Matrix.random(sizes[i + 1], 1));
+        }
     }
 }

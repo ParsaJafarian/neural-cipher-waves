@@ -18,7 +18,7 @@ public class Controller {
     public ComboBox<Double> learningRateCB;
     public ComboBox<String> activationCB, lossCB;
     public Slider batchSlider;
-    public Button startStopBtn;
+    public Button startStopBtn, clrBtn;
     public Label testLossLabel, trainingLossLabel;
     public LineChart<Integer, Double> trainingChart;
     public Canvas canvas;
@@ -58,6 +58,8 @@ public class Controller {
             //update display
             networkDisplay.update();
         });
+
+        clrBtn.setOnAction(e -> networkDisplay.clear());
 
     }
 }

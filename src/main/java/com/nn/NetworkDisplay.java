@@ -37,11 +37,6 @@ public class NetworkDisplay {
         this.network = network;
         this.neuronList = new ArrayList<>();
         this.activations = network.getActivations();
-        if (this.activations.isEmpty()) {
-            for (int i = 0; i < network.getSizes().length; i++) {
-                this.activations.add(new Matrix(network.getSizes()[i], 1));
-            }
-        }
 
         generateNeurons();
         generateWeight();
@@ -59,7 +54,6 @@ public class NetworkDisplay {
             int n = activations.get(i).getRows();
             int heightGap = disposableHeight / (n + 1);
             for (int j = 0; j < n; j++) {
-
                 Label value = new Label();
                 value.setId("neuronNet");
                 DoubleProperty prop = new SimpleDoubleProperty(activations.get(i).get(j, 0));
@@ -76,7 +70,6 @@ public class NetworkDisplay {
 
                 pane.getChildren().addAll(neuron, value);
                 neuronList.get(i).add(neuron);
-
             }
         }
 
@@ -111,6 +104,11 @@ public class NetworkDisplay {
                 }
             }
         }
+    }
+
+    public void clear(){
+        network.clear();
+        update();
     }
 
     public void update() {
