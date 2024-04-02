@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -22,7 +23,7 @@ public class Network {
      * An array of sizes of the layers in the network.
      * Each element represents a layer while the value represents the number of neurons in that layer.
      */
-    private final int[] sizes;
+    private LinkedList<Integer> sizes;
     private final int numLayers;
 
     private final ArrayList<Matrix> activations;
@@ -64,7 +65,10 @@ public class Network {
             activations.add(new Matrix(size, 1));
         }
 
-        this.sizes = sizes;
+        this.sizes = new LinkedList<>();
+        for (int size : sizes)
+            this.sizes.add(size);
+
         this.numLayers = sizes.length;
         this.activation = activationFunctions.get(activationFunction);
         this.loss = losses.get(loss);
@@ -90,7 +94,7 @@ public class Network {
      */
     private Matrix feedForward(@NotNull Matrix inputs, ArrayList<Matrix> zs) {
         //if input size is not equal to the first layer size and it's not a column vector, throw an exception
-        if (inputs.getRows() != sizes[0] || inputs.getCols() != 1)
+        if (inputs.getRows() != sizes.get(0) || inputs.getCols() != 1)
             throw new IllegalArgumentException("Invalid input size");
 
         //clear the activations ArrayList and add the inputs to it
@@ -304,12 +308,12 @@ public class Network {
         return new ArrayList[]{nablaB, nablaW};
     }
 
-    public int getNumLayers() {
+    public int getNumberOfLayers() {
         return numLayers;
     }
 
     public int[] getSizes() {
-        return sizes;
+        return sizes.stream().mapToInt(i -> i).toArray();
     }
 
     public ArrayList<Matrix> getWeights() {
@@ -324,7 +328,7 @@ public class Network {
     @Override
     public String toString() {
         return "Network{" +
-                ", sizes=" + Arrays.toString(sizes) +
+                ", sizes=" + sizes +
                 ", numLayers=" + numLayers +
                 ", weights=" + weights +
                 ", biases=" + biases +
@@ -362,9 +366,6 @@ public class Network {
      * @return a deep copy of the activations of the network
      */
     public ArrayList<Matrix> getActivations() {
-//        ArrayList<Matrix> copy = new ArrayList<>();
-//        activations.forEach(x -> copy.add(x.clone()));
-//        return copy;
         return activations;
     }
 
@@ -374,7 +375,7 @@ public class Network {
         this.loss = losses.get(value);
     }
 
-    public void clear(){
+    void clear(){
         //Clear activations because it is empty when network is first constructed
         activations.clear();
         for (int size : sizes) {
@@ -384,9 +385,18 @@ public class Network {
         weights.clear();
         biases.clear();
 
-        for (int i = 0; i < sizes.length - 1; i++) {
-            weights.add(Matrix.random(sizes[i + 1], sizes[i]));
-            biases.add(Matrix.random(sizes[i + 1], 1));
+        for (int i = 0; i < sizes.size() - 1; i++) {
+            weights.add(Matrix.random(sizes.get(i + 1), sizes.get(i)));
+            biases.add(Matrix.random(sizes.get(i + 1), 1));
         }
+    }
+
+    void addLayer(int numberOfNeurons) {
+        int oldNumLayers = sizes.size() - 1;
+        sizes.add(oldNumLayers, numberOfNeurons);
+
+        weights.add(weights.size() - 1, Matrix.random(sizes.get(oldNumLayers), sizes.get(oldNumLayers - 1)));
+        biases.add(biases.size() - 1, Matrix.random(sizes.get(oldNumLayers), 1));
+        activations.add(new Matrix(sizes.get(oldNumLayers), 1));
     }
 }

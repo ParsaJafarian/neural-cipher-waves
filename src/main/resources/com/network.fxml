@@ -167,7 +167,17 @@
                   <Label prefHeight="43.0" prefWidth="149.0" text="Prediction: " />
                </children>
             </VBox>
-            <Pane fx:id="networkPane" layoutY="101.0" prefHeight="252.0" prefWidth="509.0" />
+            <VBox layoutX="7.0" layoutY="101.0" prefHeight="344.0" prefWidth="501.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="70.0" prefWidth="501.0" spacing="20.0">
+                     <children>
+                        <Button fx:id="btnAdderBtn" mnemonicParsing="false" text="+" />
+                        <Button fx:id="btnRemoverBtn" mnemonicParsing="false" text="-" />
+                     </children></HBox>
+                  <HBox fx:id="btnContainer" prefHeight="74.0" prefWidth="501.0" spacing="20.0" />
+                  <Pane fx:id="networkPane" prefHeight="280.0" prefWidth="501.0" />
+               </children>
+            </VBox>
          </children>
     </AnchorPane>
   </children>

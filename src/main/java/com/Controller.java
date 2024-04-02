@@ -4,6 +4,7 @@ import com.nn.Matrix;
 import com.nn.Network;
 import com.nn.NetworkDisplay;
 import javafx.beans.value.ChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.chart.LineChart;
@@ -26,6 +27,8 @@ public class Controller {
     public LineChart<Integer, Double> trainingChart;
     public Canvas canvas;
     public Pane networkPane;
+    public Button btnAdderBtn, btnRemoverBtn;
+    public HBox btnContainer;
     private Network network;
     private NetworkDisplay networkDisplay;
 
@@ -42,26 +45,34 @@ public class Controller {
 
         startStopBtn.setText("Train");
 
-        Matrix[][] trainData = new Matrix[][]{
-                new Matrix[]{
-                        Matrix.random(4, 1),
-                        new Matrix(new double[][]{{1}})
-                }
-        };
+//        Matrix[][] trainData = new Matrix[][]{
+//                new Matrix[]{
+//                        Matrix.random(4, 1),
+//                        new Matrix(new double[][]{{1}})
+//                }
+//        };
 
         network = new Network(learningRateCB.getValue(), activationCB.getValue(), lossCB.getValue(), 4,6,1);
-        networkDisplay = new NetworkDisplay(networkPane, network);
+        networkDisplay = new NetworkDisplay(networkPane, btnContainer);
 
         startStopBtn.setOnAction(e -> {
             network.setLearningRate(learningRateCB.getValue());
             network.setActivation(activationCB.getValue());
             network.setLoss(lossCB.getValue());
 
-            network.sgd(trainData, null, 2, 1);
+//            network.sgd(trainData, null, 2, 1);
             //update display
             networkDisplay.update();
         });
 
         clrBtn.setOnAction(e -> networkDisplay.clear());
+
+        btnAdderBtn.setOnAction(e -> networkDisplay.addLayer());
+
+        btnRemoverBtn.setOnAction(e -> {
+            if (btnContainer.getChildren().isEmpty()) return;
+            int size = btnContainer.getChildren().size();
+            btnContainer.getChildren().remove(size - 1 );
+        });
     }
 }

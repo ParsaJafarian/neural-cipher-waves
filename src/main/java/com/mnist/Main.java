@@ -14,7 +14,7 @@ public class Main {
 
         Network network = new Network(0.001, "relu", "mse", 784, 100, 10);
 
-        network.sgd(trainData, testData, 10, 100);
+        network.sgd(trainData, testData, 10,100);
 
     }
 }
