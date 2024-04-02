@@ -32,7 +32,7 @@
             <Font name="System Bold" size="30.0" />
          </font>
       </Label>
-      <LineChart layoutX="745.0" layoutY="12.0" prefHeight="243.0" prefWidth="321.0">
+      <LineChart fx:id="kineticGraph" layoutX="745.0" layoutY="12.0" prefHeight="243.0" prefWidth="321.0" title="Kinetic">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
         </xAxis>
@@ -103,5 +103,13 @@
             <Font name="System Bold" size="31.0" />
          </font>
       </Label>
+      <LineChart fx:id="potentialGraph" layoutX="1076.0" layoutY="12.0" prefHeight="243.0" prefWidth="321.0" title="Potential">
+         <xAxis>
+            <CategoryAxis side="BOTTOM" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis side="LEFT" />
+         </yAxis>
+      </LineChart>
    </children>
 </AnchorPane>

@@ -16,6 +16,10 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.Axis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
@@ -58,6 +62,14 @@ public class SpringController implements Initializable {
         dotCreation();
     }));
     double endSpring;
+    double totalE;
+    double amplitude;
+    double springConstant;
+    double dur;
+    @FXML
+    private LineChart<?, ?> kineticGraph;
+    @FXML
+    private LineChart<?, ?> potentialGraph;
     /**
      * Initializes the controller class.
      */
@@ -76,6 +88,7 @@ public class SpringController implements Initializable {
         
         setAngularVelocityAndPeriod(pathTransition);
         equationCreation();
+        graphCreation();
         
         freq.valueProperty().addListener((observable, oldvalue, newvalue) -> {
             pathTransition.setRate((double) newvalue);
@@ -121,17 +134,50 @@ public class SpringController implements Initializable {
             period.setText("no movement");
             angVel.setText("no movement");
         } else {
-            double dur = Math.round((pathTransition.getDuration().toSeconds()*2 / pathTransition.getRate()) * 100.0) / 100.0;
+            dur = Math.round((pathTransition.getDuration().toSeconds()*2 / pathTransition.getRate()) * 100.0) / 100.0;
             period.setText(String.valueOf(dur) + " seconds");
             angularV = String.valueOf(Math.round(((2 * Math.PI) / dur) * 100.0) / 100.0);
-            double springConstant = Math.round(Math.pow(((2 * Math.PI)/dur)*1,2) * 100.0)/ 100.0;
+            springConstant = Math.round(Math.pow(((2 * Math.PI)/dur)*1,2) * 100.0)/ 100.0;
             constant.setText(String.valueOf(springConstant) + " N/m");
             angVel.setText(String.valueOf(Math.round(((2 * Math.PI) / dur) * 100.0) / 100.0) + " rad/s");
         }
     }
 
     public void equationCreation() {
-        String equ = String.valueOf(Math.round((path.getEndX()-path.getStartX()) * 100.0) / 100.0) + "sin" + "(" + angularV + "t" + ")";
+        amplitude = Math.round((path.getEndX()-path.getStartX()) * 100.0) / 100.0;
+        String equ = String.valueOf(amplitude) + "sin" + "(" + angularV + "t" + ")";
         equation.setText(equ);
+        totalE = 0.5*springConstant*Math.pow(amplitude, 2);
+        graphCreation();
+    }
+    
+    public void graphCreation(){
+        ArrayList displacement = new ArrayList<>();
+        ArrayList time = new ArrayList<>();
+       
+        for (double i = 0; i < dur*2; i+=0.01) {
+            time.add(i);
+        }
+        for (int i = 0; i < time.size(); i++) {
+            double y = amplitude*Math.sin(((2 * Math.PI) / dur)*(double)time.get(i));
+            double val = 0.5*springConstant*Math.pow(y, 2);
+            displacement.add(val);
+        }
+        
+        NumberAxis x = new NumberAxis(0, dur*2, 1);
+        x.setLabel("time");
+        NumberAxis y = new NumberAxis(0, totalE, 1);
+        y.setLabel("displacement");
+        
+        LineChart e = new LineChart(x,y);
+        XYChart.Series series = new XYChart.Series<>();
+        for (int i = 0; i < time.size(); i++) {
+            series.getData().add(new XYChart.Data(time.get(i),displacement.get(i)));
+            System.out.println(time.get(i));
+            System.out.println(displacement.get(i));
+        }
+        e.getData().add(series);
+        e.setCreateSymbols(false);
+        back.getChildren().add(e);
     }
 }

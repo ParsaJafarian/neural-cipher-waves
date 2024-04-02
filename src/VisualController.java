@@ -18,6 +18,7 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -57,17 +58,15 @@ public class VisualController implements Initializable {
     private Slider amp;
     @FXML
     private Circle border;
-
-    double angle;
-    String angularV;
-    boolean cont = true;
     @FXML
     private Label equation;
     @FXML
     private Label angVel;
     @FXML
     private Label period;
-
+    double angle;
+    String angularV;
+    boolean cont = true;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -145,4 +144,6 @@ public class VisualController implements Initializable {
         String equ = String.valueOf(Math.round((border.getRadius()) * 100.0) / 100.0) + "sin" + "(" + angularV + "t" + ")";
         equation.setText(equ);
     }
+    
+    
 }

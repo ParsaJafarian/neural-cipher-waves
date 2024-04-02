@@ -5,7 +5,6 @@
 
 import java.net.URL;
 import java.util.ResourceBundle;
-<<<<<<< HEAD
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.fxml.FXML;
@@ -15,9 +14,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-=======
 import javafx.fxml.Initializable;
->>>>>>> be40b6c13f47d21efe445b9d3052c9f3f67b9f8e
 
 /**
  * FXML Controller class
@@ -26,7 +23,6 @@ import javafx.fxml.Initializable;
  */
 public class PendulumController implements Initializable {
 
-<<<<<<< HEAD
     @FXML
     private Line rope;
     @FXML
@@ -43,15 +39,12 @@ public class PendulumController implements Initializable {
     private Circle object2;
     private Arc path2;
 
-=======
->>>>>>> be40b6c13f47d21efe445b9d3052c9f3f67b9f8e
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-<<<<<<< HEAD
         rope.startXProperty().bind(pivot.centerXProperty());
         rope.startYProperty().bind(pivot.centerYProperty());
         rope.endXProperty().bind(object.translateXProperty().add(object.getCenterX()));
@@ -72,8 +65,6 @@ public class PendulumController implements Initializable {
         pathTransition2.setCycleCount(Animation.INDEFINITE);
         pathTransition2.play();
         */
-=======
->>>>>>> be40b6c13f47d21efe445b9d3052c9f3f67b9f8e
     }    
     
 }
