@@ -33,7 +33,6 @@
 -->
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -48,10 +47,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox alignment="CENTER" prefHeight="770.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" prefHeight="770.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cipher.Controller">
   <children>
       <TextFlow prefHeight="0.0" prefWidth="0.0" />
     <MenuBar prefHeight="28.0" prefWidth="649.0" VBox.vgrow="NEVER">
@@ -149,24 +149,18 @@
                         </HBox>
                         <StackPane prefHeight="150.0" prefWidth="200.0">
                            <children>
-                              <Group fx:id="outer">
-                                 <children>
-                                    <ImageView fitHeight="495.0" fitWidth="422.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@outer.png" />
-                                       </image>
-                                    </ImageView>
-                                 </children>
-                              </Group>
-                              <Group fx:id="inner">
-                                 <children>
-                                    <ImageView fitHeight="341.0" fitWidth="330.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@inner.png" />
-                                       </image>
-                                    </ImageView>
-                                 </children>
-                              </Group>
+                              <ImageView fx:id="outer" fitHeight="495.0" fitWidth="422.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@outer.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="inner" fitHeight="341.0" fitWidth="330.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@inner.png" />
+                                 </image>
+                              </ImageView>
+                              <Circle fill="#00438200" onMouseDragged="#onDraggedO" onMousePressed="#onMousePressedO" radius="211.0" stroke="BLACK" strokeType="INSIDE" />
+                              <Circle fill="#1f93ff00" onMouseDragged="#onDraggedI" onMousePressed="#onMousePressedI" radius="164.0" stroke="BLACK" strokeType="INSIDE" />
                            </children>
                         </StackPane>
                      </children>
