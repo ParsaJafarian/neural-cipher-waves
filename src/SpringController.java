@@ -68,8 +68,6 @@ public class SpringController implements Initializable {
     double dur;
     @FXML
     private LineChart<?, ?> kineticGraph;
-    @FXML
-    private LineChart<?, ?> potentialGraph;
     /**
      * Initializes the controller class.
      */
@@ -144,7 +142,7 @@ public class SpringController implements Initializable {
     }
 
     public void equationCreation() {
-        amplitude = Math.round((path.getEndX()-path.getStartX()) * 100.0) / 100.0;
+        amplitude = Math.round((path.getEndX()-path.getStartX())/100 * 100.0) / 100.0;
         String equ = String.valueOf(amplitude) + "sin" + "(" + angularV + "t" + ")";
         equation.setText(equ);
         totalE = 0.5*springConstant*Math.pow(amplitude, 2);
@@ -152,31 +150,48 @@ public class SpringController implements Initializable {
     }
     
     public void graphCreation(){
-        ArrayList displacement = new ArrayList<>();
+        ArrayList potential = new ArrayList<>();
+        ArrayList kinetic = new ArrayList<>();
         ArrayList time = new ArrayList<>();
-       
+        NumberAxis x = new NumberAxis(0, dur, 1);
+        x.setLabel("Time (period)");
+        NumberAxis y = new NumberAxis(0, totalE, 1);
+        y.setLabel("energy");
+        
+        LineChart e = new LineChart(x,y);
+        e.setMaxHeight(350);
+        e.setLayoutX(kineticGraph.getLayoutX());
+        e.setLayoutY(kineticGraph.getLayoutY());
+        //creating arrayList for time values for creating energy graphs
         for (double i = 0; i < dur*2; i+=0.01) {
             time.add(i);
         }
+        
+        //Potential enrrgy values according to the time values created above
         for (int i = 0; i < time.size(); i++) {
-            double y = amplitude*Math.sin(((2 * Math.PI) / dur)*(double)time.get(i));
-            double val = 0.5*springConstant*Math.pow(y, 2);
-            displacement.add(val);
+            double displacement = amplitude*Math.sin(((2 * Math.PI) / dur)*(double)time.get(i));
+            double val = 0.5*springConstant*Math.pow(displacement, 2);
+            potential.add(val);
         }
-        
-        NumberAxis x = new NumberAxis(0, dur*2, 1);
-        x.setLabel("time");
-        NumberAxis y = new NumberAxis(0, totalE, 1);
-        y.setLabel("displacement");
-        
-        LineChart e = new LineChart(x,y);
         XYChart.Series series = new XYChart.Series<>();
+        series.setName("Potential Energy");
         for (int i = 0; i < time.size(); i++) {
-            series.getData().add(new XYChart.Data(time.get(i),displacement.get(i)));
-            System.out.println(time.get(i));
-            System.out.println(displacement.get(i));
+            series.getData().add(new XYChart.Data(time.get(i),potential.get(i)));
         }
-        e.getData().add(series);
+        
+        //Total energy value: TotalE
+        //Kinetic enrrgy values according to the time values created above
+        for (int i = 0; i < time.size(); i++) {
+            double val = totalE - (double)potential.get(i);
+            kinetic.add(val);
+        }
+        XYChart.Series series2 = new XYChart.Series<>();
+        series2.setName("Kinetic Energy");
+        for (int i = 0; i < time.size(); i++) {
+            series2.getData().add(new XYChart.Data(time.get(i),kinetic.get(i)));
+        }
+        
+        e.getData().addAll(series, series2);
         e.setCreateSymbols(false);
         back.getChildren().add(e);
     }

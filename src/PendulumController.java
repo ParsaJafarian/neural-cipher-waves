@@ -15,6 +15,8 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.shape.Shape;
 
 /**
  * FXML Controller class
@@ -38,6 +40,10 @@ public class PendulumController implements Initializable {
     @FXML
     private Circle object2;
     private Arc path2;
+    @FXML
+    private Button Shape1;
+    @FXML
+    private Button button2;
 
     /**
      * Initializes the controller class.
@@ -45,17 +51,24 @@ public class PendulumController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        rope.startXProperty().bind(pivot.centerXProperty());
-        rope.startYProperty().bind(pivot.centerYProperty());
-        rope.endXProperty().bind(object.translateXProperty().add(object.getCenterX()));
-        rope.endYProperty().bind(object.translateYProperty().add(object.getCenterY()));
+        ropeSet(object);
         System.out.println(path.toString());
         PathTransition pathTransition = new PathTransition(new Duration(800), path, object);
         pathTransition.setAutoReverse(true);
         pathTransition.setCycleCount(Animation.INDEFINITE);
         pathTransition.play();
+
+        Shape1.setOnAction(e -> {
+            System.out.println(pathTransition.durationProperty());
+            pathTransition.getNode().setVisible(false);
+            ropeSet(object2);
+            pathTransition.setNode(object2);
+            pathTransition.stop();
+            pathTransition.play();
+        });
         
-        /*
+        
+    /*
         rope2.startXProperty().bind(object.translateXProperty().add(object.centerXProperty()));
         rope2.startYProperty().bind(object.translateYProperty().add(object.centerYProperty()));
         rope2.endXProperty().bind(object2.translateXProperty().add(object.getCenterX()));
@@ -64,7 +77,14 @@ public class PendulumController implements Initializable {
         pathTransition2.setAutoReverse(true);
         pathTransition2.setCycleCount(Animation.INDEFINITE);
         pathTransition2.play();
-        */
-    }    
+     */
+}
     
+    public void ropeSet(Circle obj) {
+        rope.startXProperty().bind(pivot.centerXProperty());
+        rope.startYProperty().bind(pivot.centerYProperty());
+        rope.endXProperty().bind(obj.translateXProperty().add(obj.getCenterX()));
+        rope.endYProperty().bind(obj.translateYProperty().add(obj.getCenterY()));
+    }
+
 }

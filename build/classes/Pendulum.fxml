@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -36,8 +33,8 @@
          <content>
             <VBox prefHeight="485.0" prefWidth="363.0">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="213.0" prefWidth="516.0" text="Button" />
-                  <Button mnemonicParsing="false" prefHeight="213.0" prefWidth="516.0" text="Button" />
+                  <Button fx:id="Shape1" mnemonicParsing="false" prefHeight="213.0" prefWidth="516.0" text="Button" />
+                  <Button fx:id="button2" mnemonicParsing="false" prefHeight="213.0" prefWidth="516.0" text="Button" />
                   <Button mnemonicParsing="false" prefHeight="213.0" prefWidth="516.0" text="Button" />
                   <Button mnemonicParsing="false" prefHeight="213.0" prefWidth="516.0" text="Button" />
                   <Button mnemonicParsing="false" prefHeight="213.0" prefWidth="516.0" text="Button" />
@@ -61,16 +58,6 @@
             <Font name="System Bold" size="27.0" />
          </font>
       </Label>
-      <Label layoutX="804.0" layoutY="683.0" prefHeight="55.0" prefWidth="255.0" text="Wavelength:" textFill="#b5864b">
-         <font>
-            <Font name="System Bold" size="27.0" />
-         </font>
-      </Label>
-      <Label layoutX="804.0" layoutY="729.0" prefHeight="55.0" prefWidth="255.0" text="Equation:" textFill="#b5864b">
-         <font>
-            <Font name="System Bold" size="27.0" />
-         </font>
-      </Label>
       <Slider layoutX="1177.0" layoutY="43.0" prefHeight="46.0" prefWidth="309.0" />
       <Label layoutX="1290.0" layoutY="77.0" prefHeight="48.0" prefWidth="84.0" text="Length" textFill="#b5864b">
          <font>
@@ -86,7 +73,13 @@
       <Arc fx:id="path" fill="#ffffff00" layoutX="392.0" layoutY="583.0" length="180.0" radiusX="314.0" radiusY="211.0" rotate="180.0" stroke="BLACK" strokeLineJoin="ROUND" strokeType="INSIDE" />
       <Circle fx:id="pivot" centerX="392.0" centerY="34.0" fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
       <Line fx:id="rope2" endX="-11.0" layoutX="10.0" layoutY="10.0" startX="-11.0" startY="411.0" strokeWidth="5.0" />
-      <Circle fx:id="object2" fill="#ff1f1f" layoutX="10.0" layoutY="10.0" radius="59.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" />
+      <Circle fx:id="object2" fill="#362424" layoutX="10.0" layoutY="10.0" radius="59.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" />
+      <Slider layoutX="1178.0" layoutY="125.0" max="90.0" prefHeight="46.0" prefWidth="309.0" />
+      <Label layoutX="1274.0" layoutY="158.0" prefHeight="48.0" prefWidth="118.0" text="Max angle" textFill="#b5864b">
+         <font>
+            <Font name="System Bold Italic" size="24.0" />
+         </font>
+      </Label>
 
    </children>
 </AnchorPane>

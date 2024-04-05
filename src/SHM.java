@@ -26,7 +26,7 @@ public class SHM extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         //makes the root the welcome screen 
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Spring.fxml")));
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Pendulum.fxml")));
         //creates scene
         Scene scene = new Scene(root);
         
