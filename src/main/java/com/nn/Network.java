@@ -24,7 +24,6 @@ public class Network {
      * Each element represents a layer while the value represents the number of neurons in that layer.
      */
     private LinkedList<Integer> sizes;
-    private final int numLayers;
 
     private final ArrayList<Matrix> activations;
     /**
@@ -69,7 +68,6 @@ public class Network {
         for (int size : sizes)
             this.sizes.add(size);
 
-        this.numLayers = sizes.length;
         this.activation = activationFunctions.get(activationFunction);
         this.loss = losses.get(loss);
         this.learningRate = learningRate;
@@ -94,7 +92,7 @@ public class Network {
      */
     private Matrix feedForward(@NotNull Matrix inputs, ArrayList<Matrix> zs) {
         //if input size is not equal to the first layer size and it's not a column vector, throw an exception
-        if (inputs.getRows() != sizes.get(0) || inputs.getCols() != 1)
+        if (inputs.getRows() != sizes.get(0) || inputs.getColumns() != 1)
             throw new IllegalArgumentException("Invalid input size");
 
         //clear the activations ArrayList and add the inputs to it
@@ -103,7 +101,7 @@ public class Network {
 
         Matrix outputs = inputs.clone();
 
-        for (int i = 0; i < numLayers - 1; i++) {
+        for (int i = 0; i < getNumberOfLayers() - 1; i++) {
             Matrix z = weights.get(i).dot(outputs).add(biases.get(i));
             zs.add(z);
             outputs = activation.f(z);
@@ -228,8 +226,8 @@ public class Network {
         ArrayList<Matrix> nablaB = new ArrayList<>();
         ArrayList<Matrix> nablaW = new ArrayList<>();
 
-        for (Matrix bias : biases) nablaB.add(Matrix.zeros(bias.getRows(), bias.getCols()));
-        for (Matrix matrix : weights) nablaW.add(Matrix.zeros(matrix.getRows(), matrix.getCols()));
+        for (Matrix bias : biases) nablaB.add(Matrix.zeros(bias.getRows(), bias.getColumns()));
+        for (Matrix matrix : weights) nablaW.add(Matrix.zeros(matrix.getRows(), matrix.getColumns()));
 
         return new ArrayList[]{nablaB, nablaW};
     }
@@ -290,7 +288,7 @@ public class Network {
         //deltaNablaW^L = delta^L * a^(L-1)
         nablaW.set(nablaW.size() - 1, delta.dot(activations.get(activations.size() - 2).transpose()));
 
-        for (int i = 2; i < numLayers; i++) {
+        for (int i = 2; i < getNumberOfLayers(); i++) {
             z = zs.get(zs.size() - i); //z^(i)
             a = activations.get(activations.size() - i - 1); //a^(i-1)
             Matrix sp = activation.der(z); //f'(z^i)
@@ -309,18 +307,23 @@ public class Network {
     }
 
     public int getNumberOfLayers() {
-        return numLayers;
+        return sizes.size();
     }
 
-    public int[] getSizes() {
-        return sizes.stream().mapToInt(i -> i).toArray();
+    /**
+     * @param layerIndex the index of the layer. Can be negative to get the layer from the end
+     * @return the number of neurons in the layer
+     */
+    public int getNumberOfNeurons(int layerIndex) {
+        int length = sizes.size();
+        return layerIndex < 0 ? sizes.get(length + layerIndex) : sizes.get(layerIndex);
     }
 
-    public ArrayList<Matrix> getWeights() {
+    ArrayList<Matrix> getWeights() {
         return weights;
     }
 
-    public ArrayList<Matrix> getBiases() {
+    ArrayList<Matrix> getBiases() {
         return biases;
     }
 
@@ -329,7 +332,6 @@ public class Network {
     public String toString() {
         return "Network{" +
                 ", sizes=" + sizes +
-                ", numLayers=" + numLayers +
                 ", weights=" + weights +
                 ", biases=" + biases +
                 ", activationFunction='" + activation + '\'' +
@@ -341,10 +343,17 @@ public class Network {
     }
 
     public void setLearningRate(double learningRate) {
+        if (learningRate <= 0)
+            throw new IllegalArgumentException("Learning rate must be greater than 0");
+        if (Double.isNaN(learningRate))
+            throw new IllegalArgumentException("Learning rate must not be NaN");
+        if (learningRate > 1)
+            throw new IllegalArgumentException("Learning rate must be less than or equal to 1");
+
         this.learningRate = learningRate;
     }
 
-    public void setActivation(String activationFunction){
+    public void setActivation(String activationFunction) {
         if (!activationFunctions.containsKey(activationFunction))
             throw new IllegalArgumentException("Activation function not found");
         this.activation = activationFunctions.get(activationFunction);
@@ -375,7 +384,7 @@ public class Network {
         this.loss = losses.get(value);
     }
 
-    void clear(){
+    void clear() {
         //Clear activations because it is empty when network is first constructed
         activations.clear();
         for (int size : sizes) {
@@ -392,11 +401,9 @@ public class Network {
     }
 
     void addLayer(int numberOfNeurons) {
-        int oldNumLayers = sizes.size() - 1;
-        sizes.add(oldNumLayers, numberOfNeurons);
-
-        weights.add(weights.size() - 1, Matrix.random(sizes.get(oldNumLayers), sizes.get(oldNumLayers - 1)));
-        biases.add(biases.size() - 1, Matrix.random(sizes.get(oldNumLayers), 1));
-        activations.add(new Matrix(sizes.get(oldNumLayers), 1));
+        sizes.add(numberOfNeurons);
+        activations.add(new Matrix(numberOfNeurons, 1));
+        weights.add(Matrix.random(numberOfNeurons, sizes.get(sizes.size() - 2)));
+        biases.add(Matrix.random(numberOfNeurons, 1));
     }
 }

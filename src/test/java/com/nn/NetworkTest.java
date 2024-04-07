@@ -5,27 +5,26 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class NetworkTest {
 
     @Test
     public void testConstructor() {
         Network n = new Network(2, 3, 1);
-        assert n.getSizes().length == 2;
-        assert n.getSizes()[0] == 3;
-        assert n.getSizes()[1] == 1;
+        assert n.getNumberOfLayers() == 2;
+        assert n.getNumberOfNeurons(0) == 3;
+        assert n.getNumberOfNeurons(1) == 1;
 
         // Check Biases
         assert n.getBiases().size() == 1;
-        assert n.getBiases().get(0).getRows() == 1; // 1 because the output layer has 1 neuron
-        assert n.getBiases().get(0).getCols() == 1; // 1 because the output layer has 1 neuron
+        assert n.getBiases().get(0).getRows() == 1;
+        assert n.getBiases().get(0).getColumns() == 1;
 
         // Check Weights
         assert n.getWeights().size() == 1;
-        assert n.getBiases().get(0).getRows() == 1; // 1 because the output layer has 1 neuron
-        assert n.getWeights().get(0).getCols() == 3; // 3 because the input layer has 3 neurons
+        assert n.getBiases().get(0).getRows() == 1;
+        assert n.getWeights().get(0).getColumns() == 3;
 
         // Check Activation Function
         assert n.getActivation() == Activation.SIGMOID;
@@ -44,7 +43,7 @@ public class NetworkTest {
 
         Matrix output = n.feedForward(input);
         assert output.getRows() == 10;
-        assert output.getCols() == 1;
+        assert output.getColumns() == 1;
 
         // Check if the output is between 0 and 1
         for (int i = 0; i < output.getRows(); i++) {
@@ -100,7 +99,34 @@ public class NetworkTest {
 
         //Check if the network has learned
         int correct = 0;
+    }
 
+    @Test
+    public void testAddLayer() {
+        Network network = new Network(0.001, "relu", "mse", 4, 6, 3);
+        int oldNumLayers = network.getNumberOfLayers();
+        int numNeurons = 10;
 
+        network.addLayer(numNeurons);
+
+        int newNumLayers = network.getNumberOfLayers();
+
+        assertEquals(oldNumLayers + 1, newNumLayers);
+        assertEquals(numNeurons, network.getNumberOfNeurons(-1));
+
+        Matrix lastWeight = network.getWeights().get(network.getWeights().size() - 1);
+        assertEquals(newNumLayers - 1, network.getWeights().size());
+        assertEquals(network.getNumberOfNeurons(-1), lastWeight.getRows());
+        assertEquals(network.getNumberOfNeurons(-2), lastWeight.getColumns());
+
+        Matrix lastBias = network.getBiases().get(network.getBiases().size() - 1);
+        assertEquals(newNumLayers - 1, network.getBiases().size());
+        assertEquals(network.getNumberOfNeurons(-1), lastBias.getRows());
+        assertEquals(1, lastBias.getColumns());
+
+        Matrix lastActivation = network.getActivations().get(network.getActivations().size() - 1);
+        assertEquals(network.getNumberOfLayers(), network.getActivations().size());
+        assertEquals(network.getNumberOfNeurons(-1), lastActivation.getRows());
+        assertEquals(1, lastActivation.getColumns());
     }
 }

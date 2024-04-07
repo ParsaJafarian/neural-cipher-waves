@@ -10,7 +10,7 @@ public class MatrixTest {
     public void testConstructor() {
         Matrix m = Matrix.ones(2, 3);
         assert m.getRows() == 2;
-        assert m.getCols() == 3;
+        assert m.getColumns() == 3;
     }
 
     @Test
@@ -121,6 +121,6 @@ public class MatrixTest {
     public void testConstructor2() {
         Matrix m = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}});
         assert m.getRows() == 2;
-        assert m.getCols() == 3;
+        assert m.getColumns() == 3;
     }
 }

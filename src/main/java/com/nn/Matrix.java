@@ -212,7 +212,7 @@ public class Matrix {
         return rows;
     }
 
-    public int getCols() {
+    public int getColumns() {
         return cols;
     }
 
