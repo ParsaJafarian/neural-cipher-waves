@@ -290,19 +290,19 @@ public class Network {
         //deltaNablaW^L = delta^L * a^(L-1)
         nablaW.set(nablaW.size() - 1, delta.dot(activations.get(activations.size() - 2).transpose()));
 
-        for (int l = 2; l < numLayers; l++) {
-            z = zs.get(zs.size() - l); //z^(l)
-            a = activations.get(activations.size() - l - 1); //a^(l-1)
-            Matrix sp = activation.der(z); //f'(z^l)
+        for (int i = 2; i < numLayers; i++) {
+            z = zs.get(zs.size() - i); //z^(i)
+            a = activations.get(activations.size() - i - 1); //a^(i-1)
+            Matrix sp = activation.der(z); //f'(z^i)
 
-            //delta^(l)= ((w^(l+1))^T * delta^(l+1)) (+) f'(z^l)
-            delta = weights.get(weights.size() - l + 1).transpose().dot(delta).hadamard(sp);
+            //delta^(i)= ((w^(i+1))^T * delta^(i+1)) (+) f'(z^i)
+            delta = weights.get(weights.size() - i + 1).transpose().dot(delta).hadamard(sp);
 
-            //deltaNablaB^l = delta^l
-            nablaB.set(nablaB.size() - l, delta);
+            //deltaNablaB^i = delta^i
+            nablaB.set(nablaB.size() - i, delta);
 
-            //deltaNablaW^l = delta^l * a^(l-1)
-            nablaW.set(nablaW.size() - l, delta.dot(a.transpose()));
+            //deltaNablaW^i = delta^i * a^(i-1)
+            nablaW.set(nablaW.size() - i, delta.dot(a.transpose()));
         }
 
         return new ArrayList[]{nablaB, nablaW};
