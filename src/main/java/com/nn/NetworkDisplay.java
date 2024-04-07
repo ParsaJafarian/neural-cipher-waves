@@ -24,11 +24,9 @@ public class NetworkDisplay {
     private ArrayList<Matrix> activations;
 
     private final ArrayList<Line> lineWeights = new ArrayList<>();
-    private ArrayList<ArrayList<Circle>> neuronList;
+    private final ArrayList<ArrayList<Circle>> neuronList;
 
-    /**
-     * @param network the network to be displayed
-     */
+
     public NetworkDisplay(Pane pane, Network network) {
         this.pane = pane;
 
@@ -39,7 +37,7 @@ public class NetworkDisplay {
         this.activations = network.getActivations();
 
         generateNeurons();
-        generateWeight();
+        generateWeights();
     }
 
     private void generateNeurons() {
@@ -75,7 +73,7 @@ public class NetworkDisplay {
 
     }
 
-    private void generateWeight() {
+    private void generateWeights() {
         //for each layer that has weights
         for (int l = 0; l < network.getWeights().size(); l++) {
             for (int currNeuron = 0; currNeuron < network.getSizes()[l + 1]; currNeuron++) {
@@ -96,9 +94,7 @@ public class NetworkDisplay {
                     line.strokeWidthProperty().bind(((value.divide(1.5)).add(0.5)).multiply(3));
                     //line.translateXProperty().bind();
 
-                    line.setOnMouseClicked((e) -> {
-                        System.out.println(value.get());
-                    });
+                    line.setOnMouseClicked(e -> System.out.println(value.get()));
                     pane.getChildren().add(line);
                     line.toBack();
                 }
