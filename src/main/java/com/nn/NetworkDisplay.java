@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import org.jetbrains.annotations.NotNull;
 
 
 import java.util.ArrayList;
@@ -21,8 +22,8 @@ public class NetworkDisplay {
     private static final int WIDTH = 600;
     private static final int HEIGHT = 400;
     private static final int PANE_PADDING = 20;
-    private static final int MIN_LAYERS = 2, MAX_LAYERS = 6;
-    private static final int MIN_NEURONS = 2, MAX_NEURONS = 8;
+    public static final int MIN_LAYERS = 2, MAX_LAYERS = 6;
+    public static final int MIN_NEURONS = 2, MAX_NEURONS = 8;
     private final HBox networkContainer;
 
     private final Network network;
@@ -38,38 +39,37 @@ public class NetworkDisplay {
 
         this.neuronList = new ArrayList<>();
 
-        this.network = new Network(0.01, 2, 4);
+        // Initialize the network with an invisible input layer
+        this.network = new Network(0.01, 10);
 
-        generateLayers();
+        addInitialHiddenLayers();
     }
 
-    private void addLayers() {
-        for (int i = 0; i < network.getNumLayers(); i++) {
-            addLayer();
-        }
+    private void addInitialHiddenLayers() {
+        for (int i = 0; i < MIN_LAYERS; i++)
+            addLayer(MIN_NEURONS);
     }
 
+    public void addLayer(int numberOfNeurons) {
+//        addLayerButtons();
 
-    private void generateLayers() {
-        for (int i = 0; i < network.getNumLayers(); i++) {
-            int numNeurons = network.getNumNeurons(i);
-            generateLayer(i, numNeurons);
-        }
-    }
-
-    private void generateLayer(int indexOfLayer, int numberOfNeurons) {
+        network.addLayer(MIN_NEURONS);
         VBox layerContainer = new VBox();
         layerContainer.setAlignment(Pos.CENTER);
         layerContainer.setSpacing(5);
+        addLayerButtons(layerContainer);
 
         ArrayList<Circle> layer = new ArrayList<>();
 
         for (int indexOfNeuron = 0; indexOfNeuron < numberOfNeurons; indexOfNeuron++) {
             Label value = new Label();
             value.setId("neuronNet");
-            double activation = network.getActivations().get(indexOfLayer).get(indexOfNeuron, 0);
-            DoubleProperty prop = new SimpleDoubleProperty(activation);
 
+            ArrayList<Matrix> activations = network.getActivations();
+            Matrix lastActivation = activations.get(activations.size() - 1);
+            double activation = lastActivation.get(indexOfNeuron, 0);
+
+            DoubleProperty prop = new SimpleDoubleProperty(activation);
             value.textProperty().bind(prop.asString("%.2f"));
 
             Circle neuron = new Circle(20);
@@ -79,30 +79,26 @@ public class NetworkDisplay {
             layer.add(neuron);
         }
 
-        neuronList.add(layer);
         networkContainer.getChildren().add(layerContainer);
         layerContainers.add(layerContainer);
+        neuronList.add(layer);
     }
 
-    public void addLayer() {
-//        addLayerButtons();
+    /**
+     * Add buttons to add or remove neurons from the layer
+     * @param layerContainer container to add the buttons to
+     */
+    private void addLayerButtons(@NotNull VBox layerContainer) {
+        HBox btnContainer = new HBox();
+        btnContainer.setSpacing(5);
 
-        network.addLayer(MIN_NEURONS);
-        generateLayer(network.getNumLayers() - 2, MIN_NEURONS);
-        generateLayerWeights(network.getNumLayers() - 2);
-    }
+        Button addNeuronBtn = new Button("+");
+        Button removeNeuronBtn = new Button("-");
 
-    private void addLayerButtons(VBox layerContainer) {
-        HBox subBtnContainer = new HBox();
-        subBtnContainer.setSpacing(5);
+        btnContainer.getChildren().add(addNeuronBtn);
+        btnContainer.getChildren().add(removeNeuronBtn);
 
-        subBtnContainer.getChildren().add(new Button("+"));
-        subBtnContainer.getChildren().add(new Button("-"));
-    }
-
-    private void addLayerNeurons() {
-        network.addLayer(MIN_NEURONS);
-        generateLayer(network.getNumLayers() - 1, MIN_NEURONS);
+        layerContainer.getChildren().add(btnContainer);
     }
 
     private void degenerateWeight(int currNeuronIndex, int prevNeuronIndex, int layerIndex) {
