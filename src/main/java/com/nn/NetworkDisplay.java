@@ -6,15 +6,12 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * This class consists of the visible neural display accesible in Simulation
@@ -44,19 +41,18 @@ public class NetworkDisplay {
         this.network = new Network(0.01, 2, 4);
 
         generateLayers();
-        generateWeights();
     }
 
     private void addLayers() {
-        for (int i = 0; i < network.getNumberOfLayers(); i++) {
+        for (int i = 0; i < network.getNumLayers(); i++) {
             addLayer();
         }
     }
 
 
     private void generateLayers() {
-        for (int i = 0; i < network.getNumberOfLayers(); i++) {
-            int numNeurons = network.getNumberOfNeurons(i);
+        for (int i = 0; i < network.getNumLayers(); i++) {
+            int numNeurons = network.getNumNeurons(i);
             generateLayer(i, numNeurons);
         }
     }
@@ -88,6 +84,32 @@ public class NetworkDisplay {
         layerContainers.add(layerContainer);
     }
 
+    public void addLayer() {
+//        addLayerButtons();
+
+        network.addLayer(MIN_NEURONS);
+        generateLayer(network.getNumLayers() - 2, MIN_NEURONS);
+        generateLayerWeights(network.getNumLayers() - 2);
+    }
+
+    private void addLayerButtons(VBox layerContainer) {
+        HBox subBtnContainer = new HBox();
+        subBtnContainer.setSpacing(5);
+
+        subBtnContainer.getChildren().add(new Button("+"));
+        subBtnContainer.getChildren().add(new Button("-"));
+    }
+
+    private void addLayerNeurons() {
+        network.addLayer(MIN_NEURONS);
+        generateLayer(network.getNumLayers() - 1, MIN_NEURONS);
+    }
+
+    private void degenerateWeight(int currNeuronIndex, int prevNeuronIndex, int layerIndex) {
+        Line line = lineWeights.get(currNeuronIndex * network.getNumNeurons(layerIndex) + prevNeuronIndex);
+        networkContainer.getChildren().remove(line);
+    }
+
     private void generateWeights() {
         for (int i = 0; i < network.getWeights().size(); i++) {
             generateLayerWeights(i);
@@ -95,7 +117,7 @@ public class NetworkDisplay {
     }
 
     private void generateLayerWeights(int layerIndex) {
-        int currNumNeurons = network.getNumberOfNeurons(layerIndex + 1);
+        int currNumNeurons = network.getNumNeurons(layerIndex + 1);
         for (int currNeuron = 0; currNeuron < currNumNeurons; currNeuron++) {
             int prevNumNeurons = network.getActivations().get(layerIndex).getRows();
             for (int prevNeuron = 0; prevNeuron < prevNumNeurons; prevNeuron++) {
@@ -147,33 +169,6 @@ public class NetworkDisplay {
         networkContainer.getChildren().add(line);
         line.toBack(); // Ensure the lines are behind the neurons
         line.setManaged(false); // The HBox will now ignore the line when laying out its children
-    }
-
-
-    public void addLayer() {
-//        addLayerButtons();
-
-        network.addLayer(MIN_NEURONS);
-        generateLayer(network.getNumberOfLayers() - 2, MIN_NEURONS);
-        generateLayerWeights(network.getNumberOfLayers() - 2);
-    }
-
-    private void addLayerButtons(VBox layerContainer) {
-        HBox subBtnContainer = new HBox();
-        subBtnContainer.setSpacing(5);
-
-        subBtnContainer.getChildren().add(new Button("+"));
-        subBtnContainer.getChildren().add(new Button("-"));
-    }
-
-    private void addLayerNeurons() {
-        network.addLayer(MIN_NEURONS);
-        generateLayer(network.getNumberOfLayers() - 1, MIN_NEURONS);
-    }
-
-    private void degenerateWeight(int currNeuronIndex, int prevNeuronIndex, int layerIndex) {
-        Line line = lineWeights.get(currNeuronIndex * network.getNumberOfNeurons(layerIndex) + prevNeuronIndex);
-        networkContainer.getChildren().remove(line);
     }
 
     public void clear() {

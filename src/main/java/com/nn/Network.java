@@ -23,7 +23,7 @@ public class Network {
      * An array of sizes of the layers in the network.
      * Each element represents a layer while the value represents the number of neurons in that layer.
      */
-    private LinkedList<Integer> sizes;
+    private final LinkedList<Integer> sizes;
 
     private final ArrayList<Matrix> activations;
     /**
@@ -50,23 +50,23 @@ public class Network {
      */
     public Network(double learningRate, String activationFunction, String loss, int @NotNull ... sizes) {
 
-        //initialize weights and biases
+        this.sizes = new LinkedList<>();
+        for (int size : sizes)
+            this.sizes.add(size);
+
         weights = new ArrayList<>();
         biases = new ArrayList<>();
         activations = new ArrayList<>();
 
-        for (int i = 0; i < sizes.length - 1; i++) {
-            weights.add(Matrix.random(sizes[i + 1], sizes[i]));
-            biases.add(Matrix.random(sizes[i + 1], 1));
+        for (int i = 0; i < getNumLayers() - 1; i++) {
+            weights.add(Matrix.random(getNumNeurons(i + 1), getNumNeurons(i)));
+            biases.add(Matrix.random(getNumNeurons(i + 1), 1));
         }
 
         for (int size : sizes) {
             activations.add(new Matrix(size, 1));
         }
 
-        this.sizes = new LinkedList<>();
-        for (int size : sizes)
-            this.sizes.add(size);
 
         this.activation = activationFunctions.get(activationFunction);
         this.loss = losses.get(loss);
@@ -92,7 +92,7 @@ public class Network {
      */
     private Matrix feedForward(@NotNull Matrix inputs, ArrayList<Matrix> zs) {
         //if input size is not equal to the first layer size and it's not a column vector, throw an exception
-        if (inputs.getRows() != sizes.get(0) || inputs.getColumns() != 1)
+        if (inputs.getRows() != getNumNeurons(0) || inputs.getColumns() != 1)
             throw new IllegalArgumentException("Invalid input size");
 
         //clear the activations ArrayList and add the inputs to it
@@ -101,7 +101,7 @@ public class Network {
 
         Matrix outputs = inputs.clone();
 
-        for (int i = 0; i < getNumberOfLayers() - 1; i++) {
+        for (int i = 0; i < getNumLayers() - 1; i++) {
             Matrix z = weights.get(i).dot(outputs).add(biases.get(i));
             zs.add(z);
             outputs = activation.f(z);
@@ -288,7 +288,7 @@ public class Network {
         //deltaNablaW^L = delta^L * a^(L-1)
         nablaW.set(nablaW.size() - 1, delta.dot(activations.get(activations.size() - 2).transpose()));
 
-        for (int i = 2; i < getNumberOfLayers(); i++) {
+        for (int i = 2; i < getNumLayers(); i++) {
             z = zs.get(zs.size() - i); //z^(i)
             a = activations.get(activations.size() - i - 1); //a^(i-1)
             Matrix sp = activation.der(z); //f'(z^i)
@@ -306,7 +306,7 @@ public class Network {
         return new ArrayList[]{nablaB, nablaW};
     }
 
-    public int getNumberOfLayers() {
+    public int getNumLayers() {
         return sizes.size();
     }
 
@@ -314,9 +314,8 @@ public class Network {
      * @param layerIndex the index of the layer. Can be negative to get the layer from the end
      * @return the number of neurons in the layer
      */
-    public int getNumberOfNeurons(int layerIndex) {
-        int length = sizes.size();
-        return layerIndex < 0 ? sizes.get(length + layerIndex) : sizes.get(layerIndex);
+    public int getNumNeurons(int layerIndex) {
+        return layerIndex < 0 ? sizes.get(getNumLayers() + layerIndex) : sizes.get(layerIndex);
     }
 
     ArrayList<Matrix> getWeights() {
@@ -394,16 +393,16 @@ public class Network {
         weights.clear();
         biases.clear();
 
-        for (int i = 0; i < sizes.size() - 1; i++) {
-            weights.add(Matrix.random(sizes.get(i + 1), sizes.get(i)));
-            biases.add(Matrix.random(sizes.get(i + 1), 1));
+        for (int i = 0; i < getNumLayers() - 1; i++) {
+            weights.add(Matrix.random(getNumNeurons(i + 1), getNumNeurons(i)));
+            biases.add(Matrix.random(getNumNeurons(i + 1), 1));
         }
     }
 
     void addLayer(int numberOfNeurons) {
         sizes.add(numberOfNeurons);
         activations.add(new Matrix(numberOfNeurons, 1));
-        weights.add(Matrix.random(numberOfNeurons, sizes.get(sizes.size() - 2)));
+        weights.add(Matrix.random(numberOfNeurons, getNumNeurons(-2)));
         biases.add(Matrix.random(numberOfNeurons, 1));
     }
 }
