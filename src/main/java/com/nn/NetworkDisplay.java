@@ -6,6 +6,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -21,7 +23,6 @@ public class NetworkDisplay {
 
     private static final int WIDTH = 600;
     private static final int HEIGHT = 400;
-    private static final int PANE_PADDING = 20;
     public static final int MIN_LAYERS = 2, MAX_LAYERS = 6;
     public static final int MIN_NEURONS = 2, MAX_NEURONS = 8;
     private final HBox networkContainer;
@@ -29,18 +30,18 @@ public class NetworkDisplay {
     private final Network network;
 
     private final ArrayList<Line> lineWeights = new ArrayList<>();
-    private final ArrayList<ArrayList<Circle>> neuronList;
-    private final ArrayList<VBox> layerContainers = new ArrayList<>();
-    private final ArrayList<VBox> lineContainers = new ArrayList<>();
+    private final ArrayList<ArrayList<Circle>> layers;
+    private final ArrayList<Matrix> activations;
 
     public NetworkDisplay(HBox networkContainer) {
         this.networkContainer = networkContainer;
         this.networkContainer.setPrefSize(WIDTH, HEIGHT);
 
-        this.neuronList = new ArrayList<>();
+        this.layers = new ArrayList<>();
 
         // Initialize the network with an invisible input layer
         this.network = new Network(0.01, 10);
+        this.activations = network.getActivations();
 
         addInitialHiddenLayers();
     }
@@ -51,37 +52,46 @@ public class NetworkDisplay {
     }
 
     public void addLayer(int numberOfNeurons) {
-//        addLayerButtons();
+        if (network.getNumLayers() > MAX_LAYERS) return;
 
         network.addLayer(MIN_NEURONS);
+
         VBox layerContainer = new VBox();
         layerContainer.setAlignment(Pos.CENTER);
         layerContainer.setSpacing(5);
-        addLayerButtons(layerContainer);
-
-        ArrayList<Circle> layer = new ArrayList<>();
-
-        for (int indexOfNeuron = 0; indexOfNeuron < numberOfNeurons; indexOfNeuron++) {
-            Label value = new Label();
-            value.setId("neuronNet");
-
-            ArrayList<Matrix> activations = network.getActivations();
-            Matrix lastActivation = activations.get(activations.size() - 1);
-            double activation = lastActivation.get(indexOfNeuron, 0);
-
-            DoubleProperty prop = new SimpleDoubleProperty(activation);
-            value.textProperty().bind(prop.asString("%.2f"));
-
-            Circle neuron = new Circle(20);
-            neuron.setUserData(prop);
-
-            layerContainer.getChildren().add(neuron);
-            layer.add(neuron);
-        }
 
         networkContainer.getChildren().add(layerContainer);
-        layerContainers.add(layerContainer);
-        neuronList.add(layer);
+
+        addLayerButtons(layerContainer);
+
+        Matrix lastActivation = activations.get(activations.size() - 1);
+
+        for (int neuronIndex = 0; neuronIndex < numberOfNeurons; neuronIndex++) {
+            double activation = lastActivation.get(neuronIndex, 0);
+            addNeuron(layerContainer, activation);
+        }
+    }
+
+    public void addNeuron(@NotNull VBox layerContainer, double activation){
+        if (layerContainer.getChildren().size() > MAX_NEURONS) return;
+
+        //Pane that contains the neuron and its value
+        StackPane neuronPane = new StackPane();
+
+        Label value = new Label();
+        value.toFront();
+        value.setId("activationValue");
+
+        DoubleProperty prop = new SimpleDoubleProperty(activation);
+        value.textProperty().bind(prop.asString("%.2f"));
+
+        Circle neuron = new Circle(20);
+        neuron.setUserData(prop);
+
+        neuronPane.getChildren().add(neuron);
+        neuronPane.getChildren().add(value);
+
+        layerContainer.getChildren().add(neuronPane);
     }
 
     /**
@@ -94,6 +104,12 @@ public class NetworkDisplay {
 
         Button addNeuronBtn = new Button("+");
         Button removeNeuronBtn = new Button("-");
+
+//        addNeuronBtn.setOnAction(e -> {
+//            int layerIndex = getLayerIndex(layerContainer);
+//            network.addNeuron(layerIndex);
+//            addNeuron(layerContainer, 0);
+//        });
 
         btnContainer.getChildren().add(addNeuronBtn);
         btnContainer.getChildren().add(removeNeuronBtn);
@@ -115,7 +131,7 @@ public class NetworkDisplay {
     private void generateLayerWeights(int layerIndex) {
         int currNumNeurons = network.getNumNeurons(layerIndex + 1);
         for (int currNeuron = 0; currNeuron < currNumNeurons; currNeuron++) {
-            int prevNumNeurons = network.getActivations().get(layerIndex).getRows();
+            int prevNumNeurons = activations.get(layerIndex).getRows();
             for (int prevNeuron = 0; prevNeuron < prevNumNeurons; prevNeuron++) {
                 generateWeight(currNeuron, prevNeuron, layerIndex);
             }
@@ -132,13 +148,13 @@ public class NetworkDisplay {
     private void generateWeight(int currNeuronIndex, int prevNeuronIndex, int currLayerIndex) {
         double weight = Math.abs(network.getWeights().get(currLayerIndex).get(currNeuronIndex, prevNeuronIndex));
         Line line = new Line();
-        VBox layer = layerContainers.get(currLayerIndex);
+        VBox layer = (VBox) networkContainer.getChildren().get(currLayerIndex);
 
         SimpleDoubleProperty value = new SimpleDoubleProperty(weight);
         line.setUserData(value);
 
-        Circle currNeuron = neuronList.get(currLayerIndex + 1).get(currNeuronIndex);
-        Circle prevNeuron = neuronList.get(currLayerIndex).get(prevNeuronIndex);
+        Circle currNeuron = layers.get(currLayerIndex + 1).get(currNeuronIndex);
+        Circle prevNeuron = layers.get(currLayerIndex).get(prevNeuronIndex);
 
         // Calculate the center positions for the current and previous neurons
         double currNeuronCenterX = currNeuron.getBoundsInParent().getCenterX();
@@ -173,9 +189,9 @@ public class NetworkDisplay {
     }
 
     public void update() {
-        for (int i = 0; i < network.getActivations().size(); i++)
-            for (int j = 0; j < network.getActivations().get(i).getRows(); j++)
-                ((SimpleDoubleProperty) neuronList.get(i).get(j).getUserData()).set(network.getActivations().get(i).get(j, 0));
+        for (int i = 0; i < activations.size(); i++)
+            for (int j = 0; j < activations.get(i).getRows(); j++)
+                ((SimpleDoubleProperty) layers.get(i).get(j).getUserData()).set(activations.get(i).get(j, 0));
     }
 }
 
