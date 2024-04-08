@@ -2,14 +2,17 @@ package com.nn;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -23,28 +26,28 @@ public class NetworkDisplay {
     private static final int PANE_PADDING = 20;
     private static final int MIN_LAYERS = 2, MAX_LAYERS = 6;
     private static final int MIN_NEURONS = 2, MAX_NEURONS = 8;
-    private final Pane networkPane;
+    private final HBox networkContainer;
 
     private final Network network;
 
     private final ArrayList<Line> lineWeights = new ArrayList<>();
     private final ArrayList<ArrayList<Circle>> neuronList;
-    private final HBox btnContainer;
+    private final ArrayList<VBox> layerContainers = new ArrayList<>();
+    private final ArrayList<VBox> lineContainers = new ArrayList<>();
 
-    public NetworkDisplay(Pane networkPane, HBox btnContainer) {
-        this.networkPane = networkPane;
-        this.btnContainer = btnContainer;
-        this.networkPane.setPrefSize(WIDTH, HEIGHT);
+    public NetworkDisplay(HBox networkContainer) {
+        this.networkContainer = networkContainer;
+        this.networkContainer.setPrefSize(WIDTH, HEIGHT);
 
         this.neuronList = new ArrayList<>();
-        neuronList.add(new ArrayList<>());
 
-        this.network = new Network(0.01, 1);
+        this.network = new Network(0.01, 2, 4);
 
         generateLayers();
+        generateWeights();
     }
 
-    private void addLayers(){
+    private void addLayers() {
         for (int i = 0; i < network.getNumberOfLayers(); i++) {
             addLayer();
         }
@@ -59,13 +62,11 @@ public class NetworkDisplay {
     }
 
     private void generateLayer(int indexOfLayer, int numberOfNeurons) {
-        int numLayers = network.getNumberOfLayers();
-        int disposableWidth = WIDTH - 2 * PANE_PADDING;
-        int disposableHeight = HEIGHT - 2 * PANE_PADDING;
-        int layerGap = disposableWidth / (numLayers + 1);
-        int heightGap = disposableHeight / (numberOfNeurons + 1);
+        VBox layerContainer = new VBox();
+        layerContainer.setAlignment(Pos.CENTER);
+        layerContainer.setSpacing(5);
 
-        neuronList.add(indexOfLayer, new ArrayList<>());
+        ArrayList<Circle> layer = new ArrayList<>();
 
         for (int indexOfNeuron = 0; indexOfNeuron < numberOfNeurons; indexOfNeuron++) {
             Label value = new Label();
@@ -78,14 +79,13 @@ public class NetworkDisplay {
             Circle neuron = new Circle(20);
             neuron.setUserData(prop);
 
-            neuron.setCenterX(layerGap * (indexOfLayer + 0.5) - (networkPane.getWidth()));
-            neuron.setCenterY(heightGap * (indexOfNeuron + 0.5) - (networkPane.getHeight()));
-            value.setTranslateX(layerGap * (indexOfLayer + 0.5) - (10));
-            value.setTranslateY(heightGap * (indexOfNeuron + 0.5) - (5));
-
-            networkPane.getChildren().addAll(neuron, value);
-            neuronList.get(indexOfLayer).add(neuron);
+            layerContainer.getChildren().add(neuron);
+            layer.add(neuron);
         }
+
+        neuronList.add(layer);
+        networkContainer.getChildren().add(layerContainer);
+        layerContainers.add(layerContainer);
     }
 
     private void generateWeights() {
@@ -112,47 +112,58 @@ public class NetworkDisplay {
      * @param currLayerIndex  index of the current layer
      */
     private void generateWeight(int currNeuronIndex, int prevNeuronIndex, int currLayerIndex) {
-        double weight = network.getWeights().get(currLayerIndex).get(currNeuronIndex, prevNeuronIndex);
-        weight = Math.abs(weight);
+        double weight = Math.abs(network.getWeights().get(currLayerIndex).get(currNeuronIndex, prevNeuronIndex));
         Line line = new Line();
+        VBox layer = layerContainers.get(currLayerIndex);
 
-        DoubleProperty value = new SimpleDoubleProperty(weight);
+        SimpleDoubleProperty value = new SimpleDoubleProperty(weight);
         line.setUserData(value);
-        line.startXProperty().bind(neuronList.get(currLayerIndex + 1).get(currNeuronIndex).centerXProperty());
-        line.startYProperty().bind(neuronList.get(currLayerIndex + 1).get(currNeuronIndex).centerYProperty());
-        line.endXProperty().bind(neuronList.get(currLayerIndex).get(prevNeuronIndex).centerXProperty());
-        line.endYProperty().bind(neuronList.get(currLayerIndex).get(prevNeuronIndex).centerYProperty());
 
-        line.opacityProperty().bind((value.divide(2)).add(0.5));
-        line.strokeWidthProperty().bind(((value.divide(1.5)).add(0.5)).multiply(3));
-        //line.translateXProperty().bind();
+        Circle currNeuron = neuronList.get(currLayerIndex + 1).get(currNeuronIndex);
+        Circle prevNeuron = neuronList.get(currLayerIndex).get(prevNeuronIndex);
 
-        line.setOnMouseClicked((e) -> {
-            System.out.println(value.get());
-        });
-        networkPane.getChildren().add(line);
-        line.toBack();
+        // Calculate the center positions for the current and previous neurons
+        double currNeuronCenterX = currNeuron.getBoundsInParent().getCenterX();
+        double prevNeuronCenterX = prevNeuron.getBoundsInParent().getCenterX();
+
+        // Bind line coordinates to neuron centers accounting for VBox layout
+        line.startXProperty().bind(currNeuron.parentProperty().get().layoutXProperty().add(currNeuronCenterX));
+        line.endXProperty().bind(prevNeuron.parentProperty().get().layoutXProperty().add(prevNeuronCenterX));
+
+
+        // Bind line coordinates to neuron centers accounting for HBox
+        line.startYProperty().bind(
+                currNeuron.layoutYProperty().add(currNeuron.getTranslateY()).add(currNeuron.getRadius()).add(layer.layoutYProperty())
+        );
+        line.endYProperty().bind(
+                prevNeuron.layoutYProperty().add(prevNeuron.getTranslateY()).add(prevNeuron.getRadius()).add(layer.layoutYProperty())
+        );
+
+        // Set line appearance properties
+        line.opacityProperty().bind(value.divide(2).add(0.5));
+        line.strokeWidthProperty().bind(value.divide(1.5).add(0.5).multiply(3));
+
+        // Add line to the container
+        networkContainer.getChildren().add(line);
+        line.toBack(); // Ensure the lines are behind the neurons
+        line.setManaged(false); // The HBox will now ignore the line when laying out its children
     }
 
-    public void addLayer() {
-        int size = btnContainer.getChildren().size();
-        if (size == MAX_LAYERS) return;
 
-        addLayerButtons();
+    public void addLayer() {
+//        addLayerButtons();
 
         network.addLayer(MIN_NEURONS);
         generateLayer(network.getNumberOfLayers() - 2, MIN_NEURONS);
         generateLayerWeights(network.getNumberOfLayers() - 2);
     }
 
-    private void addLayerButtons() {
+    private void addLayerButtons(VBox layerContainer) {
         HBox subBtnContainer = new HBox();
         subBtnContainer.setSpacing(5);
 
         subBtnContainer.getChildren().add(new Button("+"));
         subBtnContainer.getChildren().add(new Button("-"));
-
-        btnContainer.getChildren().add(subBtnContainer);
     }
 
     private void addLayerNeurons() {
@@ -162,7 +173,7 @@ public class NetworkDisplay {
 
     private void degenerateWeight(int currNeuronIndex, int prevNeuronIndex, int layerIndex) {
         Line line = lineWeights.get(currNeuronIndex * network.getNumberOfNeurons(layerIndex) + prevNeuronIndex);
-        networkPane.getChildren().remove(line);
+        networkContainer.getChildren().remove(line);
     }
 
     public void clear() {

@@ -1,10 +1,7 @@
 package com;
 
-import com.nn.Matrix;
 import com.nn.Network;
 import com.nn.NetworkDisplay;
-import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.chart.LineChart;
@@ -15,8 +12,6 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
-import java.util.Objects;
-
 public class Controller {
     public HBox inputSection;
     public ComboBox<Double> learningRateCB;
@@ -26,9 +21,8 @@ public class Controller {
     public Label testLossLabel, trainingLossLabel;
     public LineChart<Integer, Double> trainingChart;
     public Canvas canvas;
-    public Pane networkPane;
+    public HBox networkContainer;
     public Button btnAdderBtn, btnRemoverBtn;
-    public HBox btnContainer;
     private Network network;
     private NetworkDisplay networkDisplay;
 
@@ -53,7 +47,7 @@ public class Controller {
 //        };
 
         network = new Network(learningRateCB.getValue(), activationCB.getValue(), lossCB.getValue(), 4,6,1);
-        networkDisplay = new NetworkDisplay(networkPane, btnContainer);
+        networkDisplay = new NetworkDisplay(networkContainer);
 
         startStopBtn.setOnAction(e -> {
             network.setLearningRate(learningRateCB.getValue());
@@ -69,10 +63,10 @@ public class Controller {
 
         btnAdderBtn.setOnAction(e -> networkDisplay.addLayer());
 
-        btnRemoverBtn.setOnAction(e -> {
-            if (btnContainer.getChildren().isEmpty()) return;
-            int size = btnContainer.getChildren().size();
-            btnContainer.getChildren().remove(size - 1 );
-        });
+//        btnRemoverBtn.setOnAction(e -> {
+//            if (btnContainer.getChildren().isEmpty()) return;
+//            int size = btnContainer.getChildren().size();
+//            btnContainer.getChildren().remove(size - 1 );
+//        });
     }
 }
