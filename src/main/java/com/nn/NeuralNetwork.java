@@ -227,8 +227,10 @@ public class NeuralNetwork {
         ArrayList<Matrix> nablaB = new ArrayList<>();
         ArrayList<Matrix> nablaW = new ArrayList<>();
 
-        for (Matrix bias : biases) nablaB.add(Matrix.zeros(bias.getRows(), bias.getColumns()));
-        for (Matrix matrix : weights) nablaW.add(Matrix.zeros(matrix.getRows(), matrix.getColumns()));
+        for (Matrix bias : biases)
+            nablaB.add(Matrix.zeros(bias.getRows(), bias.getColumns()));
+        for (Matrix matrix : weights)
+            nablaW.add(Matrix.zeros(matrix.getRows(), matrix.getColumns()));
 
         return new ArrayList[]{nablaB, nablaW};
     }

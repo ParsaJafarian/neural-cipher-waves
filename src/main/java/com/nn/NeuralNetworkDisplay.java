@@ -41,6 +41,7 @@ public class NeuralNetworkDisplay {
     private void initializeInputLayer() {
         VBox inputLayer = new VBox();
         networkContainer.getChildren().add(inputLayer);
+        layers.add(new ArrayList<>());
     }
 
     private void initializeHiddenLayers() {
@@ -66,6 +67,72 @@ public class NeuralNetworkDisplay {
             double activation = lastActivation.get(neuronIndex, 0);
             addNeuron(layerContainer, activation);
         }
+    }
+
+    /**
+     * Generate weights between last layer and the before last layer
+     */
+    private void generateLayerWeights() {
+        int lastIndex = network.getNumLayers() - 1;
+        int currNumNeurons = network.getNumNeurons(lastIndex);
+        for (int currNeuronIndex = 0; currNeuronIndex < currNumNeurons; currNeuronIndex++) {
+            generateWeights(currNeuronIndex, lastIndex);
+        }
+    }
+
+    /**
+     * Generate weight lines between current neuron and all neurons of previous layer
+     * @param currNeuronIndex index of the current neuron
+     * @param currLayerIndex  index of the current layer
+     */
+    private void generateWeights(int currNeuronIndex, int currLayerIndex) {
+        int prevNumNeurons = activations.get(currLayerIndex - 1).getRows();
+        for (int prevNeuronIndex = 0; prevNeuronIndex < prevNumNeurons; prevNeuronIndex++) {
+            connectNeurons(currNeuronIndex, prevNeuronIndex, currLayerIndex);
+        }
+    }
+
+    /**
+     * Connects two neurons with a weighted line
+     * @param currNeuronIndex index of the current neuron
+     * @param prevNeuronIndex index of the previous neuron
+     * @param currLayerIndex index of the current layer
+     */
+    private void connectNeurons(int currNeuronIndex, int prevNeuronIndex, int currLayerIndex){
+        double weight = Math.abs(network.getWeights().get(currLayerIndex).get(currNeuronIndex, prevNeuronIndex));
+        Line line = new Line();
+        VBox layer = (VBox) networkContainer.getChildren().get(currLayerIndex);
+
+        SimpleDoubleProperty value = new SimpleDoubleProperty(weight);
+        line.setUserData(value);
+
+        Circle currNeuron = layers.get(currLayerIndex).get(currNeuronIndex);
+        Circle prevNeuron = layers.get(currLayerIndex - 1).get(prevNeuronIndex);
+
+        // Calculate the center positions for the current and previous neurons
+        double currNeuronCenterX = currNeuron.getBoundsInParent().getCenterX();
+        double prevNeuronCenterX = prevNeuron.getBoundsInParent().getCenterX();
+
+        // Bind line coordinates to neuron centers accounting for VBox layout
+        line.startXProperty().bind(currNeuron.parentProperty().get().layoutXProperty().add(currNeuronCenterX));
+        line.endXProperty().bind(prevNeuron.parentProperty().get().layoutXProperty().add(prevNeuronCenterX));
+
+        // Bind line coordinates to neuron centers accounting for HBox
+        line.startYProperty().bind(
+                currNeuron.layoutYProperty().add(currNeuron.getTranslateY()).add(currNeuron.getRadius()).add(layer.layoutYProperty())
+        );
+        line.endYProperty().bind(
+                prevNeuron.layoutYProperty().add(prevNeuron.getTranslateY()).add(prevNeuron.getRadius()).add(layer.layoutYProperty())
+        );
+
+        // Set line appearance properties
+        line.opacityProperty().bind(value.divide(2).add(0.5));
+        line.strokeWidthProperty().bind(value.divide(1.5).add(0.5).multiply(3));
+        line.toBack();
+        line.setManaged(false);
+
+        // Add line to the container
+        networkContainer.getChildren().add(line);
     }
 
     public void removeLayer(){
@@ -131,72 +198,6 @@ public class NeuralNetworkDisplay {
 
     private int getLayerIndex(VBox layerContainer) {
         return networkContainer.getChildren().indexOf(layerContainer) - 1;
-    }
-
-    private void degenerateWeight(int currNeuronIndex, int prevNeuronIndex, int layerIndex) {
-        Line line = lineWeights.get(currNeuronIndex * network.getNumNeurons(layerIndex) + prevNeuronIndex);
-        networkContainer.getChildren().remove(line);
-    }
-
-    private void generateWeights() {
-        for (int i = 0; i < network.getWeights().size(); i++) {
-            generateLayerWeights(i);
-        }
-    }
-
-    private void generateLayerWeights(int layerIndex) {
-        int currNumNeurons = network.getNumNeurons(layerIndex + 1);
-        for (int currNeuron = 0; currNeuron < currNumNeurons; currNeuron++) {
-            int prevNumNeurons = activations.get(layerIndex).getRows();
-            for (int prevNeuron = 0; prevNeuron < prevNumNeurons; prevNeuron++) {
-                generateWeight(currNeuron, prevNeuron, layerIndex);
-            }
-        }
-    }
-
-    /**
-     * Generate weight line between current neuron and a previous neuron
-     *
-     * @param currNeuronIndex index of the current neuron
-     * @param prevNeuronIndex index of the previous neuron
-     * @param currLayerIndex  index of the current layer
-     */
-    private void generateWeight(int currNeuronIndex, int prevNeuronIndex, int currLayerIndex) {
-        double weight = Math.abs(network.getWeights().get(currLayerIndex).get(currNeuronIndex, prevNeuronIndex));
-        Line line = new Line();
-        VBox layer = (VBox) networkContainer.getChildren().get(currLayerIndex);
-
-        SimpleDoubleProperty value = new SimpleDoubleProperty(weight);
-        line.setUserData(value);
-
-        Circle currNeuron = layers.get(currLayerIndex + 1).get(currNeuronIndex);
-        Circle prevNeuron = layers.get(currLayerIndex).get(prevNeuronIndex);
-
-        // Calculate the center positions for the current and previous neurons
-        double currNeuronCenterX = currNeuron.getBoundsInParent().getCenterX();
-        double prevNeuronCenterX = prevNeuron.getBoundsInParent().getCenterX();
-
-        // Bind line coordinates to neuron centers accounting for VBox layout
-        line.startXProperty().bind(currNeuron.parentProperty().get().layoutXProperty().add(currNeuronCenterX));
-        line.endXProperty().bind(prevNeuron.parentProperty().get().layoutXProperty().add(prevNeuronCenterX));
-
-
-        // Bind line coordinates to neuron centers accounting for HBox
-        line.startYProperty().bind(
-                currNeuron.layoutYProperty().add(currNeuron.getTranslateY()).add(currNeuron.getRadius()).add(layer.layoutYProperty())
-        );
-        line.endYProperty().bind(
-                prevNeuron.layoutYProperty().add(prevNeuron.getTranslateY()).add(prevNeuron.getRadius()).add(layer.layoutYProperty())
-        );
-
-        // Set line appearance properties
-        line.opacityProperty().bind(value.divide(2).add(0.5));
-        line.strokeWidthProperty().bind(value.divide(1.5).add(0.5).multiply(3));
-
-        // Add line to the container
-        networkContainer.getChildren().add(line);
-        line.toBack(); // Ensure the lines are behind the neurons
-        line.setManaged(false); // The HBox will now ignore the line when laying out its children
     }
 
     public void clear() {
