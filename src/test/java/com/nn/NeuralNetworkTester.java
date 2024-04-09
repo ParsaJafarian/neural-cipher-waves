@@ -1,13 +1,14 @@
 package com.nn;
 
+import static com.nn.NeuralNetworkConfig.MIN_LAYERS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class NetworkTester {
+public class NeuralNetworkTester {
 
-    private static Network network;
+    private static NeuralNetwork network;
 
     static void testAddNeuron(int layerIndex, int... sizes) {
-        network = new Network(0.001, "relu", "mse", sizes);
+        network = new NeuralNetwork(0.001, "relu", "mse", sizes);
         int oldNumNeurons = network.getNumNeurons(layerIndex);
 
         network.addNeuron(layerIndex);
@@ -38,7 +39,7 @@ public class NetworkTester {
     }
 
     static void testAddLayer(int numNeurons, int... sizes) {
-        network = new Network(0.001, "relu", "mse", sizes);
+        network = new NeuralNetwork(0.001, "relu", "mse", sizes);
         int oldNumLayers = network.getNumLayers();
 
         network.addLayer(numNeurons);
@@ -61,5 +62,35 @@ public class NetworkTester {
         assertEquals(network.getNumLayers(), network.getActivations().size());
         assertEquals(network.getNumNeurons(-1), lastActivation.getRows());
         assertEquals(1, lastActivation.getColumns());
+    }
+
+    static void testRemoveLayer(int... sizes) {
+        network = new NeuralNetwork(0.001, "relu", "mse", sizes);
+        int oldNumLayers = network.getNumLayers();
+        if (oldNumLayers <= MIN_LAYERS) return; // Cannot remove input layer or output layer
+
+        network.removeLayer();
+
+        int newNumLayers = network.getNumLayers();
+        assertEquals(oldNumLayers - 1, newNumLayers);
+
+        int numActivations = network.getActivations().size();
+        Matrix lastActivation = network.getActivations().get(network.getActivations().size() - 1);
+        assertEquals(oldNumLayers - 1, numActivations);
+        assertEquals(network.getNumNeurons(-1), lastActivation.getRows());
+
+
+        int numWeights = network.getWeights().size();
+        Matrix lastWeight = network.getWeights().get(network.getWeights().size() - 1);
+        assertEquals(oldNumLayers - 2, numWeights);
+        assertEquals(network.getNumNeurons(-1), lastWeight.getRows());
+        assertEquals(network.getNumNeurons(-2), lastWeight.getColumns());
+
+        int numBiases = network.getBiases().size();
+        Matrix lastBias = network.getBiases().get(network.getBiases().size() - 1);
+        assertEquals(oldNumLayers - 2, numBiases);
+        assertEquals(network.getNumNeurons(-1), lastBias.getRows());
+        assertEquals(1, lastBias.getColumns());
+
     }
 }

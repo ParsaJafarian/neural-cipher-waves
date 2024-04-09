@@ -1,7 +1,7 @@
 package com;
 
-import com.nn.Network;
-import com.nn.NetworkDisplay;
+import com.nn.NeuralNetwork;
+import com.nn.NeuralNetworkDisplay;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.chart.LineChart;
@@ -10,7 +10,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+
+import static com.nn.NeuralNetworkConfig.MIN_NEURONS;
 
 public class Controller {
     public HBox inputSection;
@@ -23,8 +24,8 @@ public class Controller {
     public Canvas canvas;
     public HBox networkContainer;
     public Button btnAdderBtn, btnRemoverBtn;
-    private Network network;
-    private NetworkDisplay networkDisplay;
+    private NeuralNetwork network;
+    private NeuralNetworkDisplay networkDisplay;
 
     @FXML
     public void initialize() {
@@ -46,8 +47,8 @@ public class Controller {
 //                }
 //        };
 
-        network = new Network(learningRateCB.getValue(), activationCB.getValue(), lossCB.getValue(), 4,6,1);
-        networkDisplay = new NetworkDisplay(networkContainer);
+        network = new NeuralNetwork(learningRateCB.getValue(), activationCB.getValue(), lossCB.getValue(), 4,6,1);
+        networkDisplay = new NeuralNetworkDisplay(networkContainer);
 
         startStopBtn.setOnAction(e -> {
             network.setLearningRate(learningRateCB.getValue());
@@ -61,7 +62,8 @@ public class Controller {
 
         clrBtn.setOnAction(e -> networkDisplay.clear());
 
-        btnAdderBtn.setOnAction(e -> networkDisplay.addLayer(NetworkDisplay.MIN_NEURONS));
+        btnAdderBtn.setOnAction(e -> networkDisplay.addLayer(MIN_NEURONS));
+        btnRemoverBtn.setOnAction(e -> networkDisplay.removeLayer());
 
 //        btnRemoverBtn.setOnAction(e -> {
 //            if (btnContainer.getChildren().isEmpty()) return;

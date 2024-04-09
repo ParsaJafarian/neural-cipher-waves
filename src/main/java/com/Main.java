@@ -1,8 +1,7 @@
 package com;
 
 import com.nn.Matrix;
-import com.nn.Network;
-import com.nn.NetworkDisplay;
+import com.nn.NeuralNetwork;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -36,7 +35,7 @@ public class Main extends Application {
                 }
         };
 
-        Network network = new Network(0.001, "sigmoid", "mse", 10,5,1);
+        NeuralNetwork network = new NeuralNetwork(0.001, "sigmoid", "mse", 10,5,1);
         network.sgd(trainData,null, 2, 1);
 
         AnchorPane root = new AnchorPane();

@@ -298,4 +298,26 @@ public class Matrix {
         return result;
     }
 
+    public Matrix removeRow() {
+        Matrix result = new Matrix(rows - 1, cols); // Create a new matrix with one less row
+        for (int i = 0, k = 0; i < rows; i++) {
+            if (i == rows - 1) continue; // Skip the row to be removed
+            System.arraycopy(data[i], 0, result.data[k], 0, cols); // Copy existing data
+            k++;
+        }
+        return result;
+    }
+
+    public Matrix removeColumn() {
+        Matrix result = new Matrix(rows, cols - 1); // Create a new matrix with one less column
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0, k = 0; j < cols; j++) {
+                if (j == cols - 1) continue; // Skip the column to be removed
+                result.data[i][k] = data[i][j]; // Copy existing data
+                k++;
+            }
+        }
+        return result;
+    }
+
 }

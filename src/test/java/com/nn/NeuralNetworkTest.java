@@ -5,15 +5,14 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.ArrayList;
 
-import static com.nn.NetworkTester.testAddLayer;
-import static com.nn.NetworkTester.testAddNeuron;
+import static com.nn.NeuralNetworkTester.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class NetworkTest {
+public class NeuralNetworkTest {
 
     @Test
     public void testConstructor() {
-        Network n = new Network(2, 3, 1);
+        NeuralNetwork n = new NeuralNetwork(2, 3, 1);
         assert n.getNumLayers() == 2;
         assert n.getNumNeurons(0) == 3;
         assert n.getNumNeurons(1) == 1;
@@ -40,7 +39,7 @@ public class NetworkTest {
 
     @Test
     public void testFeedForward() {
-        Network n = new Network(2, 3, 10, 10);
+        NeuralNetwork n = new NeuralNetwork(2, 3, 10, 10);
         Matrix input = Matrix.ones(3, 1); // 3 input neurons
 
         Matrix output = n.feedForward(input);
@@ -59,7 +58,7 @@ public class NetworkTest {
 
     @Test
     public void testSGD() {
-        Network n = new Network(0.001, 1, 1); //2 input neurons, 1 output neurons
+        NeuralNetwork n = new NeuralNetwork(0.001, 1, 1); //2 input neurons, 1 output neurons
         Matrix[][] trainingData = new Matrix[10][2];
         Matrix[][] testData = new Matrix[10][2];
 
@@ -107,8 +106,23 @@ public class NetworkTest {
     }
 
     @Test
-    public void testAddLayer2(){
+    public void testAddLayer2() {
         testAddLayer(3, 1, 1, 1);
+    }
+
+    @Test
+    public void testRemoveLayer1() {
+        testRemoveLayer(2, 1, 1);
+    }
+
+    @Test
+    public void testRemoveLayer2() {
+        testRemoveLayer(3, 1, 1, 1);
+    }
+
+    @Test
+    public void testRemoveLayer3() {
+        testRemoveLayer(1, 1);
     }
 
     @Test
@@ -125,4 +139,5 @@ public class NetworkTest {
     public void testAddNeuron3() {
         testAddNeuron(2, 4, 6, 3);
     }
+
 }

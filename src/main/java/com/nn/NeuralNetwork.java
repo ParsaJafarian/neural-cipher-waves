@@ -12,11 +12,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.nn.Activation.activationFunctions;
 import static com.nn.Loss.losses;
+import static com.nn.NeuralNetworkConfig.*;
 
 /**
  * Neural network class for creating and training neural networks.
  */
-public class Network {
+public class NeuralNetwork {
     private double learningRate;
 
     /**
@@ -48,7 +49,7 @@ public class Network {
      * @param loss               cost function of the network
      * @param sizes              sizes of the layers in the network.
      */
-    public Network(double learningRate, String activationFunction, String loss, int @NotNull ... sizes) {
+    public NeuralNetwork(double learningRate, String activationFunction, String loss, int @NotNull ... sizes) {
 
         this.sizes = new LinkedList<>();
         for (int size : sizes)
@@ -79,7 +80,7 @@ public class Network {
      * @param learningRate learning rate of the network
      * @param sizes        sizes of the layers in the network
      */
-    public Network(double learningRate, int... sizes) {
+    public NeuralNetwork(double learningRate, int... sizes) {
         this(learningRate, "sigmoid", "mse", sizes);
     }
 
@@ -384,11 +385,9 @@ public class Network {
     }
 
     void clear() {
-        //Clear activations because it is empty when network is first constructed
         activations.clear();
-        for (int size : sizes) {
+        for (int size : sizes)
             activations.add(new Matrix(size, 1));
-        }
 
         weights.clear();
         biases.clear();
@@ -406,31 +405,53 @@ public class Network {
         biases.add(Matrix.random(numberOfNeurons, 1));
     }
 
-    void addNeuron(int layerIndex) {
+    void removeLayer() {
+        if (getNumLayers() <= MIN_LAYERS) return;
+
+        sizes.removeLast();
+        activations.remove(activations.size() - 1);
+        weights.remove(weights.size() - 1);
+        biases.remove(biases.size() - 1);
+    }
+
+    /**
+     * @param layerIndex the index of the layer. Can be negative to get the layer from the end
+     * @param add        true to add a neuron, false to remove a neuron
+     */
+    private void addOrRemoveNeuron(int layerIndex, boolean add) {
         if (layerIndex < 0) layerIndex = getNumLayers() + layerIndex;
+        if (add && getNumNeurons(layerIndex) >= MAX_NEURONS) return;
+        if (!add && getNumNeurons(layerIndex) <= MIN_NEURONS) return;
 
         int oldNumNeurons = getNumNeurons(layerIndex);
-        sizes.set(layerIndex, oldNumNeurons + 1);
+        sizes.set(layerIndex, add ? oldNumNeurons + 1 : oldNumNeurons - 1);
 
         Matrix oldActivation = activations.get(layerIndex);
-        Matrix newActivation = oldActivation.addRow();
+        Matrix newActivation = add ? oldActivation.addRow() : oldActivation.removeRow();
         activations.set(layerIndex, newActivation);
 
         if (layerIndex > 0) {
             Matrix oldBias = biases.get(layerIndex - 1);
-            Matrix newBias = oldBias.addRow();
+            Matrix newBias = add ? oldBias.addRow() : oldBias.removeRow();
             biases.set(layerIndex - 1, newBias);
 
             Matrix oldWeight = weights.get(layerIndex - 1);
-            Matrix newWeight = oldWeight.addRow();
+            Matrix newWeight = add ? oldWeight.addRow() : oldWeight.removeRow();
             weights.set(layerIndex - 1, newWeight);
         }
 
         if (layerIndex + 1 < getNumLayers()) {
             Matrix oldNextWeight = weights.get(layerIndex);
-            Matrix newNextWeight = oldNextWeight.addColumn();
+            Matrix newNextWeight = add ? oldNextWeight.addColumn() : oldNextWeight.removeColumn();
             weights.set(layerIndex, newNextWeight);
         }
+    }
 
+    void addNeuron(int layerIndex) {
+        addOrRemoveNeuron(layerIndex, true);
+    }
+
+    void removeNeuron(int layerIndex) {
+        addOrRemoveNeuron(layerIndex, false);
     }
 }
