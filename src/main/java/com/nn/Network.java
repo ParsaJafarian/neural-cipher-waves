@@ -405,4 +405,32 @@ public class Network {
         weights.add(Matrix.random(numberOfNeurons, getNumNeurons(-2)));
         biases.add(Matrix.random(numberOfNeurons, 1));
     }
+
+    void addNeuron(int layerIndex) {
+        if (layerIndex < 0) layerIndex = getNumLayers() + layerIndex;
+
+        int oldNumNeurons = getNumNeurons(layerIndex);
+        sizes.set(layerIndex, oldNumNeurons + 1);
+
+        Matrix oldActivation = activations.get(layerIndex);
+        Matrix newActivation = oldActivation.addRow();
+        activations.set(layerIndex, newActivation);
+
+        if (layerIndex > 0) {
+            Matrix oldBias = biases.get(layerIndex - 1);
+            Matrix newBias = oldBias.addRow();
+            biases.set(layerIndex - 1, newBias);
+
+            Matrix oldWeight = weights.get(layerIndex - 1);
+            Matrix newWeight = oldWeight.addRow();
+            weights.set(layerIndex - 1, newWeight);
+        }
+
+        if (layerIndex + 1 < getNumLayers()) {
+            Matrix oldNextWeight = weights.get(layerIndex);
+            Matrix newNextWeight = oldNextWeight.addColumn();
+            weights.set(layerIndex, newNextWeight);
+        }
+
+    }
 }

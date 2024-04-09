@@ -58,6 +58,7 @@ public class Matrix {
 
     /**
      * Turns a nxm matrix into a (n*m)x1 matrix
+     *
      * @return a new matrix that is the vectorized version of this matrix
      */
     public Matrix flatten() {
@@ -219,8 +220,8 @@ public class Matrix {
     @Override
     public String toString() {
         StringBuilder matrix = new StringBuilder();
-        for(int i = 0; i < rows; i++) {
-            for(int j = 0; j < cols; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 matrix.append(data[i][j]).append(" ");
             }
             matrix.append("\n");
@@ -276,4 +277,25 @@ public class Matrix {
                     return true;
         return false;
     }
+
+    public Matrix addRow(){
+        Matrix result = new Matrix(rows + 1, cols); // Create a new matrix with one additional row
+        for (int i = 0; i < rows; i++) {
+            if (cols >= 0) {
+                System.arraycopy(data[i], 0, result.data[i], 0, cols); // Copy existing data
+            }
+        }
+        return result;
+    }
+
+    public Matrix addColumn() {
+        Matrix result = new Matrix(rows, cols + 1); // Create a new matrix with one additional column
+        for (int i = 0; i < rows; i++) {
+            if (cols >= 0) {
+                System.arraycopy(data[i], 0, result.data[i], 0, cols); // Copy existing data
+            }
+        }
+        return result;
+    }
+
 }

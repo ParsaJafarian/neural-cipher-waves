@@ -40,7 +40,7 @@ public class MatrixTest {
     @Test
     public void testMap2() {
         Matrix m = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}});
-        Matrix result = m.map(x -> (double) x /4);
+        Matrix result = m.map(x -> (double) x / 4);
         Matrix actual = new Matrix(new double[][]{{0.25, 0.5, 0.75}, {1, 1.25, 1.5}});
         assertTrue(result.equals(actual), "Expected " + actual + " but got " + result);
     }
@@ -122,5 +122,25 @@ public class MatrixTest {
         Matrix m = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}});
         assert m.getRows() == 2;
         assert m.getColumns() == 3;
+    }
+
+    @Test
+    public void testAddRow() {
+        Matrix m = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}});
+        Matrix result = m.addRow();
+
+        Matrix actual = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}, {0, 0, 0}});
+
+        assertTrue(result.equals(actual), "Expected " + actual + " but got " + result);
+    }
+
+    @Test
+    public void testAddColumn() {
+        Matrix m = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}});
+        Matrix result = m.addColumn();
+
+        Matrix actual = new Matrix(new double[][]{{1, 2, 3, 0}, {4, 5, 6, 0}});
+
+        assertTrue(result.equals(actual), "Expected " + actual + " but got " + result);
     }
 }
