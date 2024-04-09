@@ -159,8 +159,8 @@
                                     <Image url="@inner.png" />
                                  </image>
                               </ImageView>
-                              <Circle fill="#00438200" onMouseDragged="#onDraggedO" onMousePressed="#onMousePressedO" radius="211.0" stroke="BLACK" strokeType="INSIDE" />
-                              <Circle fill="#1f93ff00" onMouseDragged="#onDraggedI" onMousePressed="#onMousePressedI" radius="164.0" stroke="BLACK" strokeType="INSIDE" />
+                              <Circle fx:id="outerC" fill="#00438200" onMouseDragged="#onDraggedO" onMousePressed="#onMousePressedO" radius="208.0" stroke="BLACK" strokeType="INSIDE" />
+                              <Circle fx:id="innerC" fill="#1f93ff00" onMouseDragged="#onDraggedI" onMousePressed="#onMousePressedI" radius="164.0" stroke="BLACK" strokeType="INSIDE" />
                            </children>
                         </StackPane>
                      </children>

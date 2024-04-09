@@ -2,15 +2,14 @@ package com.cipher;
 
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.transform.Rotate;
+import javafx.scene.shape.Circle;
 
 
 public class Controller {
 
-    private double IstartAngle;
-    private double OstartAngle;
+    public Circle innerC;
+    public Circle outerC;
     @FXML
     private ImageView inner;
 
@@ -19,25 +18,28 @@ public class Controller {
 
     @FXML
     public void onMousePressedI(MouseEvent e){
-        IstartAngle = aTanAngle(e.getX(), e.getY());
+        double mouseDeltaX = e.getX();
+        double mouseDeltaY = e.getY();
+        double radAngle = Math.atan2(mouseDeltaY, mouseDeltaX);
+        innerC.setRotate(Math.toDegrees(radAngle));
     }
     @FXML
     public void onMousePressedO(MouseEvent e){
-        OstartAngle = aTanAngle(e.getX(), e.getY());
+        System.out.println(e.getX());
     }
     @FXML
-    public void onDraggedI(MouseDragEvent t){
-        double deltaAngle = aTanAngle(t.getX(), t.getY()) - IstartAngle;
-        Rotate rotate = new Rotate(deltaAngle, Rotate.Z_AXIS);
-        inner.getTransforms().add(rotate);
+    public void onDraggedI(MouseEvent t){
+        double mouseDeltaX = t.getX();
+        double mouseDeltaY = t.getY();
+        double radAngle = Math.atan2(mouseDeltaY, mouseDeltaX);
+        System.out.println(radAngle);
+        System.out.println(innerC.getRotate());
+        double deltaAngle = Math.toDegrees(radAngle)-innerC.getRotate();
+        //inner.setRotate(deltaAngle);
+        //System.out.println(deltaAngle);
     }
     @FXML
-    public void onDraggedO(MouseDragEvent t){
-        double deltaAngle = aTanAngle(t.getX(), t.getY()) - OstartAngle;
-        Rotate rotate = new Rotate(deltaAngle, Rotate.Z_AXIS);
-        outer.getTransforms().add(rotate);
-    }
-    private double aTanAngle(double x, double y){
-        return Math.toDegrees(Math.atan(y/x));
+    public void onDraggedO(MouseEvent t){
+        System.out.println("Mouse Dragged on the Outer");
     }
 }
