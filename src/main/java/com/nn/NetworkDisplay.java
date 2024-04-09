@@ -43,6 +43,10 @@ public class NetworkDisplay {
         this.network = new Network(0.01, 10);
         this.activations = network.getActivations();
 
+        //Add invisible first layer to networkContainer
+        VBox inputLayer = new VBox();
+        networkContainer.getChildren().add(inputLayer);
+
         addInitialHiddenLayers();
     }
 
@@ -57,7 +61,7 @@ public class NetworkDisplay {
         network.addLayer(MIN_NEURONS);
 
         VBox layerContainer = new VBox();
-        layerContainer.setAlignment(Pos.CENTER);
+        layerContainer.setAlignment(Pos.TOP_CENTER);
         layerContainer.setSpacing(5);
 
         networkContainer.getChildren().add(layerContainer);
@@ -105,16 +109,22 @@ public class NetworkDisplay {
         Button addNeuronBtn = new Button("+");
         Button removeNeuronBtn = new Button("-");
 
-//        addNeuronBtn.setOnAction(e -> {
-//            int layerIndex = getLayerIndex(layerContainer);
-//            network.addNeuron(layerIndex);
-//            addNeuron(layerContainer, 0);
-//        });
+        addNeuronBtn.setOnAction(e -> {
+            int layerIndex = getLayerIndex(layerContainer);
+            network.addNeuron(layerIndex);
+            Matrix activation = activations.get(layerIndex);
+            double activationValue = activation.get(activation.getRows() - 1, 0);
+            addNeuron(layerContainer, activationValue);
+        });
 
         btnContainer.getChildren().add(addNeuronBtn);
         btnContainer.getChildren().add(removeNeuronBtn);
 
         layerContainer.getChildren().add(btnContainer);
+    }
+
+    private int getLayerIndex(VBox layerContainer) {
+        return networkContainer.getChildren().indexOf(layerContainer) - 1;
     }
 
     private void degenerateWeight(int currNeuronIndex, int prevNeuronIndex, int layerIndex) {
