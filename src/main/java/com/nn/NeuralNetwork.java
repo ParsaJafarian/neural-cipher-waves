@@ -325,8 +325,15 @@ public class NeuralNetwork {
         return weights;
     }
 
+    public Matrix getWeightsAtLayer(int layerIndex){
+        return weights.get(layerIndex - 1);
+    }
     ArrayList<Matrix> getBiases() {
         return biases;
+    }
+
+    public Matrix getBiasesAtLayer(int layerIndex){
+        return biases.get(layerIndex - 1);
     }
 
 
@@ -378,6 +385,10 @@ public class NeuralNetwork {
      */
     public ArrayList<Matrix> getActivations() {
         return activations;
+    }
+
+    public Matrix getActivationsAtLayer(int layerIndex){
+        return activations.get(layerIndex);
     }
 
     public void setLoss(String value) {

@@ -50,12 +50,13 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="477.0" prefWidth="739.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Controller">
+<VBox prefHeight="571.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Controller">
   <children>
-    <MenuBar VBox.vgrow="NEVER">
+    <MenuBar prefWidth="805.0" VBox.vgrow="NEVER">
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
@@ -160,20 +161,25 @@
                   </LineChart>
                </children>
             </HBox>
-            <VBox layoutX="508.0" layoutY="101.0" prefHeight="239.0" prefWidth="230.0">
+            <VBox layoutX="599.0" layoutY="101.0" prefHeight="239.0" prefWidth="230.0">
                <children>
                   <Canvas fx:id="canvas" height="200.0" width="220.0" />
                   <Label prefHeight="43.0" prefWidth="149.0" text="Prediction: " />
                </children>
             </VBox>
-            <VBox layoutX="7.0" layoutY="101.0" prefHeight="344.0" prefWidth="501.0">
+            <VBox layoutY="101.0" prefHeight="441.0" prefWidth="596.0">
                <children>
                   <HBox alignment="CENTER" prefHeight="70.0" prefWidth="501.0" spacing="20.0">
                      <children>
                         <Button fx:id="btnAdderBtn" mnemonicParsing="false" text="+" />
                         <Button fx:id="btnRemoverBtn" mnemonicParsing="false" text="-" />
-                     </children></HBox>
-                  <HBox fx:id="networkContainer" alignment="CENTER" prefHeight="277.0" prefWidth="501.0" spacing="50.0" />
+                     </children>
+                  </HBox>
+                  <StackPane prefHeight="498.0" prefWidth="596.0">
+                     <children>
+                        <HBox fx:id="networkContainer" alignment="CENTER" prefHeight="422.0" prefWidth="501.0" spacing="50.0" />
+                     </children>
+                  </StackPane>
                </children>
             </VBox>
          </children>

@@ -2,9 +2,11 @@ package com.nn;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -25,14 +27,11 @@ public class NeuralNetworkDisplay {
     private final HBox networkContainer;
     private final NeuralNetwork network;
     private final ArrayList<Line> lineWeights = new ArrayList<>();
-    private final ArrayList<ArrayList<Circle>> layers;
-    private final ArrayList<Matrix> activations;
+    private final ArrayList<VBox> layerContainers = new ArrayList<>();
 
     public NeuralNetworkDisplay(HBox networkContainer) {
         this.networkContainer = networkContainer;
-        this.layers = new ArrayList<>();
         this.network = new NeuralNetwork(0.01, 10);
-        this.activations = network.getActivations();
 
         initializeInputLayer();
         initializeHiddenLayers();
@@ -41,7 +40,7 @@ public class NeuralNetworkDisplay {
     private void initializeInputLayer() {
         VBox inputLayer = new VBox();
         networkContainer.getChildren().add(inputLayer);
-        layers.add(new ArrayList<>());
+        layerContainers.add(inputLayer);
     }
 
     private void initializeHiddenLayers() {
@@ -59,13 +58,17 @@ public class NeuralNetworkDisplay {
         layerContainer.setSpacing(5);
         addLayerButtons(layerContainer);
 
+        layerContainers.add(layerContainer);
         networkContainer.getChildren().add(layerContainer);
 
-        Matrix lastActivation = activations.get(activations.size() - 1);
+        int lastLayerIndex = network.getNumLayers() - 1;
+        Matrix lastActivations = network.getActivationsAtLayer(lastLayerIndex);
 
         for (int neuronIndex = 0; neuronIndex < numberOfNeurons; neuronIndex++) {
-            double activation = lastActivation.get(neuronIndex, 0);
+            double activation = lastActivations.get(neuronIndex, 0);
             addNeuron(layerContainer, activation);
+            if (lastLayerIndex >= 2)
+                generateWeights(neuronIndex, lastLayerIndex);
         }
     }
 
@@ -86,59 +89,81 @@ public class NeuralNetworkDisplay {
      * @param currLayerIndex  index of the current layer
      */
     private void generateWeights(int currNeuronIndex, int currLayerIndex) {
-        int prevNumNeurons = activations.get(currLayerIndex - 1).getRows();
+        int prevNumNeurons = network.getNumNeurons(currLayerIndex - 1);
         for (int prevNeuronIndex = 0; prevNeuronIndex < prevNumNeurons; prevNeuronIndex++) {
             connectNeurons(currNeuronIndex, prevNeuronIndex, currLayerIndex);
         }
     }
 
     /**
-     * Connects two neurons with a weighted line
+     * Connect two neurons with a weighted line
      * @param currNeuronIndex index of the current neuron
      * @param prevNeuronIndex index of the previous neuron
      * @param currLayerIndex index of the current layer
      */
     private void connectNeurons(int currNeuronIndex, int prevNeuronIndex, int currLayerIndex){
-        double weight = Math.abs(network.getWeights().get(currLayerIndex).get(currNeuronIndex, prevNeuronIndex));
+        double weight = Math.abs(network.getWeightsAtLayer(currLayerIndex).get(currNeuronIndex, prevNeuronIndex));
         Line line = new Line();
-        VBox layer = (VBox) networkContainer.getChildren().get(currLayerIndex);
+        VBox layerContainer = getLayerContainer(currLayerIndex);
+        StackPane stackPane = (StackPane) networkContainer.getParent();
 
         SimpleDoubleProperty value = new SimpleDoubleProperty(weight);
         line.setUserData(value);
 
-        Circle currNeuron = layers.get(currLayerIndex).get(currNeuronIndex);
-        Circle prevNeuron = layers.get(currLayerIndex - 1).get(prevNeuronIndex);
+        Circle currNeuron = getNeuron(currLayerIndex, currNeuronIndex);
+        Circle prevNeuron = getNeuron(currLayerIndex - 1, prevNeuronIndex);
 
-        // Calculate the center positions for the current and previous neurons
-        double currNeuronCenterX = currNeuron.getBoundsInParent().getCenterX();
-        double prevNeuronCenterX = prevNeuron.getBoundsInParent().getCenterX();
+        Point2D currNeuronCoordinates = getNeuronStackPaneCoordinates(currNeuron, stackPane);
+        Point2D prevNeuronCoordinates = getNeuronStackPaneCoordinates(prevNeuron, stackPane);
 
-        // Bind line coordinates to neuron centers accounting for VBox layout
-        line.startXProperty().bind(currNeuron.parentProperty().get().layoutXProperty().add(currNeuronCenterX));
-        line.endXProperty().bind(prevNeuron.parentProperty().get().layoutXProperty().add(prevNeuronCenterX));
+        line.setStartX(prevNeuronCoordinates.getX());
+        line.setStartY(prevNeuronCoordinates.getY());
 
-        // Bind line coordinates to neuron centers accounting for HBox
-        line.startYProperty().bind(
-                currNeuron.layoutYProperty().add(currNeuron.getTranslateY()).add(currNeuron.getRadius()).add(layer.layoutYProperty())
-        );
-        line.endYProperty().bind(
-                prevNeuron.layoutYProperty().add(prevNeuron.getTranslateY()).add(prevNeuron.getRadius()).add(layer.layoutYProperty())
-        );
+        line.setEndX(currNeuronCoordinates.getX());
+        line.setEndY(currNeuronCoordinates.getY());
 
         // Set line appearance properties
         line.opacityProperty().bind(value.divide(2).add(0.5));
         line.strokeWidthProperty().bind(value.divide(1.5).add(0.5).multiply(3));
-        line.toBack();
-        line.setManaged(false);
 
         // Add line to the container
-        networkContainer.getChildren().add(line);
+        lineWeights.add(line);
+        stackPane.getChildren().add(line);
+    }
+
+    private Point2D getNeuronStackPaneCoordinates(Circle neuron, StackPane stackPane){
+        // Get the local coordinates of the circle in terms of the VBox
+        double neuronLocalX = neuron.getBoundsInLocal().getMinX();
+        double neuronLocalY = neuron.getBoundsInLocal().getMinY();
+
+        // Convert local coordinates to scene coordinates
+        double neuronSceneX = neuron.localToScene(neuronLocalX, neuronLocalY).getX();
+        double neuronSceneY = neuron.localToScene(neuronLocalX, neuronLocalY).getY();
+
+        // Convert scene coordinates to coordinates relative to the StackPane
+        double neuronStackPaneX = stackPane.sceneToLocal(neuronSceneX, neuronSceneY).getX();
+        double neuronStackPaneY = stackPane.sceneToLocal(neuronSceneX, neuronSceneY).getY();
+
+        return new Point2D(neuronStackPaneX, neuronStackPaneY);
+    }
+
+    private Circle getNeuron(int layerIndex, int neuronIndex){
+        VBox layerContainer = getLayerContainer(layerIndex);
+        StackPane neuronPane = (StackPane) layerContainer.getChildren().get(neuronIndex + 1);
+        return (Circle) neuronPane.getChildren().get(0);
+    }
+
+    private VBox getLayerContainer(int layerIndex){
+        return layerContainers.get(layerIndex);
     }
 
     public void removeLayer(){
-        if (networkContainer.getChildren().size() <= MIN_LAYERS + 1) return;
+        if (network.getNumLayers() <= MIN_LAYERS + 1) return;
+        int lastIndex = network.getNumLayers() - 1;
         network.removeLayer();
-        networkContainer.getChildren().remove(networkContainer.getChildren().size() - 1);
+        VBox layerContainer = getLayerContainer(lastIndex);
+        layerContainers.remove(layerContainer);
+        networkContainer.getChildren().remove(layerContainer);
     }
 
     public void addNeuron(@NotNull VBox layerContainer, double activation){
@@ -191,13 +216,13 @@ public class NeuralNetworkDisplay {
     private void addNeuronThroughBtn(VBox layerContainer){
         int layerIndex = getLayerIndex(layerContainer);
         network.addNeuron(layerIndex);
-        Matrix activation = activations.get(layerIndex);
+        Matrix activation = network.getActivationsAtLayer(layerIndex);
         double activationValue = activation.get(activation.getRows() - 1, 0);
         addNeuron(layerContainer, activationValue);
     }
 
     private int getLayerIndex(VBox layerContainer) {
-        return networkContainer.getChildren().indexOf(layerContainer) - 1;
+        return layerContainers.indexOf(layerContainer);
     }
 
     public void clear() {
@@ -206,9 +231,17 @@ public class NeuralNetworkDisplay {
     }
 
     public void update() {
-        for (int i = 0; i < activations.size(); i++)
-            for (int j = 0; j < activations.get(i).getRows(); j++)
-                ((SimpleDoubleProperty) layers.get(i).get(j).getUserData()).set(activations.get(i).get(j, 0));
+        for (int layerIndex = 0; layerIndex < network.getNumLayers(); layerIndex++){
+            Matrix activations = network.getActivationsAtLayer(layerIndex);
+
+            for (int neuronIndex = 0; neuronIndex < activations.getRows(); neuronIndex++){
+                Circle neuron = getNeuron(layerIndex, neuronIndex);
+                SimpleDoubleProperty activationProp = ((SimpleDoubleProperty) neuron.getUserData());
+
+                double activation = activations.get(neuronIndex, 0);
+                activationProp.set(activation);
+            }
+        }
     }
 }
 
