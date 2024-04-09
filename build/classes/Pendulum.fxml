@@ -12,7 +12,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1500.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PendulumController">
+<AnchorPane id="AnchorPane" fx:id="back" prefHeight="800.0" prefWidth="1500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PendulumController">
    <children>
       <Rectangle fx:id="border" arcHeight="5.0" arcWidth="5.0" fill="#a19e9c" height="760.0" stroke="#6f5327" strokeType="INSIDE" strokeWidth="5.0" width="722.0" x="23.0" y="21.0" />
 
@@ -58,7 +58,7 @@
             <Font name="System Bold" size="27.0" />
          </font>
       </Label>
-      <Slider layoutX="1177.0" layoutY="43.0" prefHeight="46.0" prefWidth="309.0" />
+      <Slider fx:id="lengthSlider" layoutX="1177.0" layoutY="43.0" max="500.0" prefHeight="46.0" prefWidth="309.0" value="400.0" />
       <Label layoutX="1290.0" layoutY="77.0" prefHeight="48.0" prefWidth="84.0" text="Length" textFill="#b5864b">
          <font>
             <Font name="System Bold Italic" size="24.0" />
@@ -74,12 +74,13 @@
       <Circle fx:id="pivot" centerX="392.0" centerY="34.0" fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
       <Line fx:id="rope2" endX="-11.0" layoutX="10.0" layoutY="10.0" startX="-11.0" startY="411.0" strokeWidth="5.0" />
       <Circle fx:id="object2" fill="#362424" layoutX="10.0" layoutY="10.0" radius="59.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" />
-      <Slider layoutX="1178.0" layoutY="125.0" max="90.0" prefHeight="46.0" prefWidth="309.0" />
+      <Slider fx:id="angleSlider" layoutX="1178.0" layoutY="125.0" max="90.0" prefHeight="46.0" prefWidth="309.0" value="40.0" />
       <Label layoutX="1274.0" layoutY="158.0" prefHeight="48.0" prefWidth="118.0" text="Max angle" textFill="#b5864b">
          <font>
             <Font name="System Bold Italic" size="24.0" />
          </font>
       </Label>
+      <Line fx:id="lineReference" endY="580.0" layoutX="392.0" layoutY="34.0" />
 
    </children>
 </AnchorPane>
