@@ -12,8 +12,6 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
-import static com.nn.NeuralNetworkConfig.MIN_NEURONS;
-
 public class Controller {
     public HBox inputSection;
     public ComboBox<Double> learningRateCB;

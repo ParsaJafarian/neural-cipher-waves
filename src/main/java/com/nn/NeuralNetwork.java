@@ -309,7 +309,7 @@ public class NeuralNetwork {
         return new ArrayList[]{nablaB, nablaW};
     }
 
-    public int getNumLayers() {
+     int getNumLayers() {
         return sizes.size();
     }
 
@@ -397,7 +397,7 @@ public class NeuralNetwork {
         this.loss = losses.get(value);
     }
 
-    void clear() {
+    public void clear() {
         activations.clear();
         for (int size : sizes)
             activations.add(new Matrix(size, 1));
@@ -411,14 +411,14 @@ public class NeuralNetwork {
         }
     }
 
-    void addLayer(int numberOfNeurons) {
+    public void addLayer(int numberOfNeurons) {
         sizes.add(numberOfNeurons);
         activations.add(new Matrix(numberOfNeurons, 1));
         weights.add(Matrix.random(numberOfNeurons, getNumNeurons(-2)));
         biases.add(Matrix.random(numberOfNeurons, 1));
     }
 
-    void removeLayer() {
+    public void removeLayer() {
         if (getNumLayers() <= MIN_LAYERS) return;
 
         sizes.removeLast();

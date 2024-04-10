@@ -11,6 +11,8 @@ public class Neuron extends StackPane {
     public static final int RADIUS = 10;
 
     public Neuron(double activation) {
+        super();
+
         setPrefSize(2 * RADIUS, 2 * RADIUS);
         getStyleClass().add("neuron");
 

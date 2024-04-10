@@ -1,15 +1,9 @@
 package com.nn;
 
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import org.jetbrains.annotations.NotNull;
-
 
 import java.util.ArrayList;
 
@@ -166,7 +160,7 @@ public class NeuralNetworkDisplay {
     }
 
     public void addNeuron(int layerIndex, double activation) {
-        if (network.getNumNeurons(layerIndex) > MAX_NEURONS) return;
+        if (layers.get(layerIndex).size() >= MAX_NEURONS) return;
 
         int lastNeuronIndex = layers.get(layerIndex).size() + 1;
 
