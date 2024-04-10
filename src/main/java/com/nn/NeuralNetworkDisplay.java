@@ -94,9 +94,6 @@ public class NeuralNetworkDisplay {
 
     /**
      * Generate weight lines between current neuron and all neurons of previous layer
-     *
-     * @param currNeuronIndex index of the current neuron
-     * @param currLayerIndex  index of the current layer
      */
     private void generateInputWeights(int currNeuronIndex, int currLayerIndex) {
         if (currLayerIndex <= 1) return;
@@ -108,6 +105,9 @@ public class NeuralNetworkDisplay {
             connectNeurons(currNeuronIndex, prevNeuronIndex, currLayerIndex);
     }
 
+    /**
+     * Generate weight lines between current neuron and all neurons of next layer
+     */
     private void generateOutputWeights(int currNeuronIndex, int currLayerIndex) {
         if (currLayerIndex == network.getNumLayers() - 1) return;
 
@@ -126,22 +126,10 @@ public class NeuralNetworkDisplay {
      * @param currLayerIndex  index of the current layer
      */
     private void connectNeurons(int currNeuronIndex, int prevNeuronIndex, int currLayerIndex) {
-        double weight = Math.abs(network.getWeightsAtLayer(currLayerIndex).get(currNeuronIndex, prevNeuronIndex));
-        Line line = new Line();
-        line.setId("weightLine");
-        line.toBack();
-
-        SimpleDoubleProperty value = new SimpleDoubleProperty(weight);
-        line.setUserData(value);
-
         Neuron currNeuron = getNeuron(currLayerIndex, currNeuronIndex);
         Neuron prevNeuron = getNeuron(currLayerIndex - 1, prevNeuronIndex);
 
-        line.startXProperty().bind(prevNeuron.outputXProperty());
-        line.startYProperty().bind(prevNeuron.outputYProperty());
-
-        line.endXProperty().bind(currNeuron.inputXProperty());
-        line.endYProperty().bind(currNeuron.inputYProperty());
+        WeightLine line = new WeightLine(prevNeuron, currNeuron);
 
         networkContainer.getChildren().add(line);
     }
@@ -181,12 +169,14 @@ public class NeuralNetworkDisplay {
     }
 
     public void removeNeuron(int layerIndex) {
-        if (network.getNumNeurons(layerIndex) <= MIN_NEURONS + 1) return;
+        if (network.getNumNeurons(layerIndex) <= MIN_NEURONS) return;
+        int lastNeuronIndex = network.getNumNeurons(layerIndex) - 1;
+
         network.removeNeuron(layerIndex);
 
-        int lastNeuronIndex = network.getNumNeurons(layerIndex) - 1;
         Neuron neuron = getNeuron(layerIndex, lastNeuronIndex);
         layers.get(layerIndex).remove(neuron);
+        networkContainer.getChildren().remove(neuron);
     }
 
     private void addNeuronThroughBtn(int layerIndex) {
