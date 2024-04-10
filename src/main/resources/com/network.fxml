@@ -51,11 +51,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="571.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Controller">
+<VBox prefHeight="571.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Controller">
   <children>
     <MenuBar prefWidth="805.0" VBox.vgrow="NEVER">
       <menus>
@@ -176,12 +175,7 @@
                         <Button fx:id="btnRemoverBtn" mnemonicParsing="false" text="-" />
                      </children>
                   </HBox>
-                  <StackPane prefHeight="498.0" prefWidth="596.0">
-                     <children>
-                        <HBox fx:id="networkContainer" alignment="CENTER" prefHeight="422.0" prefWidth="501.0" spacing="50.0" />
-                        <Pane prefHeight="200.0" prefWidth="200.0" />
-                     </children>
-                  </StackPane>
+                  <Pane fx:id="networkContainer" prefHeight="457.0" prefWidth="596.0" />
                </children>
             </VBox>
          </children>

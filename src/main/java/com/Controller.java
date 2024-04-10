@@ -10,6 +10,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
 import static com.nn.NeuralNetworkConfig.MIN_NEURONS;
 
@@ -22,7 +23,7 @@ public class Controller {
     public Label testLossLabel, trainingLossLabel;
     public LineChart<Integer, Double> trainingChart;
     public Canvas canvas;
-    public HBox networkContainer;
+    public Pane networkContainer;
     public Button btnAdderBtn, btnRemoverBtn;
     private NeuralNetwork network;
     private NeuralNetworkDisplay networkDisplay;
