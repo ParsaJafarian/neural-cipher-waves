@@ -52,8 +52,7 @@ public class NeuralNetworkDisplay {
             addNeuron(lastLayerIndex, activation);
         }
 
-        if (lastLayerIndex >= 2)
-            generateLayerWeights(lastLayerIndex);
+        generateLayerWeights(lastLayerIndex);
     }
 
     /**
@@ -84,6 +83,8 @@ public class NeuralNetworkDisplay {
      * Generate weights between last layer and the before last layer
      */
     private void generateLayerWeights(int currLayerIndex) {
+        if (currLayerIndex < 2) return;
+
         int currNumNeurons = network.getNumNeurons(currLayerIndex);
         for (int currNeuronIndex = 0; currNeuronIndex < currNumNeurons; currNeuronIndex++) {
             generateInputWeights(currNeuronIndex, currLayerIndex);
@@ -102,6 +103,7 @@ public class NeuralNetworkDisplay {
 
         int prevLayerIndex = currLayerIndex - 1;
         int prevNumNeurons = network.getNumNeurons(prevLayerIndex);
+
         for (int prevNeuronIndex = 0; prevNeuronIndex < prevNumNeurons; prevNeuronIndex++)
             connectNeurons(currNeuronIndex, prevNeuronIndex, currLayerIndex);
     }
@@ -148,37 +150,34 @@ public class NeuralNetworkDisplay {
         return layers.get(layerIndex).get(neuronIndex);
     }
 
-    private ArrayList<Neuron> getLastLayer() {
-        return layers.get(network.getNumLayers() - 1);
-    }
-
     public void removeLayer() {
         if (network.getNumLayers() <= MIN_LAYERS + 1) return;
         int lastIndex = network.getNumLayers() - 1;
-        network.removeLayer();
-        layers.remove(lastIndex);
 
-        networkContainer.getChildren().remove(btnContainers.get(lastIndex));
-        for (Neuron neuron : getLastLayer())
+        network.removeLayer();
+        networkContainer.getChildren().remove(btnContainers.get(lastIndex - 1));
+
+        ArrayList<Neuron> lastLayer = layers.get(lastIndex);
+
+        for (Neuron neuron : lastLayer)
             networkContainer.getChildren().remove(neuron);
+        layers.remove(lastIndex);
     }
 
     public void addNeuron(int layerIndex, double activation) {
         if (layers.get(layerIndex).size() >= MAX_NEURONS) return;
 
-        int lastNeuronIndex = layers.get(layerIndex).size() + 1;
+        int lastNeuronIndex = layers.get(layerIndex).size();
 
         Neuron neuron = new Neuron(activation);
         neuron.setTranslateX(getLayerSpacing(layerIndex));
-        neuron.setTranslateY(getNeuronSpacing(lastNeuronIndex));
+        neuron.setTranslateY(getNeuronSpacing(lastNeuronIndex + 1));
 
         layers.get(layerIndex).add(neuron);
         networkContainer.getChildren().add(neuron);
 
-
-        generateInputWeights(lastNeuronIndex - 1, layerIndex);
-        generateOutputWeights(lastNeuronIndex - 1, layerIndex);
-
+        generateInputWeights(lastNeuronIndex, layerIndex);
+        generateOutputWeights(lastNeuronIndex, layerIndex);
     }
 
     public void removeNeuron(int layerIndex) {

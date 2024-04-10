@@ -7,29 +7,42 @@
 //
 //import java.util.ArrayList;
 //
+//import static com.nn.NeuralNetworkConfig.getLayerSpacing;
+//
 //public class Layer {
 //    private final HBox btnContainer;
-//    private final ArrayList<Circle> neurons;
+//    private final ArrayList<Neuron> neurons;
 //
 //    public Layer() {
 //        this.btnContainer = initializeBtnContainer();
 //        this.neurons = new ArrayList<>();
 //    }
 //
-//    private ArrayList<Circle> initializeNeurons(int numberOfNeurons) {
-//        ArrayList<Circle> neurons = new ArrayList<>();
-//        for (int i = 0; i < numberOfNeurons; i++) {
-//            Circle neuron = new Circle(10);
-//            neuron.getStyleClass().add("neuron");
-//            neurons.add(neuron);
-//        }
-//        return neurons;
+//    public Layer(boolean withBtnContainer){
+//        this.btnContainer = withBtnContainer ? initializeBtnContainer() : null;
+//        this.neurons = new ArrayList<>();
 //    }
 //
-//    private void setTranslateX(double x) {
-//        btnContainer.setTranslateX(x);
-//        for (Circle neuron : neurons) {
-//            neuron.setTranslateX(x);
-//        }
+//    private void addLayerButtons() {
+//        int lastLayerIndex = network.getNumLayers() - 1;
+//
+//        HBox btnContainer = new HBox();
+//        btnContainer.setSpacing(5);
+//        btnContainer.toFront();
+//        btnContainer.setTranslateX(getLayerSpacing(lastLayerIndex));
+//
+//        Button addNeuronBtn = new Button("+");
+//        Button removeNeuronBtn = new Button("-");
+//
+//        addNeuronBtn.setOnAction(e -> addNeuronThroughBtn(lastLayerIndex));
+//        removeNeuronBtn.setOnAction(e -> removeNeuron(lastLayerIndex));
+//
+//        btnContainer.getChildren().add(addNeuronBtn);
+//        btnContainer.getChildren().add(removeNeuronBtn);
+//
+//        networkContainer.getChildren().add(btnContainer);
+//        btnContainers.add(btnContainer);
 //    }
+//
+//
 //}
