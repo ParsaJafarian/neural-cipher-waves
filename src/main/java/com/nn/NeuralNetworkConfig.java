@@ -5,7 +5,7 @@ public class NeuralNetworkConfig {
     public static final int MIN_NEURONS = 2, MAX_NEURONS = 8;
 
     public static int getLayerSpacing(int layerIndex) {
-        return 150 * layerIndex;
+        return 150 * (layerIndex - 1);
     }
 
     public static int getNeuronSpacing(int neuronIndex) {

@@ -19,13 +19,13 @@ public class Neuron extends StackPane {
         DoubleProperty prop = new SimpleDoubleProperty(activation);
 
         Circle circle = new Circle(2 * RADIUS);
-        circle.setUserData(prop);
 
         Label value = new Label();
         value.setId("activationValue");
         value.textProperty().bind(prop.asString("%.2f"));
         value.toFront();
 
+        this.setUserData(prop);
         this.toFront();
         this.getChildren().addAll(circle, value);
     }

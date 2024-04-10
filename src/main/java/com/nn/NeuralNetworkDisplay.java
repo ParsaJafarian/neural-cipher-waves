@@ -50,9 +50,10 @@ public class NeuralNetworkDisplay {
         for (int neuronIndex = 0; neuronIndex < MIN_NEURONS; neuronIndex++) {
             double activation = lastActivations.get(neuronIndex, 0);
             addNeuron(lastLayerIndex, activation);
-            if (lastLayerIndex >= 2)
-                generateWeights(neuronIndex, lastLayerIndex);
         }
+
+        if (lastLayerIndex >= 2)
+            generateLayerWeights(lastLayerIndex);
     }
 
     /**
@@ -82,11 +83,11 @@ public class NeuralNetworkDisplay {
     /**
      * Generate weights between last layer and the before last layer
      */
-    private void generateLayerWeights() {
-        int lastIndex = network.getNumLayers() - 1;
-        int currNumNeurons = network.getNumNeurons(lastIndex);
+    private void generateLayerWeights(int currLayerIndex) {
+        int currNumNeurons = network.getNumNeurons(currLayerIndex);
         for (int currNeuronIndex = 0; currNeuronIndex < currNumNeurons; currNeuronIndex++) {
-            generateWeights(currNeuronIndex, lastIndex);
+            generateInputWeights(currNeuronIndex, currLayerIndex);
+            generateOutputWeights(currNeuronIndex, currLayerIndex);
         }
     }
 
@@ -96,11 +97,23 @@ public class NeuralNetworkDisplay {
      * @param currNeuronIndex index of the current neuron
      * @param currLayerIndex  index of the current layer
      */
-    private void generateWeights(int currNeuronIndex, int currLayerIndex) {
-        int prevNumNeurons = network.getNumNeurons(currLayerIndex - 1);
-        for (int prevNeuronIndex = 0; prevNeuronIndex < prevNumNeurons; prevNeuronIndex++) {
+    private void generateInputWeights(int currNeuronIndex, int currLayerIndex) {
+        if (currLayerIndex <= 1) return;
+
+        int prevLayerIndex = currLayerIndex - 1;
+        int prevNumNeurons = network.getNumNeurons(prevLayerIndex);
+        for (int prevNeuronIndex = 0; prevNeuronIndex < prevNumNeurons; prevNeuronIndex++)
             connectNeurons(currNeuronIndex, prevNeuronIndex, currLayerIndex);
-        }
+    }
+
+    private void generateOutputWeights(int currNeuronIndex, int currLayerIndex) {
+        if (currLayerIndex == network.getNumLayers() - 1) return;
+
+        int nextLayerIndex = currLayerIndex + 1;
+        int nextNumNeurons = network.getNumNeurons(nextLayerIndex);
+
+        for (int nextNeuronIndex = 0; nextNeuronIndex < nextNumNeurons; nextNeuronIndex++)
+            connectNeurons(nextNeuronIndex, currNeuronIndex, nextLayerIndex);
     }
 
     /**
@@ -128,17 +141,8 @@ public class NeuralNetworkDisplay {
         line.endXProperty().bind(currNeuron.inputXProperty());
         line.endYProperty().bind(currNeuron.inputYProperty());
 
-
-
-        // Set line appearance properties
-        line.opacityProperty().bind(value.divide(2).add(0.5));
-        line.strokeWidthProperty().bind(value.divide(1.5).add(0.5).multiply(3));
-
-        // Add line to the container
         networkContainer.getChildren().add(line);
     }
-
-
 
     private Neuron getNeuron(int layerIndex, int neuronIndex) {
         return layers.get(layerIndex).get(neuronIndex);
@@ -170,6 +174,11 @@ public class NeuralNetworkDisplay {
 
         layers.get(layerIndex).add(neuron);
         networkContainer.getChildren().add(neuron);
+
+
+        generateInputWeights(lastNeuronIndex - 1, layerIndex);
+        generateOutputWeights(lastNeuronIndex - 1, layerIndex);
+
     }
 
     public void removeNeuron(int layerIndex) {
