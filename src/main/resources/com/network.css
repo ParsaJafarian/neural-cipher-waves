@@ -1,3 +1,7 @@
 #activationValue {
     -fx-text-fill: white;
 }
+
+#weightLine {
+    -fx-background-color: red;
+}

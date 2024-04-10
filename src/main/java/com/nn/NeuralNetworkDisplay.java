@@ -118,6 +118,8 @@ public class NeuralNetworkDisplay {
     private void connectNeurons(int currNeuronIndex, int prevNeuronIndex, int currLayerIndex) {
         double weight = Math.abs(network.getWeightsAtLayer(currLayerIndex).get(currNeuronIndex, prevNeuronIndex));
         Line line = new Line();
+        line.setId("weightLine");
+        line.toBack();
 
         SimpleDoubleProperty value = new SimpleDoubleProperty(weight);
         line.setUserData(value);
@@ -136,14 +138,14 @@ public class NeuralNetworkDisplay {
     }
 
     private void setLineCoordinates(@NotNull Line line, @NotNull Circle neuron1, @NotNull Circle neuron2) {
-        Point2D start = neuron1.localToScene(neuron1.getCenterX(), neuron1.getCenterY());
-        Point2D end = neuron2.localToScene(neuron2.getCenterX(), neuron2.getCenterY());
+        line.startXProperty().bind(neuron1.translateXProperty());
+        line.startYProperty().bind(neuron1.translateYProperty());
 
-        line.setStartX(start.getX());
-        line.setStartY(start.getY());
-        line.setEndX(end.getX());
-        line.setEndY(end.getY());
+        line.endXProperty().bind(neuron2.translateXProperty());
+        line.endYProperty().bind(neuron2.translateYProperty());
     }
+
+
 
     private Circle getNeuron(int layerIndex, int neuronIndex) {
         return layers.get(layerIndex).get(neuronIndex);
@@ -168,7 +170,6 @@ public class NeuralNetworkDisplay {
         if (network.getNumNeurons(layerIndex) > MAX_NEURONS) return;
 
         Label value = new Label();
-        value.toFront();
         value.setId("activationValue");
 
         DoubleProperty prop = new SimpleDoubleProperty(activation);
@@ -199,7 +200,7 @@ public class NeuralNetworkDisplay {
     }
 
     private int getLayerSpacing(int layerIndex) {
-        return 50 * layerIndex;
+        return 100 * layerIndex;
     }
 
     private int getNeuronSpacing(int neuronIndex) {
