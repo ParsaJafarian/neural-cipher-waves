@@ -1,9 +1,10 @@
 package com.nn;
 
 import javafx.scene.shape.Line;
+import org.jetbrains.annotations.NotNull;
 
 public class WeightLine extends Line {
-    public WeightLine(Neuron prevNeuron, Neuron currNeuron) {
+    public WeightLine(@NotNull Neuron prevNeuron, @NotNull Neuron currNeuron) {
         super();
         this.setId("weightLine");
         this.toBack();

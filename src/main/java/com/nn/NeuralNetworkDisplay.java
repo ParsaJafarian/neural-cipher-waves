@@ -87,50 +87,44 @@ public class NeuralNetworkDisplay {
 
         int currNumNeurons = network.getNumNeurons(currLayerIndex);
         for (int currNeuronIndex = 0; currNeuronIndex < currNumNeurons; currNeuronIndex++) {
-            generateInputWeights(currNeuronIndex, currLayerIndex);
-            generateOutputWeights(currNeuronIndex, currLayerIndex);
+            generateWeights(currNeuronIndex, currLayerIndex);
+        }
+    }
+
+    private void generateWeights(int currNeuronIndex, int currLayerIndex){
+        generateInputWeights(currNeuronIndex, currLayerIndex);
+        generateOutputWeights(currNeuronIndex, currLayerIndex);
+    }
+
+    private void generateInputWeights(int currNeuronIndex, int currLayerIndex) {
+        generateWeights(currNeuronIndex, currLayerIndex, true);
+    }
+
+    private void generateOutputWeights(int currNeuronIndex, int currLayerIndex) {
+        generateWeights(currNeuronIndex, currLayerIndex, false);
+    }
+
+    private void generateWeights(int currNeuronIndex, int currLayerIndex, boolean isInput) {
+        if (isInput && currLayerIndex <= 1) return;
+        if (!isInput && currLayerIndex == network.getNumLayers() - 1) return;
+
+        int otherLayerIndex = isInput ? currLayerIndex - 1 : currLayerIndex + 1;
+        int otherNumNeurons = network.getNumNeurons(otherLayerIndex);
+
+        for (int otherNeuronIndex = 0; otherNeuronIndex < otherNumNeurons; otherNeuronIndex++) {
+            Neuron currNeuron = getNeuron(currLayerIndex, currNeuronIndex);
+            Neuron otherNeuron = getNeuron(otherLayerIndex, otherNeuronIndex);
+
+            if (isInput) connectNeurons(otherNeuron, currNeuron);
+            else connectNeurons(currNeuron, otherNeuron);
         }
     }
 
     /**
-     * Generate weight lines between current neuron and all neurons of previous layer
-     */
-    private void generateInputWeights(int currNeuronIndex, int currLayerIndex) {
-        if (currLayerIndex <= 1) return;
-
-        int prevLayerIndex = currLayerIndex - 1;
-        int prevNumNeurons = network.getNumNeurons(prevLayerIndex);
-
-        for (int prevNeuronIndex = 0; prevNeuronIndex < prevNumNeurons; prevNeuronIndex++)
-            connectNeurons(currNeuronIndex, prevNeuronIndex, currLayerIndex);
-    }
-
-    /**
-     * Generate weight lines between current neuron and all neurons of next layer
-     */
-    private void generateOutputWeights(int currNeuronIndex, int currLayerIndex) {
-        if (currLayerIndex == network.getNumLayers() - 1) return;
-
-        int nextLayerIndex = currLayerIndex + 1;
-        int nextNumNeurons = network.getNumNeurons(nextLayerIndex);
-
-        for (int nextNeuronIndex = 0; nextNeuronIndex < nextNumNeurons; nextNeuronIndex++)
-            connectNeurons(nextNeuronIndex, currNeuronIndex, nextLayerIndex);
-    }
-
-    /**
      * Connect two neurons with a weighted line
-     *
-     * @param currNeuronIndex index of the current neuron
-     * @param prevNeuronIndex index of the previous neuron
-     * @param currLayerIndex  index of the current layer
      */
-    private void connectNeurons(int currNeuronIndex, int prevNeuronIndex, int currLayerIndex) {
-        Neuron currNeuron = getNeuron(currLayerIndex, currNeuronIndex);
-        Neuron prevNeuron = getNeuron(currLayerIndex - 1, prevNeuronIndex);
-
+    private void connectNeurons(Neuron prevNeuron, Neuron currNeuron) {
         WeightLine line = new WeightLine(prevNeuron, currNeuron);
-
         networkContainer.getChildren().add(line);
     }
 
@@ -164,8 +158,7 @@ public class NeuralNetworkDisplay {
         layers.get(layerIndex).add(neuron);
         networkContainer.getChildren().add(neuron);
 
-        generateInputWeights(lastNeuronIndex, layerIndex);
-        generateOutputWeights(lastNeuronIndex, layerIndex);
+        generateWeights(lastNeuronIndex, layerIndex);
     }
 
     public void removeNeuron(int layerIndex) {
