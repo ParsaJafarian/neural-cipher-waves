@@ -7,7 +7,7 @@
 //
 //import java.util.ArrayList;
 //
-//import static com.nn.NeuralNetworkConfig.getLayerSpacing;
+//import static com.nn.display.NeuralNetworkConfig.getLayerSpacing;
 //
 //public class Layer {
 //    private final HBox btnContainer;

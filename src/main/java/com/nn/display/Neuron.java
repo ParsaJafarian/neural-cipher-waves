@@ -1,4 +1,4 @@
-package com.nn;
+package com.nn.display;
 
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;

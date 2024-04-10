@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.nn.Activation.activationFunctions;
 import static com.nn.Loss.losses;
-import static com.nn.NeuralNetworkConfig.*;
+import static com.nn.display.NeuralNetworkConfig.*;
 
 /**
  * Neural network class for creating and training neural networks.
@@ -309,7 +309,7 @@ public class NeuralNetwork {
         return new ArrayList[]{nablaB, nablaW};
     }
 
-     int getNumLayers() {
+     public int getNumLayers() {
         return sizes.size();
     }
 
@@ -460,11 +460,11 @@ public class NeuralNetwork {
         }
     }
 
-    void addNeuron(int layerIndex) {
+    public void addNeuron(int layerIndex) {
         addOrRemoveNeuron(layerIndex, true);
     }
 
-    void removeNeuron(int layerIndex) {
+    public void removeNeuron(int layerIndex) {
         addOrRemoveNeuron(layerIndex, false);
     }
 }

@@ -1,7 +1,7 @@
 package com;
 
 import com.nn.NeuralNetwork;
-import com.nn.NeuralNetworkDisplay;
+import com.nn.display.NeuralNetworkDisplay;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.chart.LineChart;

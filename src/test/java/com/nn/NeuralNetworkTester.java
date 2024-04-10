@@ -1,6 +1,6 @@
 package com.nn;
 
-import static com.nn.NeuralNetworkConfig.MIN_LAYERS;
+import static com.nn.display.NeuralNetworkConfig.MIN_LAYERS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class NeuralNetworkTester {

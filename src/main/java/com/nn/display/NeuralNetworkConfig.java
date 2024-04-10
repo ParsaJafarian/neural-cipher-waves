@@ -1,4 +1,4 @@
-package com.nn;
+package com.nn.display;
 
 public class NeuralNetworkConfig {
     public static final int MIN_LAYERS = 2, MAX_LAYERS = 5;

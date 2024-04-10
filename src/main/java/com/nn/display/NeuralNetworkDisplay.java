@@ -1,15 +1,17 @@
-package com.nn;
+package com.nn.display;
 
+import com.nn.Matrix;
+import com.nn.NeuralNetwork;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 
 import java.util.ArrayList;
 
-import static com.nn.NeuralNetworkConfig.*;
+import static com.nn.display.NeuralNetworkConfig.*;
 
 /**
- * This class consists of the visible neural display accesible in Simulation
+ * This class consists of the visible neural display accessible in Simulation
  */
 public class NeuralNetworkDisplay {
 

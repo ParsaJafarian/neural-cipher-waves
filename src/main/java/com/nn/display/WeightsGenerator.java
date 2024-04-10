@@ -1,5 +1,6 @@
-package com.nn;
+package com.nn.display;
 
+import com.nn.NeuralNetwork;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
