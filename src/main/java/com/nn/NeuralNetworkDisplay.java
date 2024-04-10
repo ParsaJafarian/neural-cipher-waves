@@ -22,7 +22,7 @@ public class NeuralNetworkDisplay {
 
     private final Pane networkContainer;
     private final NeuralNetwork network;
-    private final ArrayList<ArrayList<Circle>> layers = new ArrayList<>();
+    private final ArrayList<ArrayList<Neuron>> layers = new ArrayList<>();
     private final ArrayList<HBox> btnContainers = new ArrayList<>();
 
     public NeuralNetworkDisplay(Pane networkContainer) {
@@ -40,10 +40,10 @@ public class NeuralNetworkDisplay {
 
     private void initializeHiddenLayers() {
         for (int i = 0; i < MIN_LAYERS; i++)
-            addLayer(MIN_NEURONS);
+            addLayer();
     }
 
-    public void addLayer(int numberOfNeurons) {
+    public void addLayer() {
         if (network.getNumLayers() > MAX_LAYERS) return;
 
         network.addLayer(MIN_NEURONS);
@@ -53,7 +53,7 @@ public class NeuralNetworkDisplay {
         int lastLayerIndex = network.getNumLayers() - 1;
         Matrix lastActivations = network.getActivationsAtLayer(lastLayerIndex);
 
-        for (int neuronIndex = 0; neuronIndex < numberOfNeurons; neuronIndex++) {
+        for (int neuronIndex = 0; neuronIndex < MIN_NEURONS; neuronIndex++) {
             double activation = lastActivations.get(neuronIndex, 0);
             addNeuron(lastLayerIndex, activation);
             if (lastLayerIndex >= 2)
@@ -82,6 +82,7 @@ public class NeuralNetworkDisplay {
         btnContainer.getChildren().add(removeNeuronBtn);
 
         networkContainer.getChildren().add(btnContainer);
+        btnContainers.add(btnContainer);
     }
 
     /**
@@ -124,10 +125,16 @@ public class NeuralNetworkDisplay {
         SimpleDoubleProperty value = new SimpleDoubleProperty(weight);
         line.setUserData(value);
 
-        Circle currNeuron = getNeuron(currLayerIndex, currNeuronIndex);
-        Circle prevNeuron = getNeuron(currLayerIndex - 1, prevNeuronIndex);
+        Neuron currNeuron = getNeuron(currLayerIndex, currNeuronIndex);
+        Neuron prevNeuron = getNeuron(currLayerIndex - 1, prevNeuronIndex);
 
-        setLineCoordinates(line, currNeuron, prevNeuron);
+        line.startXProperty().bind(prevNeuron.outputXProperty());
+        line.startYProperty().bind(prevNeuron.outputYProperty());
+
+        line.endXProperty().bind(currNeuron.inputXProperty());
+        line.endYProperty().bind(currNeuron.inputYProperty());
+
+
 
         // Set line appearance properties
         line.opacityProperty().bind(value.divide(2).add(0.5));
@@ -137,21 +144,13 @@ public class NeuralNetworkDisplay {
         networkContainer.getChildren().add(line);
     }
 
-    private void setLineCoordinates(@NotNull Line line, @NotNull Circle neuron1, @NotNull Circle neuron2) {
-        line.startXProperty().bind(neuron1.translateXProperty());
-        line.startYProperty().bind(neuron1.translateYProperty());
-
-        line.endXProperty().bind(neuron2.translateXProperty());
-        line.endYProperty().bind(neuron2.translateYProperty());
-    }
 
 
-
-    private Circle getNeuron(int layerIndex, int neuronIndex) {
+    private Neuron getNeuron(int layerIndex, int neuronIndex) {
         return layers.get(layerIndex).get(neuronIndex);
     }
 
-    private ArrayList<Circle> getLastLayer() {
+    private ArrayList<Neuron> getLastLayer() {
         return layers.get(network.getNumLayers() - 1);
     }
 
@@ -162,29 +161,18 @@ public class NeuralNetworkDisplay {
         layers.remove(lastIndex);
 
         networkContainer.getChildren().remove(btnContainers.get(lastIndex));
-        for (Circle neuron : getLastLayer())
+        for (Neuron neuron : getLastLayer())
             networkContainer.getChildren().remove(neuron);
     }
 
     public void addNeuron(int layerIndex, double activation) {
         if (network.getNumNeurons(layerIndex) > MAX_NEURONS) return;
 
-        Label value = new Label();
-        value.setId("activationValue");
+        int lastNeuronIndex = layers.get(layerIndex).size() + 1;
 
-        DoubleProperty prop = new SimpleDoubleProperty(activation);
-        value.textProperty().bind(prop.asString("%.2f"));
-
-        Circle neuron = new Circle(20);
-        neuron.setUserData(prop);
-
-        int lastNeuronIndex = network.getNumNeurons(layerIndex) - 1;
-
+        Neuron neuron = new Neuron(activation);
         neuron.setTranslateX(getLayerSpacing(layerIndex));
         neuron.setTranslateY(getNeuronSpacing(lastNeuronIndex));
-
-        value.setTranslateX(getLayerSpacing(layerIndex));
-        value.setTranslateY(getNeuronSpacing(lastNeuronIndex));
 
         layers.get(layerIndex).add(neuron);
         networkContainer.getChildren().add(neuron);
@@ -195,16 +183,8 @@ public class NeuralNetworkDisplay {
         network.removeNeuron(layerIndex);
 
         int lastNeuronIndex = network.getNumNeurons(layerIndex) - 1;
-        Circle neuron = getNeuron(layerIndex, lastNeuronIndex);
+        Neuron neuron = getNeuron(layerIndex, lastNeuronIndex);
         layers.get(layerIndex).remove(neuron);
-    }
-
-    private int getLayerSpacing(int layerIndex) {
-        return 100 * layerIndex;
-    }
-
-    private int getNeuronSpacing(int neuronIndex) {
-        return 50 * neuronIndex;
     }
 
     private void addNeuronThroughBtn(int layerIndex) {
@@ -224,7 +204,7 @@ public class NeuralNetworkDisplay {
             Matrix activations = network.getActivationsAtLayer(layerIndex);
 
             for (int neuronIndex = 0; neuronIndex < activations.getRows(); neuronIndex++) {
-                Circle neuron = getNeuron(layerIndex, neuronIndex);
+                Neuron neuron = getNeuron(layerIndex, neuronIndex);
                 SimpleDoubleProperty activationProp = ((SimpleDoubleProperty) neuron.getUserData());
 
                 double activation = activations.get(neuronIndex, 0);

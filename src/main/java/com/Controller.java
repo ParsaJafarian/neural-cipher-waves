@@ -63,7 +63,7 @@ public class Controller {
 
         clrBtn.setOnAction(e -> networkDisplay.clear());
 
-        btnAdderBtn.setOnAction(e -> networkDisplay.addLayer(MIN_NEURONS));
+        btnAdderBtn.setOnAction(e -> networkDisplay.addLayer());
         btnRemoverBtn.setOnAction(e -> networkDisplay.removeLayer());
 
 //        btnRemoverBtn.setOnAction(e -> {
