@@ -3,7 +3,6 @@ package com.nn;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
 
@@ -18,10 +17,12 @@ public class NeuralNetworkDisplay {
     private final NeuralNetwork network;
     private final ArrayList<ArrayList<Neuron>> layers = new ArrayList<>();
     private final ArrayList<HBox> btnContainers = new ArrayList<>();
+    private final WeightsGenerator weightsGenerator;
 
     public NeuralNetworkDisplay(Pane networkContainer) {
         this.networkContainer = networkContainer;
         this.network = new NeuralNetwork(0.01, 10);
+        this.weightsGenerator = new WeightsGenerator(networkContainer, network, layers);
 
         initializeInputLayer();
         initializeHiddenLayers();
@@ -52,7 +53,7 @@ public class NeuralNetworkDisplay {
             addNeuron(lastLayerIndex, activation);
         }
 
-        generateLayerWeights(lastLayerIndex);
+        weightsGenerator.generateLayerWeights(lastLayerIndex);
     }
 
     /**
@@ -77,55 +78,6 @@ public class NeuralNetworkDisplay {
 
         networkContainer.getChildren().add(btnContainer);
         btnContainers.add(btnContainer);
-    }
-
-    /**
-     * Generate weights between last layer and the before last layer
-     */
-    private void generateLayerWeights(int currLayerIndex) {
-        if (currLayerIndex < 2) return;
-
-        int currNumNeurons = network.getNumNeurons(currLayerIndex);
-        for (int currNeuronIndex = 0; currNeuronIndex < currNumNeurons; currNeuronIndex++) {
-            generateWeights(currNeuronIndex, currLayerIndex);
-        }
-    }
-
-    private void generateWeights(int currNeuronIndex, int currLayerIndex){
-        generateInputWeights(currNeuronIndex, currLayerIndex);
-        generateOutputWeights(currNeuronIndex, currLayerIndex);
-    }
-
-    private void generateInputWeights(int currNeuronIndex, int currLayerIndex) {
-        generateWeights(currNeuronIndex, currLayerIndex, true);
-    }
-
-    private void generateOutputWeights(int currNeuronIndex, int currLayerIndex) {
-        generateWeights(currNeuronIndex, currLayerIndex, false);
-    }
-
-    private void generateWeights(int currNeuronIndex, int currLayerIndex, boolean isInput) {
-        if (isInput && currLayerIndex <= 1) return;
-        if (!isInput && currLayerIndex == network.getNumLayers() - 1) return;
-
-        int otherLayerIndex = isInput ? currLayerIndex - 1 : currLayerIndex + 1;
-        int otherNumNeurons = network.getNumNeurons(otherLayerIndex);
-
-        for (int otherNeuronIndex = 0; otherNeuronIndex < otherNumNeurons; otherNeuronIndex++) {
-            Neuron currNeuron = getNeuron(currLayerIndex, currNeuronIndex);
-            Neuron otherNeuron = getNeuron(otherLayerIndex, otherNeuronIndex);
-
-            if (isInput) connectNeurons(otherNeuron, currNeuron);
-            else connectNeurons(currNeuron, otherNeuron);
-        }
-    }
-
-    /**
-     * Connect two neurons with a weighted line
-     */
-    private void connectNeurons(Neuron prevNeuron, Neuron currNeuron) {
-        WeightLine line = new WeightLine(prevNeuron, currNeuron);
-        networkContainer.getChildren().add(line);
     }
 
     private Neuron getNeuron(int layerIndex, int neuronIndex) {
@@ -158,7 +110,7 @@ public class NeuralNetworkDisplay {
         layers.get(layerIndex).add(neuron);
         networkContainer.getChildren().add(neuron);
 
-        generateWeights(lastNeuronIndex, layerIndex);
+        weightsGenerator.generateWeights(lastNeuronIndex, layerIndex);
     }
 
     public void removeNeuron(int layerIndex) {
