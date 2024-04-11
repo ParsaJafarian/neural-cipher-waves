@@ -61,11 +61,11 @@ public class VisualController implements Initializable {
     @FXML
     private Label equation;
     @FXML
-    private Label angVel;
+    private Label angF;
     @FXML
     private Label period;
     double angle;
-    String angularV;
+    String angularF;
     boolean cont = true;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -77,7 +77,6 @@ public class VisualController implements Initializable {
         PathTransition pathTransition = new PathTransition(new Duration(2000), path, node);
         pathTransition.setCycleCount(Animation.INDEFINITE);
         pathTransition.setInterpolator(Interpolator.LINEAR);
-        pathTransition.jumpTo(new Duration(currentTimeMillis()));
         pathTransition.play();
         alert.play();
         
@@ -131,17 +130,17 @@ public class VisualController implements Initializable {
     public void setAngularVelocityAndPeriod(PathTransition pathTransition) {
         if (pathTransition.getRate() == 0) {
             period.setText("no movement");
-            angVel.setText("no movement");
+            angF.setText("no movement");
         } else {
             double dur = Math.round((pathTransition.getDuration().toSeconds() / pathTransition.getRate()) * 100.0) / 100.0;
             period.setText(String.valueOf(dur) + " seconds");
-            angularV = String.valueOf(Math.round(((2 * Math.PI) / dur) * 100.0) / 100.0);
-            angVel.setText(String.valueOf(Math.round(((2 * Math.PI) / dur) * 100.0) / 100.0) + " rad/s");
+            angularF = String.valueOf(Math.round(((2 * Math.PI) / dur) * 100.0) / 100.0);
+            angF.setText(String.valueOf(Math.round(((2 * Math.PI) / dur) * 100.0) / 100.0) + " rad/s");
         }
     }
 
     public void equationCreation() {
-        String equ = String.valueOf(Math.round((border.getRadius()) * 100.0) / 100.0) + "sin" + "(" + angularV + "t" + " + π/2)";
+        String equ = String.valueOf(Math.round((border.getRadius()) * 100.0) / 100.0) + "sin" + "(" + angularF + "t" + " + π/2)";
         equation.setText(equ);
     }
     

@@ -51,11 +51,9 @@ public class SpringController implements Initializable {
     @FXML
     private Label period;
     @FXML
-    private Label angVel;
-    @FXML
     private Label constant;
     
-    String angularV;
+    String angularF;
     boolean cont = true;
     ArrayList<Circle> dots = new ArrayList<>();
     Timeline alert = new Timeline(new KeyFrame(new Duration(0.1), event -> {
@@ -68,6 +66,8 @@ public class SpringController implements Initializable {
     double dur;
     @FXML
     private LineChart<?, ?> kineticGraph;
+    @FXML
+    private Label angF;
     /**
      * Initializes the controller class.
      */
@@ -130,20 +130,20 @@ public class SpringController implements Initializable {
     public void setAngularVelocityAndPeriod(PathTransition pathTransition) {
         if (pathTransition.getRate() == 0) {
             period.setText("no movement");
-            angVel.setText("no movement");
+            angF.setText("no movement");
         } else {
             dur = Math.round((pathTransition.getDuration().toSeconds()*2 / pathTransition.getRate()) * 100.0) / 100.0;
             period.setText(String.valueOf(dur) + " seconds");
-            angularV = String.valueOf(Math.round(((2 * Math.PI) / dur) * 100.0) / 100.0);
+            angularF = String.valueOf(Math.round(((2 * Math.PI) / dur) * 100.0) / 100.0);
             springConstant = Math.round(Math.pow(((2 * Math.PI)/dur)*1,2) * 100.0)/ 100.0;
             constant.setText(String.valueOf(springConstant) + " N/m");
-            angVel.setText(String.valueOf(Math.round(((2 * Math.PI) / dur) * 100.0) / 100.0) + " rad/s");
+            angF.setText(String.valueOf(Math.round(((2 * Math.PI) / dur) * 100.0) / 100.0) + " rad/s");
         }
     }
 
     public void equationCreation() {
         amplitude = Math.round((path.getEndX()-path.getStartX())/100 * 100.0) / 100.0;
-        String equ = String.valueOf(amplitude) + "sin" + "(" + angularV + "t" + " + π/2)";
+        String equ = String.valueOf(amplitude) + "sin" + "(" + angularF + "t" + " + π/2)";
         equation.setText(equ);
         totalE = 0.5*springConstant*Math.pow(amplitude, 2);
         graphCreation();

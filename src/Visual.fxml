@@ -45,7 +45,7 @@
             <Font name="System Bold" size="26.0" />
          </font>
       </Label>
-      <Label fx:id="angVel" layoutX="310.0" layoutY="561.0" prefHeight="31.0" prefWidth="257.0" textFill="WHITE">
+      <Label fx:id="angF" layoutX="310.0" layoutY="561.0" prefHeight="31.0" prefWidth="257.0" textFill="WHITE">
          <font>
             <Font name="System Bold" size="26.0" />
          </font>
