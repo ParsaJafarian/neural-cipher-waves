@@ -12,7 +12,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="back" prefHeight="800.0" prefWidth="1500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PendulumController">
+<AnchorPane id="AnchorPane" fx:id="back" prefHeight="800.0" prefWidth="1500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PendulumController">
    <children>
       <Rectangle fx:id="border" arcHeight="5.0" arcWidth="5.0" fill="#a19e9c" height="760.0" stroke="#6f5327" strokeType="INSIDE" strokeWidth="5.0" width="722.0" x="23.0" y="21.0" />
 
@@ -58,7 +58,7 @@
             <Font name="System Bold" size="27.0" />
          </font>
       </Label>
-      <Slider fx:id="lengthSlider" layoutX="1177.0" layoutY="43.0" max="500.0" prefHeight="46.0" prefWidth="309.0" value="400.0" />
+      <Slider fx:id="lengthSlider" layoutX="1177.0" layoutY="43.0" max="1.0" prefHeight="46.0" prefWidth="309.0" value="0.5" />
       <Label layoutX="1290.0" layoutY="77.0" prefHeight="48.0" prefWidth="84.0" text="Length" textFill="#b5864b">
          <font>
             <Font name="System Bold Italic" size="24.0" />
@@ -73,7 +73,7 @@
       <Arc fx:id="path" fill="#ffffff00" layoutX="392.0" layoutY="583.0" length="180.0" radiusX="314.0" radiusY="211.0" rotate="180.0" stroke="BLACK" strokeLineJoin="ROUND" strokeType="INSIDE" />
       <Circle fx:id="pivot" centerX="392.0" centerY="34.0" fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
       <Line fx:id="rope2" endX="-11.0" layoutX="10.0" layoutY="10.0" startX="-11.0" startY="411.0" strokeWidth="5.0" />
-      <Circle fx:id="object2" fill="#362424" layoutX="10.0" layoutY="10.0" radius="59.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" />
+      <Circle fx:id="object2" fill="#362424" radius="59.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" visible="false" />
       <Slider fx:id="angleSlider" layoutX="1178.0" layoutY="125.0" max="90.0" prefHeight="46.0" prefWidth="309.0" value="40.0" />
       <Label layoutX="1274.0" layoutY="158.0" prefHeight="48.0" prefWidth="118.0" text="Max angle" textFill="#b5864b">
          <font>
@@ -81,6 +81,51 @@
          </font>
       </Label>
       <Line fx:id="lineReference" endY="580.0" layoutX="392.0" layoutY="34.0" />
+      <Label fx:id="angularVelocityText" layoutX="1059.0" layoutY="547.0" prefHeight="55.0" prefWidth="255.0" textFill="#b5864b">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+      <Label fx:id="periodText" layoutX="922.0" layoutY="594.0" prefHeight="55.0" prefWidth="255.0" textFill="#b5864b">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+      <Label fx:id="lengthText" layoutX="922.0" layoutY="640.0" prefHeight="55.0" prefWidth="255.0" textFill="#b5864b">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+      <Label layoutX="805.0" layoutY="683.0" prefHeight="55.0" prefWidth="255.0" text="Equation:" textFill="#b5864b">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+      <Label fx:id="equationText" layoutX="933.0" layoutY="683.0" prefHeight="55.0" prefWidth="255.0" textFill="#b5864b">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+      <Label fx:id="equationText1" layoutX="1206.0" layoutY="683.0" prefHeight="55.0" prefWidth="255.0" text="[𝜃 = 𝜃𝑚𝑐𝑜𝑠(𝜔𝑡 + 𝜙)]" textFill="#b5864b">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+      <Label layoutX="1244.0" layoutY="594.0" prefHeight="55.0" prefWidth="255.0" text="T = 2π⋅√(L/g) " textFill="#b5864b">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+      <Label layoutX="1244.0" layoutY="547.0" prefHeight="55.0" prefWidth="255.0" text="w = 2π/T or √(g/L) " textFill="#b5864b">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+      <Label layoutX="805.0" layoutY="729.0" prefHeight="55.0" prefWidth="255.0" text="Gravity: 9.81 m/s²" textFill="#b5864b">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
 
    </children>
 </AnchorPane>

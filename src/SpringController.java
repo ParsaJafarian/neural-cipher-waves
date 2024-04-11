@@ -143,7 +143,7 @@ public class SpringController implements Initializable {
 
     public void equationCreation() {
         amplitude = Math.round((path.getEndX()-path.getStartX())/100 * 100.0) / 100.0;
-        String equ = String.valueOf(amplitude) + "sin" + "(" + angularV + "t" + ")";
+        String equ = String.valueOf(amplitude) + "sin" + "(" + angularV + "t" + " + π/2)";
         equation.setText(equ);
         totalE = 0.5*springConstant*Math.pow(amplitude, 2);
         graphCreation();

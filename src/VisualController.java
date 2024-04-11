@@ -141,7 +141,7 @@ public class VisualController implements Initializable {
     }
 
     public void equationCreation() {
-        String equ = String.valueOf(Math.round((border.getRadius()) * 100.0) / 100.0) + "sin" + "(" + angularV + "t" + ")";
+        String equ = String.valueOf(Math.round((border.getRadius()) * 100.0) / 100.0) + "sin" + "(" + angularV + "t" + " + π/2)";
         equation.setText(equ);
     }
     

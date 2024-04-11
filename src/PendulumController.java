@@ -16,6 +16,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.ArcType;
@@ -54,10 +55,22 @@ public class PendulumController implements Initializable {
 
     double angleVal;
     double length;
+    double period;
+    double angularF;
     @FXML
     private Line lineReference;
     @FXML
     private AnchorPane back;
+    @FXML
+    private Label angularVelocityText;
+    @FXML
+    private Label periodText;
+    @FXML
+    private Label lengthText;
+    @FXML
+    private Label equationText;
+    @FXML
+    private Label equationText1;
 
     /**
      * Initializes the controller class.
@@ -68,19 +81,24 @@ public class PendulumController implements Initializable {
         ropeSet(object);
         angleVal = angleSlider.getValue();
         length = lengthSlider.getValue();
-        PathTransition pathTransition = new PathTransition(new Duration(800), path, object);
+        period = (2*Math.PI)*(Math.sqrt((length)/9.81));
+        angularF= (2*Math.PI)/period;
+        PathTransition pathTransition = new PathTransition(Duration.seconds(period/2), path, object);
         pathTransition.setAutoReverse(true);
         pathTransition.setCycleCount(Animation.INDEFINITE);
-        arcPathCreation(lengthSlider.getValue(), angleSlider.getValue(), pathTransition);
+        arcPathCreation(length*500, angleSlider.getValue(), pathTransition);
         
 
         lengthSlider.valueProperty().addListener((observable, oldvalue, newvalue) -> {
             length = (double) newvalue;
-            arcPathCreation(length, angleVal,pathTransition);
+            period = (2*Math.PI)*(Math.sqrt((length)/9.81));
+            angularF= (2*Math.PI)/period;
+            pathTransition.setDuration(Duration.seconds(period/2));
+            arcPathCreation(length*500, angleVal,pathTransition);
         });
         angleSlider.valueProperty().addListener((observable, oldvalue, newvalue) -> {
             angleVal = (double) newvalue;
-            arcPathCreation(length, angleVal,pathTransition);
+            arcPathCreation(length*500, angleVal,pathTransition);
         });
 
         Shape1.setOnAction(e -> {
@@ -99,7 +117,7 @@ public class PendulumController implements Initializable {
         double degrees = angle * (Math.PI / 180);
         double yDifference = length - (length * Math.cos(degrees));
         double xDifference = length* Math.sin(degrees);
-       
+        equationCreation();
         path.setLayoutX(0);
         path.setLayoutY(0);
         path.setCenterX(lineReference.getLayoutX());
@@ -117,4 +135,11 @@ public class PendulumController implements Initializable {
         rope.endYProperty().bind(obj.translateYProperty().add(obj.getCenterY()));
     }
 
+    public void equationCreation() {
+        angularVelocityText.setText(String.valueOf(Math.round(angularF * 100.0) / 100.0) + " rad/s");
+        periodText.setText(String.valueOf(Math.round(period* 100.0) / 100.0) + " seconds");
+        lengthText.setText(String.valueOf(Math.round(length * 100.0) / 100.0) + " meters");
+        String equ = String.valueOf(Math.round((angleVal * (Math.PI / 180)) * 100.0) / 100.0) + "sin" + "(" + Math.round(angularF * 100.0) / 100.0 + "t" + ")";
+        equationText.setText(equ);
+    }
 }
