@@ -4,6 +4,7 @@
  */
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
@@ -15,6 +16,9 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -71,6 +75,10 @@ public class PendulumController implements Initializable {
     private Label equationText;
     @FXML
     private Label equationText1;
+    double pendulumStartingHeight;
+    double mass;
+    @FXML
+    private LineChart<?, ?> EChart;
 
     /**
      * Initializes the controller class.
@@ -79,26 +87,33 @@ public class PendulumController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         ropeSet(object);
+        mass = 1;
         angleVal = angleSlider.getValue();
         length = lengthSlider.getValue();
-        period = (2*Math.PI)*(Math.sqrt((length)/9.81));
-        angularF= (2*Math.PI)/period;
-        PathTransition pathTransition = new PathTransition(Duration.seconds(period/2), path, object);
+        period = (2 * Math.PI) * (Math.sqrt((length) / 9.81));
+        angularF = (2 * Math.PI) / period;
+        PathTransition pathTransition = new PathTransition(Duration.seconds(period / 2), path, object);
         pathTransition.setAutoReverse(true);
         pathTransition.setCycleCount(Animation.INDEFINITE);
-        arcPathCreation(length*500, angleSlider.getValue(), pathTransition);
-        
+        arcPathCreation(length * 500, angleSlider.getValue(), pathTransition);
+        equationCreation();
 
         lengthSlider.valueProperty().addListener((observable, oldvalue, newvalue) -> {
             length = (double) newvalue;
-            period = (2*Math.PI)*(Math.sqrt((length)/9.81));
-            angularF= (2*Math.PI)/period;
-            pathTransition.setDuration(Duration.seconds(period/2));
-            arcPathCreation(length*500, angleVal,pathTransition);
+            period = (2 * Math.PI) * (Math.sqrt((length) / 9.81));
+            angularF = (2 * Math.PI) / period;
+            pathTransition.setDuration(Duration.seconds(period / 2));
+            arcPathCreation(length * 500, angleVal, pathTransition);
+            lengthSlider.setOnMouseReleased(e->{
+            equationCreation();
+            });
         });
         angleSlider.valueProperty().addListener((observable, oldvalue, newvalue) -> {
             angleVal = (double) newvalue;
-            arcPathCreation(length*500, angleVal,pathTransition);
+            arcPathCreation(length * 500, angleVal, pathTransition);
+            angleSlider.setOnMouseReleased(e->{
+            equationCreation();
+            });
         });
 
         Shape1.setOnAction(e -> {
@@ -106,6 +121,7 @@ public class PendulumController implements Initializable {
                 pathTransition.getNode().setVisible(false);
             }
             ropeSet(object2);
+            mass = 2;
             pathTransition.setNode(object2);
             pathTransition.stop();
             pathTransition.play();
@@ -114,10 +130,10 @@ public class PendulumController implements Initializable {
     }
 
     public void arcPathCreation(double length, double angle, PathTransition pathTransition) {
-        double degrees = angle * (Math.PI / 180);
-        double yDifference = length - (length * Math.cos(degrees));
-        double xDifference = length* Math.sin(degrees);
-        equationCreation();
+        double rad = angle * (Math.PI / 180);
+        double yDifference = length - (length * Math.cos(rad));
+        double xDifference = length * Math.sin(rad);
+        
         path.setLayoutX(0);
         path.setLayoutY(0);
         path.setCenterX(lineReference.getLayoutX());
@@ -137,9 +153,65 @@ public class PendulumController implements Initializable {
 
     public void equationCreation() {
         angularVelocityText.setText(String.valueOf(Math.round(angularF * 100.0) / 100.0) + " rad/s");
-        periodText.setText(String.valueOf(Math.round(period* 100.0) / 100.0) + " seconds");
+        periodText.setText(String.valueOf(Math.round(period * 100.0) / 100.0) + " seconds");
         lengthText.setText(String.valueOf(Math.round(length * 100.0) / 100.0) + " meters");
         String equ = String.valueOf(Math.round((angleVal * (Math.PI / 180)) * 100.0) / 100.0) + "sin" + "(" + Math.round(angularF * 100.0) / 100.0 + "t" + ")";
         equationText.setText(equ);
+        graphCreation();
+    }
+
+    LineChart r;
+
+    public void graphCreation() {
+        back.getChildren().remove(r);
+        double dur = Math.round(period * 100.0) / 100.0;
+        double totalE = (length - (length * Math.cos((angleVal*(Math.PI/180))))) * 9.81 * mass;
+        ArrayList potential = new ArrayList<>();
+        ArrayList kinetic = new ArrayList<>();
+        ArrayList time = new ArrayList<>();
+        NumberAxis x = new NumberAxis(0, dur, 1);
+        x.setLabel("Time (period)");
+        NumberAxis y = new NumberAxis(0, totalE, 1);
+        y.setLabel("energy");
+
+        r = new LineChart(x, y);
+        r.setMaxHeight(350);
+        r.setMaxWidth(400);
+        r.setLayoutX(EChart.getLayoutX()-20);
+        r.setLayoutY(EChart.getLayoutY()-20);
+        //creating arrayList for time values for creating energy graphs
+        for (double i = 0; i < dur*2; i += 0.01) {
+            time.add(i);
+        }
+
+        //Potential enrrgy values according to the time values created above
+        for (int i = 0; i < time.size(); i++) {
+            double angle = (angleVal*(Math.PI / 180)) * Math.cos((angularF) * (double) time.get(i));
+            double heightDifference = length - (length * Math.cos(angle));
+            double val = mass*9.81*heightDifference;
+            potential.add(val);
+            System.out.println(val);
+        }
+        XYChart.Series series = new XYChart.Series<>();
+        series.setName("Potential Energy");
+        for (int i = 0; i < time.size(); i++) {
+            series.getData().add(new XYChart.Data(time.get(i), potential.get(i)));
+        }
+
+        //Total energy value: TotalE
+        //Kinetic enrrgy values according to the time values created above
+        for (int i = 0; i < time.size(); i++) {
+            double val = totalE - (double) potential.get(i);
+            kinetic.add(val);
+        }
+        XYChart.Series series2 = new XYChart.Series<>();
+        series2.setName("Kinetic Energy");
+        for (int i = 0; i < time.size(); i++) {
+            series2.getData().add(new XYChart.Data(time.get(i), kinetic.get(i)));
+        }
+
+        r.getData().addAll(series, series2);
+        r.setCreateSymbols(false);
+        back.getChildren().add(r);
     }
 }

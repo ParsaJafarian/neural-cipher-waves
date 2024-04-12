@@ -52,7 +52,7 @@ public class SpringController implements Initializable {
     private Label period;
     @FXML
     private Label constant;
-    
+
     String angularF;
     boolean cont = true;
     ArrayList<Circle> dots = new ArrayList<>();
@@ -68,14 +68,15 @@ public class SpringController implements Initializable {
     private LineChart<?, ?> kineticGraph;
     @FXML
     private Label angF;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        path.setStartX(path.getStartX()+(block.getWidth()/2));
-        endSpring= path.getEndX();
+        path.setStartX(path.getStartX() + (block.getWidth() / 2));
+        endSpring = path.getEndX();
         PathTransition pathTransition = new PathTransition(new Duration(800), path, block);
         pathTransition.setCycleCount(Animation.INDEFINITE);
         pathTransition.setInterpolator(Interpolator.EASE_BOTH);
@@ -83,39 +84,39 @@ public class SpringController implements Initializable {
         pathTransition.setAutoReverse(true);
         pathTransition.play();
         alert.play();
-        
+
         setAngularVelocityAndPeriod(pathTransition);
         equationCreation();
-        graphCreation();
-        
+
         freq.valueProperty().addListener((observable, oldvalue, newvalue) -> {
             pathTransition.setRate((double) newvalue);
             setAngularVelocityAndPeriod(pathTransition);
-            equationCreation();
-        });
-        
-        amp.setOnMousePressed(e -> {
-            cont = false;
-            amp.valueProperty().addListener((observable, oldvalue, newvalue) -> {
-
-                pathTransition.stop();
-                path.setEndX(path.getStartX() + (double) newvalue);
-                block.setVisible(false);
+            freq.setOnMouseReleased(e -> {
                 equationCreation();
             });
         });
-        
+
+        amp.setOnMousePressed(e -> {
+            cont = false;
+            amp.valueProperty().addListener((observable, oldvalue, newvalue) -> {
+                pathTransition.stop();
+                path.setEndX(path.getStartX() + (double) newvalue);
+                block.setVisible(false);
+            });
+        });
+
         amp.setOnMouseReleased(e -> {
             cont = true;
             block.setVisible(true);
             pathTransition.play();
+            equationCreation();
         });
-    }    
-    
+    }
+
     public void dotCreation() {
         Platform.runLater(() -> {
             if (cont) {
-                Circle dot = new Circle(block.getTranslateX(), (block.getTranslateY()+200), 5, Color.WHITE);
+                Circle dot = new Circle(block.getTranslateX(), (block.getTranslateY() + 200), 5, Color.WHITE);
                 back.getChildren().add(dot);
                 TranslateTransition translate = new TranslateTransition(new Duration(10000), dot);
                 dots.add(dot);
@@ -127,29 +128,32 @@ public class SpringController implements Initializable {
 
         });
     }
+
     public void setAngularVelocityAndPeriod(PathTransition pathTransition) {
         if (pathTransition.getRate() == 0) {
             period.setText("no movement");
             angF.setText("no movement");
         } else {
-            dur = Math.round((pathTransition.getDuration().toSeconds()*2 / pathTransition.getRate()) * 100.0) / 100.0;
+            dur = Math.round((pathTransition.getDuration().toSeconds() * 2 / pathTransition.getRate()) * 100.0) / 100.0;
             period.setText(String.valueOf(dur) + " seconds");
             angularF = String.valueOf(Math.round(((2 * Math.PI) / dur) * 100.0) / 100.0);
-            springConstant = Math.round(Math.pow(((2 * Math.PI)/dur)*1,2) * 100.0)/ 100.0;
+            springConstant = Math.round(Math.pow(((2 * Math.PI) / dur) * 1, 2) * 100.0) / 100.0;
             constant.setText(String.valueOf(springConstant) + " N/m");
             angF.setText(String.valueOf(Math.round(((2 * Math.PI) / dur) * 100.0) / 100.0) + " rad/s");
         }
     }
 
     public void equationCreation() {
-        amplitude = Math.round((path.getEndX()-path.getStartX())/100 * 100.0) / 100.0;
+        amplitude = Math.round((path.getEndX() - path.getStartX()) / 100 * 100.0) / 100.0;
         String equ = String.valueOf(amplitude) + "sin" + "(" + angularF + "t" + " + π/2)";
         equation.setText(equ);
-        totalE = 0.5*springConstant*Math.pow(amplitude, 2);
+        totalE = 0.5 * springConstant * Math.pow(amplitude, 2);
         graphCreation();
     }
-    
-    public void graphCreation(){
+    LineChart r;
+
+    public void graphCreation() {
+        back.getChildren().remove(r);
         ArrayList potential = new ArrayList<>();
         ArrayList kinetic = new ArrayList<>();
         ArrayList time = new ArrayList<>();
@@ -157,42 +161,42 @@ public class SpringController implements Initializable {
         x.setLabel("Time (period)");
         NumberAxis y = new NumberAxis(0, totalE, 1);
         y.setLabel("energy");
-        
-        LineChart e = new LineChart(x,y);
-        e.setMaxHeight(350);
-        e.setLayoutX(kineticGraph.getLayoutX());
-        e.setLayoutY(kineticGraph.getLayoutY());
+
+        r = new LineChart(x, y);
+        r.setMaxHeight(350);
+        r.setLayoutX(kineticGraph.getLayoutX());
+        r.setLayoutY(kineticGraph.getLayoutY());
         //creating arrayList for time values for creating energy graphs
-        for (double i = 0; i < dur*2; i+=0.01) {
+        for (double i = 0; i < dur * 2; i += 0.01) {
             time.add(i);
         }
-        
+
         //Potential enrrgy values according to the time values created above
         for (int i = 0; i < time.size(); i++) {
-            double displacement = amplitude*Math.sin(((2 * Math.PI) / dur)*(double)time.get(i));
-            double val = 0.5*springConstant*Math.pow(displacement, 2);
+            double displacement = amplitude * Math.sin(((2 * Math.PI) / dur) * (double) time.get(i));
+            double val = 0.5 * springConstant * Math.pow(displacement, 2);
             potential.add(val);
         }
         XYChart.Series series = new XYChart.Series<>();
         series.setName("Potential Energy");
         for (int i = 0; i < time.size(); i++) {
-            series.getData().add(new XYChart.Data(time.get(i),potential.get(i)));
+            series.getData().add(new XYChart.Data(time.get(i), potential.get(i)));
         }
-        
+
         //Total energy value: TotalE
         //Kinetic enrrgy values according to the time values created above
         for (int i = 0; i < time.size(); i++) {
-            double val = totalE - (double)potential.get(i);
+            double val = totalE - (double) potential.get(i);
             kinetic.add(val);
         }
         XYChart.Series series2 = new XYChart.Series<>();
         series2.setName("Kinetic Energy");
         for (int i = 0; i < time.size(); i++) {
-            series2.getData().add(new XYChart.Data(time.get(i),kinetic.get(i)));
+            series2.getData().add(new XYChart.Data(time.get(i), kinetic.get(i)));
         }
-        
-        e.getData().addAll(series, series2);
-        e.setCreateSymbols(false);
-        back.getChildren().add(e);
+
+        r.getData().addAll(series, series2);
+        r.setCreateSymbols(false);
+        back.getChildren().add(r);
     }
 }

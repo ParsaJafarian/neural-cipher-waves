@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -12,7 +15,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="back" prefHeight="800.0" prefWidth="1500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PendulumController">
+<AnchorPane id="AnchorPane" fx:id="back" prefHeight="800.0" prefWidth="1500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PendulumController">
    <children>
       <Rectangle fx:id="border" arcHeight="5.0" arcWidth="5.0" fill="#a19e9c" height="760.0" stroke="#6f5327" strokeType="INSIDE" strokeWidth="5.0" width="722.0" x="23.0" y="21.0" />
 
@@ -64,12 +67,6 @@
             <Font name="System Bold Italic" size="24.0" />
          </font>
       </Label>
-      
-      <Label layoutX="1293.0" layoutY="444.0" prefHeight="48.0" prefWidth="78.0" text="Energy" textFill="#b5864b">
-         <font>
-            <Font name="System Bold Italic" size="24.0" />
-         </font>
-      </Label>
       <Arc fx:id="path" fill="#ffffff00" layoutX="392.0" layoutY="583.0" length="180.0" radiusX="314.0" radiusY="211.0" rotate="180.0" stroke="BLACK" strokeLineJoin="ROUND" strokeType="INSIDE" />
       <Circle fx:id="pivot" centerX="392.0" centerY="34.0" fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
       <Line fx:id="rope2" endX="-11.0" layoutX="10.0" layoutY="10.0" startX="-11.0" startY="411.0" strokeWidth="5.0" />
@@ -106,7 +103,7 @@
             <Font name="System Bold" size="27.0" />
          </font>
       </Label>
-      <Label fx:id="equationText1" layoutX="1206.0" layoutY="683.0" prefHeight="55.0" prefWidth="255.0" text="[𝜃 = 𝜃𝑚𝑐𝑜𝑠(𝜔𝑡 + 𝜙)]" textFill="#b5864b">
+      <Label fx:id="equationText1" layoutX="1206.0" layoutY="683.0" prefHeight="55.0" prefWidth="255.0" text="[𝜃 = 𝜃𝑚sin(𝜔𝑡 + 𝜙)]" textFill="#b5864b">
          <font>
             <Font name="System Bold" size="27.0" />
          </font>
@@ -126,6 +123,14 @@
             <Font name="System Bold" size="27.0" />
          </font>
       </Label>
+      <LineChart fx:id="EChart" layoutX="1169.0" layoutY="213.0" prefHeight="211.0" prefWidth="318.0" visible="false">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </LineChart>
 
    </children>
 </AnchorPane>
