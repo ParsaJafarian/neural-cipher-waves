@@ -33,7 +33,6 @@
 -->
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -45,7 +44,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.Slider?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -95,11 +94,11 @@
         </Menu>
       </menus>
     </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-         <children>
-            <HBox fx:id="inputSection" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="101.0" prefWidth="739.0" spacing="10.0" style="-fx-border-color: black;">
+      <BorderPane prefHeight="546.0" prefWidth="843.0">
+         <top>
+            <HBox fx:id="inputSection" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="94.0" prefWidth="843.0" spacing="10.0" style="-fx-border-color: black;" BorderPane.alignment="CENTER">
                <children>
-                  <GridPane alignment="CENTER_LEFT" hgap="5.0" prefHeight="101.0" prefWidth="324.0">
+                  <GridPane alignment="CENTER_LEFT" hgap="5.0" prefHeight="105.0" prefWidth="386.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -111,12 +110,12 @@
                       <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <ComboBox fx:id="learningRateCB" prefHeight="25.0" prefWidth="81.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                        <ComboBox fx:id="learningRateCB" prefHeight="25.0" prefWidth="118.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
                         <Label text="Learning Rate" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM" />
                         <Label contentDisplay="CENTER" text="Activation" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM" />
                         <Label alignment="CENTER" contentDisplay="CENTER" text="Loss" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM" />
-                        <ComboBox fx:id="activationCB" prefHeight="25.0" prefWidth="81.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-                        <ComboBox fx:id="lossCB" prefHeight="13.0" prefWidth="77.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                        <ComboBox fx:id="activationCB" prefHeight="25.0" prefWidth="103.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                        <ComboBox fx:id="lossCB" prefHeight="25.0" prefWidth="101.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
                         <Label text="Batch Size" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM" />
                         <Slider fx:id="batchSlider" max="30.0" min="1.0" prefWidth="97.0" showTickLabels="true" showTickMarks="true" value="1.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
                            <GridPane.margin>
@@ -161,13 +160,9 @@
                   </LineChart>
                </children>
             </HBox>
-            <VBox layoutX="599.0" layoutY="101.0" prefHeight="239.0" prefWidth="230.0">
-               <children>
-                  <Canvas fx:id="canvas" height="200.0" width="220.0" />
-                  <Label prefHeight="43.0" prefWidth="149.0" text="Prediction: " />
-               </children>
-            </VBox>
-            <VBox layoutY="101.0" prefHeight="441.0" prefWidth="596.0">
+         </top>
+         <left>
+            <VBox prefHeight="441.0" prefWidth="596.0" BorderPane.alignment="CENTER">
                <children>
                   <HBox alignment="CENTER" prefHeight="70.0" prefWidth="501.0" spacing="20.0">
                      <children>
@@ -178,7 +173,7 @@
                   <Pane fx:id="networkContainer" prefHeight="457.0" prefWidth="596.0" />
                </children>
             </VBox>
-         </children>
-    </AnchorPane>
+         </left>
+      </BorderPane>
   </children>
 </VBox>

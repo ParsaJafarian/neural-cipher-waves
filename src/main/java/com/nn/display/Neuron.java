@@ -46,12 +46,10 @@ public class Neuron extends StackPane {
 
         for (WeightLine inputLine : inputLines) {
             parent.getChildren().remove(inputLine);
-            inputLines.remove(inputLine);
         }
 
         for (WeightLine outputLine : outputLines) {
             parent.getChildren().remove(outputLine);
-            outputLines.remove(outputLine);
         }
     }
 
