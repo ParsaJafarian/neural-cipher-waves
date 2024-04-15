@@ -1,17 +1,14 @@
 package com.nn.display;
 
 import com.nn.NeuralNetwork;
-import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
 
 public class WeightsGenerator {
-    private final Pane networkContainer;
     private final NeuralNetwork network;
     private final ArrayList<ArrayList<Neuron>> layers;
 
-    public WeightsGenerator(Pane networkContainer, NeuralNetwork network, ArrayList<ArrayList<Neuron>> layers) {
-        this.networkContainer = networkContainer;
+    public WeightsGenerator( NeuralNetwork network, ArrayList<ArrayList<Neuron>> layers) {
         this.network = network;
         this.layers = layers;
     }
@@ -52,16 +49,8 @@ public class WeightsGenerator {
             Neuron currNeuron = layers.get(currLayerIndex).get(currNeuronIndex);
             Neuron otherNeuron = layers.get(otherLayerIndex).get(otherNeuronIndex);
 
-            if (isInput) connectNeurons(otherNeuron, currNeuron);
-            else connectNeurons(currNeuron, otherNeuron);
+            if (isInput) currNeuron.connectToPrevNeuron(otherNeuron);
+            else otherNeuron.connectToPrevNeuron(currNeuron);
         }
-    }
-
-    /**
-     * Connect two neurons with a weighted line
-     */
-    private void connectNeurons(Neuron prevNeuron, Neuron currNeuron) {
-        WeightLine line = new WeightLine(prevNeuron, currNeuron);
-        networkContainer.getChildren().add(line);
     }
 }

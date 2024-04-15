@@ -3,7 +3,6 @@ package com.nn.display;
 import com.nn.Matrix;
 import com.nn.NeuralNetwork;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 
 import java.util.ArrayList;
@@ -18,13 +17,13 @@ public class NeuralNetworkDisplay {
     private final Pane networkContainer;
     private final NeuralNetwork network;
     private final ArrayList<ArrayList<Neuron>> layers = new ArrayList<>();
-    private final ArrayList<HBox> btnContainers = new ArrayList<>();
+    private final ArrayList<ButtonContainer> btnContainers = new ArrayList<>();
     private final WeightsGenerator weightsGenerator;
 
     public NeuralNetworkDisplay(Pane networkContainer) {
         this.networkContainer = networkContainer;
         this.network = new NeuralNetwork(0.01, 10);
-        this.weightsGenerator = new WeightsGenerator(networkContainer, network, layers);
+        this.weightsGenerator = new WeightsGenerator(network, layers);
 
         initializeInputLayer();
         initializeHiddenLayers();
@@ -64,19 +63,11 @@ public class NeuralNetworkDisplay {
     private void addLayerButtons() {
         int lastLayerIndex = network.getNumLayers() - 1;
 
-        HBox btnContainer = new HBox();
-        btnContainer.setSpacing(5);
-        btnContainer.toFront();
+        ButtonContainer btnContainer = new ButtonContainer();
+
         btnContainer.setTranslateX(getLayerSpacing(lastLayerIndex));
-
-        Button addNeuronBtn = new Button("+");
-        Button removeNeuronBtn = new Button("-");
-
-        addNeuronBtn.setOnAction(e -> addNeuronThroughBtn(lastLayerIndex));
-        removeNeuronBtn.setOnAction(e -> removeNeuron(lastLayerIndex));
-
-        btnContainer.getChildren().add(addNeuronBtn);
-        btnContainer.getChildren().add(removeNeuronBtn);
+        btnContainer.setAddNeuronAction(() -> addNeuronThroughBtn(lastLayerIndex));
+        btnContainer.setRemoveNeuronAction(() -> removeNeuron(lastLayerIndex));
 
         networkContainer.getChildren().add(btnContainer);
         btnContainers.add(btnContainer);
@@ -96,11 +87,12 @@ public class NeuralNetworkDisplay {
         ArrayList<Neuron> lastLayer = layers.get(lastIndex);
 
         for (Neuron neuron : lastLayer)
-            networkContainer.getChildren().remove(neuron);
+            neuron.remove();
         layers.remove(lastIndex);
+        btnContainers.remove(lastIndex - 1);
     }
 
-    public void addNeuron(int layerIndex, double activation) {
+    private void addNeuron(int layerIndex, double activation) {
         if (layers.get(layerIndex).size() >= MAX_NEURONS) return;
 
         int lastNeuronIndex = layers.get(layerIndex).size();
@@ -115,15 +107,16 @@ public class NeuralNetworkDisplay {
         weightsGenerator.generateWeights(lastNeuronIndex, layerIndex);
     }
 
-    public void removeNeuron(int layerIndex) {
+    private void removeNeuron(int layerIndex) {
         if (network.getNumNeurons(layerIndex) <= MIN_NEURONS) return;
         int lastNeuronIndex = network.getNumNeurons(layerIndex) - 1;
 
         network.removeNeuron(layerIndex);
 
         Neuron neuron = getNeuron(layerIndex, lastNeuronIndex);
+
         layers.get(layerIndex).remove(neuron);
-        networkContainer.getChildren().remove(neuron);
+        neuron.remove();
     }
 
     private void addNeuronThroughBtn(int layerIndex) {
