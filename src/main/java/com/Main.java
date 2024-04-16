@@ -22,29 +22,7 @@ public class Main extends Application {
         String css = Objects.requireNonNull(Main.class.getResource("network.css")).toExternalForm();
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         scene.getStylesheets().add(css);
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    private static void showNetwork(Stage stage){
-        Matrix[][] trainData = {
-                new Matrix[]{
-                        Matrix.random(10, 1),
-                        new Matrix(new double[][]{{1}})
-                }
-        };
-
-        NeuralNetwork network = new NeuralNetwork(0.001, "sigmoid", "mse", 10,5,1);
-        network.sgd(trainData,null, 2, 1);
-
-        AnchorPane root = new AnchorPane();
-//        NetworkDisplay display = new NetworkDisplay(network);
-//        root.getChildren().add(display);
-
-        Scene scene = new Scene(root, 800, 600);
-
-        stage.setTitle("Neural Network");
+        stage.setTitle("Neural Network Simulation");
         stage.setScene(scene);
         stage.show();
     }

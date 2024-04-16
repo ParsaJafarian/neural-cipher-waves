@@ -4,7 +4,6 @@ import com.nn.Matrix;
 import com.nn.NeuralNetwork;
 import com.nn.display.NeuralNetworkDisplay;
 import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -18,13 +17,20 @@ public class Controller {
     public ComboBox<Double> learningRateCB;
     public ComboBox<String> activationCB, lossCB;
     public Slider batchSlider;
-    public Button startStopBtn, clrBtn;
+    public Button trainBtn, clrBtn, stopBtn;
     public Label testLossLabel, trainingLossLabel;
     public LineChart<Integer, Double> trainingChart;
     public Pane networkContainer;
-    public Button btnAdderBtn, btnRemoverBtn;
+    public Button layerAdderBtn, layerRemoverBtn;
     private NeuralNetwork network;
     private NeuralNetworkDisplay networkDisplay;
+    private boolean isTraining = false;
+    Matrix[][] trainData = new Matrix[][]{
+            new Matrix[]{
+                    Matrix.random(10, 1),
+                    new Matrix(new double[][]{{1}, {1}})
+            }
+    };
 
     @FXML
     public void initialize() {
@@ -37,37 +43,46 @@ public class Controller {
         lossCB.getItems().addAll("mse", "mae");
         lossCB.getSelectionModel().select(0);
 
-        startStopBtn.setText("Train");
+        batchSlider.setValue(1);
 
-        Matrix[][] trainData = new Matrix[][]{
-                new Matrix[]{
-                        Matrix.random(10, 1),
-                        new Matrix(new double[][]{{1}, {1}})
-                }
-        };
+        trainBtn.setText("Train");
 
         network = new NeuralNetwork(0.001, "sigmoid", "mse", 10);
         networkDisplay = new NeuralNetworkDisplay(network, networkContainer);
 
-        startStopBtn.setOnAction(e -> {
-            network.setLearningRate(learningRateCB.getValue());
-            network.setActivation(activationCB.getValue());
-            network.setLoss(lossCB.getValue());
-
-            network.sgd(trainData, null, 2, 1);
-            //update display
-            networkDisplay.update();
+        trainBtn.setOnAction(e -> {
+            if (!isTraining) {
+                isTraining = true;
+                train();
+            }
+        });
+        stopBtn.setOnAction(e -> {
+            clrBtn.fire();
+            isTraining = false;
         });
 
         clrBtn.setOnAction(e -> networkDisplay.clear());
 
-        btnAdderBtn.setOnAction(e -> networkDisplay.addLayer());
-        btnRemoverBtn.setOnAction(e -> networkDisplay.removeLayer());
+        layerAdderBtn.setOnAction(e -> networkDisplay.addLayer());
+        layerRemoverBtn.setOnAction(e -> networkDisplay.removeLayer());
+    }
 
-//        btnRemoverBtn.setOnAction(e -> {
-//            if (btnContainer.getChildren().isEmpty()) return;
-//            int size = btnContainer.getChildren().size();
-//            btnContainer.getChildren().remove(size - 1 );
-//        });
+    private void train(){
+        new Thread(() -> {
+            while (isTraining) {
+                try {
+                    network.setLearningRate(learningRateCB.getValue());
+                    network.setActivation(activationCB.getValue());
+                    network.setLoss(lossCB.getValue());
+                    int miniBatchSize = (int) batchSlider.getValue();
+
+                    network.sgd(trainData, null, 1, miniBatchSize);
+
+                    networkDisplay.update();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

@@ -53,7 +53,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="571.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Controller">
+<VBox prefHeight="571.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Controller">
   <children>
     <MenuBar prefWidth="805.0" VBox.vgrow="NEVER">
       <menus>
@@ -124,7 +124,8 @@
                         </Slider>
                      </children>
                   </GridPane>
-                  <Button fx:id="startStopBtn" mnemonicParsing="false" text="Train" />
+                  <Button fx:id="trainBtn" mnemonicParsing="false" text="Train" />
+                  <Button fx:id="stopBtn" mnemonicParsing="false" text="Stop" />
                   <Button fx:id="clrBtn" mnemonicParsing="false" text="Clear" />
                   <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="101.0" prefWidth="91.0">
                      <children>
@@ -166,8 +167,8 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="70.0" prefWidth="501.0" spacing="20.0">
                      <children>
-                        <Button fx:id="btnAdderBtn" mnemonicParsing="false" text="+" />
-                        <Button fx:id="btnRemoverBtn" mnemonicParsing="false" text="-" />
+                        <Button fx:id="layerAdderBtn" mnemonicParsing="false" text="+" />
+                        <Button fx:id="layerRemoverBtn" mnemonicParsing="false" text="-" />
                      </children>
                   </HBox>
                   <Pane fx:id="networkContainer" prefHeight="457.0" prefWidth="596.0" />
