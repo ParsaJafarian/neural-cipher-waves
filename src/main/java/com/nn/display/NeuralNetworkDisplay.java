@@ -20,9 +20,9 @@ public class NeuralNetworkDisplay {
     private final ArrayList<ButtonContainer> btnContainers = new ArrayList<>();
     private final WeightsGenerator weightsGenerator;
 
-    public NeuralNetworkDisplay(Pane networkContainer) {
+    public NeuralNetworkDisplay(NeuralNetwork network, Pane networkContainer) {
         this.networkContainer = networkContainer;
-        this.network = new NeuralNetwork(0.01, 10);
+        this.network = network;
         this.weightsGenerator = new WeightsGenerator(network, layers);
 
         initializeInputLayer();
@@ -55,6 +55,7 @@ public class NeuralNetworkDisplay {
         }
 
         weightsGenerator.generateLayerWeights(lastLayerIndex);
+        System.out.println(network.getSizes());
     }
 
     /**
@@ -105,6 +106,7 @@ public class NeuralNetworkDisplay {
         networkContainer.getChildren().add(neuron);
 
         weightsGenerator.generateWeights(lastNeuronIndex, layerIndex);
+        System.out.println(network.getSizes());
     }
 
     private void removeNeuron(int layerIndex) {
@@ -132,7 +134,7 @@ public class NeuralNetworkDisplay {
     }
 
     public void update() {
-        for (int layerIndex = 0; layerIndex < network.getNumLayers(); layerIndex++) {
+        for (int layerIndex = 1; layerIndex < network.getNumLayers(); layerIndex++) {
             Matrix activations = network.getActivationsAtLayer(layerIndex);
 
             for (int neuronIndex = 0; neuronIndex < activations.getRows(); neuronIndex++) {

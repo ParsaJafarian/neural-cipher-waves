@@ -1,5 +1,6 @@
 package com;
 
+import com.nn.Matrix;
 import com.nn.NeuralNetwork;
 import com.nn.display.NeuralNetworkDisplay;
 import javafx.fxml.FXML;
@@ -20,7 +21,6 @@ public class Controller {
     public Button startStopBtn, clrBtn;
     public Label testLossLabel, trainingLossLabel;
     public LineChart<Integer, Double> trainingChart;
-    public Canvas canvas;
     public Pane networkContainer;
     public Button btnAdderBtn, btnRemoverBtn;
     private NeuralNetwork network;
@@ -39,22 +39,22 @@ public class Controller {
 
         startStopBtn.setText("Train");
 
-//        Matrix[][] trainData = new Matrix[][]{
-//                new Matrix[]{
-//                        Matrix.random(4, 1),
-//                        new Matrix(new double[][]{{1}})
-//                }
-//        };
+        Matrix[][] trainData = new Matrix[][]{
+                new Matrix[]{
+                        Matrix.random(10, 1),
+                        new Matrix(new double[][]{{1}, {1}})
+                }
+        };
 
-        network = new NeuralNetwork(learningRateCB.getValue(), activationCB.getValue(), lossCB.getValue(), 4,6,1);
-        networkDisplay = new NeuralNetworkDisplay(networkContainer);
+        network = new NeuralNetwork(0.001, "sigmoid", "mse", 10);
+        networkDisplay = new NeuralNetworkDisplay(network, networkContainer);
 
         startStopBtn.setOnAction(e -> {
             network.setLearningRate(learningRateCB.getValue());
             network.setActivation(activationCB.getValue());
             network.setLoss(lossCB.getValue());
 
-//            network.sgd(trainData, null, 2, 1);
+            network.sgd(trainData, null, 2, 1);
             //update display
             networkDisplay.update();
         });

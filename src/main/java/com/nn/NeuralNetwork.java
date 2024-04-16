@@ -460,6 +460,10 @@ public class NeuralNetwork {
         }
     }
 
+    public String getSizes(){
+        return sizes.toString();
+    }
+
     public void addNeuron(int layerIndex) {
         addOrRemoveNeuron(layerIndex, true);
     }
