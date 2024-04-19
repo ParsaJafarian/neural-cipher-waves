@@ -33,6 +33,7 @@
 -->
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -112,18 +113,18 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <TextArea focusTraversable="false" prefHeight="680.0" prefWidth="420.0" promptText="Hi team, I woke up sick. I can't come to work today!" wrapText="true">
+                        <TextArea prefHeight="680.0" prefWidth="420.0" promptText="Hi team, I woke up sick. I can't come to work today!" wrapText="true">
                            <padding>
                               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                            </padding>
                         </TextArea>
                      </children>
                   </VBox>
-                  <VBox prefHeight="707.0" prefWidth="500.0">
+                  <VBox alignment="TOP_CENTER" prefHeight="707.0" prefWidth="412.0">
                      <children>
                         <HBox alignment="CENTER" prefHeight="45.0" prefWidth="393.0">
                            <children>
-                              <RadioButton focusTraversable="false" mnemonicParsing="false" prefHeight="45.0" prefWidth="125.0" selected="true" styleClass="toggle-button" stylesheets="@caesar.css" text="Encrypt   ">
+                              <RadioButton mnemonicParsing="false" prefHeight="45.0" prefWidth="125.0" selected="true" styleClass="toggle-button" stylesheets="@caesar.css" text="Encrypt   ">
                                  <toggleGroup>
                                     <ToggleGroup fx:id="ende" />
                                  </toggleGroup>
@@ -134,7 +135,7 @@
                                     <Insets right="5.0" />
                                  </HBox.margin>
                               </RadioButton>
-                              <RadioButton focusTraversable="false" mnemonicParsing="false" prefHeight="45.0" prefWidth="125.0" styleClass="toggle-button" stylesheets="@caesar.css" text="Decrypt   " toggleGroup="$ende">
+                              <RadioButton mnemonicParsing="false" prefHeight="45.0" prefWidth="125.0" styleClass="toggle-button" stylesheets="@caesar.css" text="Decrypt   " toggleGroup="$ende">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -160,9 +161,14 @@
                                  </image>
                               </ImageView>
                               <Circle fx:id="outerC" fill="#00438200" onMouseDragged="#onDraggedO" onMousePressed="#onMousePressedO" radius="208.0" stroke="BLACK" strokeType="INSIDE" />
-                              <Circle fx:id="innerC" fill="#1f93ff00" onMouseDragged="#onDraggedI" onMousePressed="#onMousePressedI" radius="164.0" stroke="BLACK" strokeType="INSIDE" />
+                              <Circle fx:id="innerC" fill="#1f93ff00" onMouseDragged="#onDraggedI" onMousePressed="#onMousePressedI" onMouseReleased="#onKeySet" radius="164.0" stroke="BLACK" strokeType="INSIDE" />
                            </children>
                         </StackPane>
+                        <Button fx:id="reset" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#resetClicked" text="Reset" textAlignment="CENTER">
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
+                        </Button>
                      </children>
                   </VBox>
                   <VBox prefHeight="707.0" prefWidth="420.0">

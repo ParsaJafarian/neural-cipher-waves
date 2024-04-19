@@ -1,15 +1,18 @@
 package com.cipher;
 
-import javafx.animation.RotateTransition;
-import javafx.animation.Transition;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
-import javafx.scene.transform.Rotate;
+
+import static java.lang.Math.round;
+import static java.lang.Math.toIntExact;
 
 
 public class Controller {
+    public final String dict = "abcdefghijklmnopqrstuvwxyz";
+    public Button reset;
     public double startI;
     public double startII;
     public double startO;
@@ -45,7 +48,6 @@ public class Controller {
         double mouseDeltaY = t.getY();
         double radAngle = Math.atan2(mouseDeltaY, mouseDeltaX);
         double deltaAngle = Math.toDegrees(radAngle)-startI;
-        System.out.println(deltaAngle);
         inner.setRotate(startII+deltaAngle);
     }
     @FXML
@@ -54,7 +56,19 @@ public class Controller {
         double mouseDeltaY = t.getY();
         double radAngle = Math.atan2(mouseDeltaY, mouseDeltaX);
         double deltaAngle = Math.toDegrees(radAngle)-startO;
-        System.out.println(deltaAngle);
         outer.setRotate(startOO+deltaAngle);
+    }
+    public void onKeySet(MouseEvent r){
+        int fromInd = (int) Math.ceil(inner.getRotate()/13.84615384615385);
+        System.out.println(fromInd);
+    }
+    @FXML
+    public void resetClicked(){
+        inner.setRotate(0);
+        outer.setRotate(0);
+        startI=0;
+        startII=0;
+        startO=0;
+        startOO=0;
     }
 }
