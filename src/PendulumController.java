@@ -3,12 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
@@ -79,6 +81,8 @@ public class PendulumController implements Initializable {
     double mass;
     @FXML
     private LineChart<?, ?> EChart;
+    @FXML
+    private Button exit;
 
     /**
      * Initializes the controller class.
@@ -127,6 +131,13 @@ public class PendulumController implements Initializable {
             pathTransition.play();
         });
 
+        exit.setOnAction(e->{
+        try {
+                //changes the root of the scene to direct the user to the slideshow before the race starts
+                exit.getScene().setRoot(FXMLLoader.load(getClass().getResource("Menu.fxml")));
+            } catch (IOException ex) {
+            }
+        });
     }
 
     public void arcPathCreation(double length, double angle, PathTransition pathTransition) {

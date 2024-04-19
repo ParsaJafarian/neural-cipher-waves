@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
 
+import java.io.IOException;
 import static java.lang.System.currentTimeMillis;
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,11 +16,13 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
@@ -68,6 +71,8 @@ public class SpringController implements Initializable {
     private LineChart<?, ?> kineticGraph;
     @FXML
     private Label angF;
+    @FXML
+    private Button exit;
 
     /**
      * Initializes the controller class.
@@ -111,6 +116,14 @@ public class SpringController implements Initializable {
             pathTransition.play();
             equationCreation();
         });
+        
+        exit.setOnAction(e->{
+        try {
+                //changes the root of the scene to direct the user to the slideshow before the race starts
+                exit.getScene().setRoot(FXMLLoader.load(getClass().getResource("Menu.fxml")));
+            } catch (IOException ex) {
+            }
+        });
     }
 
     public void dotCreation() {
@@ -123,6 +136,10 @@ public class SpringController implements Initializable {
                 translate.setInterpolator(Interpolator.LINEAR);
                 translate.setByY(2000);
                 translate.play();
+                translate.play();
+                translate.setOnFinished(e -> {
+                    back.getChildren().remove(translate.getNode());
+                });
             }
             alert.play();
 
@@ -167,7 +184,7 @@ public class SpringController implements Initializable {
         r.setLayoutX(kineticGraph.getLayoutX());
         r.setLayoutY(kineticGraph.getLayoutY());
         //creating arrayList for time values for creating energy graphs
-        for (double i = 0; i < dur * 2; i += 0.01) {
+        for (double i = 0; i < dur; i += 0.01) {
             time.add(i);
         }
 

@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
 
+import java.io.IOException;
 import static java.lang.System.currentTimeMillis;
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.Button;
@@ -67,6 +69,9 @@ public class VisualController implements Initializable {
     double angle;
     String angularF;
     boolean cont = true;
+    @FXML
+    public Button exit;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -79,10 +84,10 @@ public class VisualController implements Initializable {
         pathTransition.setInterpolator(Interpolator.LINEAR);
         pathTransition.play();
         alert.play();
-        
+
         setAngularVelocityAndPeriod(pathTransition);
         equationCreation();
-        
+
         freq.valueProperty().addListener((observable, oldvalue, newvalue) -> {
             pathTransition.setRate((double) newvalue);
             setAngularVelocityAndPeriod(pathTransition);
@@ -109,6 +114,14 @@ public class VisualController implements Initializable {
             pathTransition.play();
         });
 
+        exit.setOnAction(e -> {
+            try {
+                //changes the root of the scene to direct the user to the slideshow before the race starts
+                exit.getScene().setRoot(FXMLLoader.load(getClass().getResource("Menu.fxml")));
+            } catch (IOException ex) {
+            }
+        });
+
     }
 
     public void dotCreation() {
@@ -121,6 +134,9 @@ public class VisualController implements Initializable {
                 translate.setInterpolator(Interpolator.LINEAR);
                 translate.setByX(2000);
                 translate.play();
+                translate.setOnFinished(e -> {
+                    back.getChildren().remove(translate.getNode());
+                });
             }
             alert.play();
 
@@ -143,6 +159,5 @@ public class VisualController implements Initializable {
         String equ = String.valueOf(Math.round((border.getRadius()) * 100.0) / 100.0) + "sin" + "(" + angularF + "t" + " + π/2)";
         equation.setText(equ);
     }
-    
-    
+
 }

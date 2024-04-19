@@ -15,7 +15,7 @@
 
 <AnchorPane id="AnchorPane" fx:id="back" maxHeight="200.0" minHeight="800.0" prefHeight="200.0" prefWidth="1500.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SpringController">
    <children>
-      <Slider fx:id="freq" layoutX="918.0" layoutY="629.0" max="3.0" prefHeight="14.0" prefWidth="560.0" value="1.0" />
+      <Slider fx:id="freq" layoutX="918.0" layoutY="629.0" max="3.0" prefHeight="14.0" prefWidth="560.0" value="3.0" />
       <Label layoutX="730.0" layoutY="613.0" prefHeight="46.0" prefWidth="170.0" text="Frequency" textFill="WHITE">
          <font>
             <Font name="System Bold" size="31.0" />
@@ -40,7 +40,6 @@
           <NumberAxis side="LEFT" />
         </yAxis>
       </LineChart>
-      <Button layoutX="25.0" layoutY="21.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="79.0" text="Exit" />
       <Label fx:id="period" layoutX="730.0" layoutY="483.0" prefHeight="52.0" prefWidth="237.0" text="Period:" textFill="WHITE">
          <font>
             <Font name="System Bold" size="30.0" />
@@ -98,5 +97,6 @@
             <Font name="System Bold" size="31.0" />
          </font>
       </Label>
+      <Button fx:id="exit" layoutX="17.0" layoutY="14.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="70.0" text="Exit" />
    </children>
 </AnchorPane>

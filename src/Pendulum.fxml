@@ -15,7 +15,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="back" prefHeight="800.0" prefWidth="1500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PendulumController">
+<AnchorPane id="AnchorPane" fx:id="back" maxWidth="800.0" minWidth="1500.0" prefHeight="800.0" prefWidth="1500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PendulumController">
    <children>
       <Rectangle fx:id="border" arcHeight="5.0" arcWidth="5.0" fill="#a19e9c" height="760.0" stroke="#6f5327" strokeType="INSIDE" strokeWidth="5.0" width="722.0" x="23.0" y="21.0" />
 
@@ -131,6 +131,7 @@
           <NumberAxis side="LEFT" />
         </yAxis>
       </LineChart>
+      <Button fx:id="exit" layoutX="6.0" layoutY="2.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="73.0" text="Exit" />
 
    </children>
 </AnchorPane>
