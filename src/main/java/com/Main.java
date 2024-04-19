@@ -22,7 +22,7 @@ public class Main extends Application {
         String css = Objects.requireNonNull(Main.class.getResource("network.css")).toExternalForm();
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         scene.getStylesheets().add(css);
-        stage.setTitle("Hello!");
+        stage.setTitle("Neural Network Simulation");
         stage.setScene(scene);
         stage.show();
     }

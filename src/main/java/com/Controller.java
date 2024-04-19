@@ -23,13 +23,20 @@ public class Controller {
     public ComboBox<Double> learningRateCB;
     public ComboBox<String> activationCB, lossCB;
     public Slider batchSlider;
-    public Button startStopBtn, clrBtn;
+    public Button trainBtn, clrBtn, stopBtn;
     public Label testLossLabel, trainingLossLabel;
     public LineChart<Integer, Double> trainingChart;
     public Pane networkContainer;
-    public Button btnAdderBtn, btnRemoverBtn;
+    public Button layerAdderBtn, layerRemoverBtn;
     private NeuralNetwork network;
     private NeuralNetworkDisplay networkDisplay;
+    private boolean isTraining = false;
+    Matrix[][] trainData = new Matrix[][]{
+            new Matrix[]{
+                    Matrix.random(10, 1),
+                    new Matrix(new double[][]{{1}, {1}})
+            }
+    };
 
     @FXML
     public void initialize() throws IOException {
@@ -45,7 +52,7 @@ public class Controller {
         batchSlider.setMin(1);
         batchSlider.setValue(10);
 
-        startStopBtn.setText("Train");
+        trainBtn.setText("Train");
 
         Matrix[][] trainData = new Matrix[][]{
                 new Matrix[]{
@@ -57,25 +64,40 @@ public class Controller {
         network = new NeuralNetwork(0.001, "sigmoid", "mse", FIRST_LAYER_NEURONS);
         networkDisplay = new NeuralNetworkDisplay(network, networkContainer);
 
-        startStopBtn.setOnAction(e -> {
-            if (network.getNumNeurons(-1) != LAST_LAYER_NEURONS) {
-                Alerts.showLastLayerAlert();
-                return;
+
+        trainBtn.setOnAction(e -> {
+            if (!isTraining) {
+                isTraining = true;
+                train();
             }
-
-            network.setLearningRate(learningRateCB.getValue());
-            network.setActivation(activationCB.getValue());
-            network.setLoss(lossCB.getValue());
-            int miniBatchSize = (int) batchSlider.getValue();
-
-            network.sgd(trainData, null, 1, miniBatchSize);
-            //update display
-            networkDisplay.update();
+        });
+        stopBtn.setOnAction(e -> {
+            clrBtn.fire();
+            isTraining = false;
         });
 
         clrBtn.setOnAction(e -> networkDisplay.clear());
 
-        btnAdderBtn.setOnAction(e -> networkDisplay.addLayer());
-        btnRemoverBtn.setOnAction(e -> networkDisplay.removeLayer());
+        layerAdderBtn.setOnAction(e -> networkDisplay.addLayer());
+        layerRemoverBtn.setOnAction(e -> networkDisplay.removeLayer());
+    }
+
+    private void train(){
+        new Thread(() -> {
+            while (isTraining) {
+                try {
+                    network.setLearningRate(learningRateCB.getValue());
+                    network.setActivation(activationCB.getValue());
+                    network.setLoss(lossCB.getValue());
+                    int miniBatchSize = (int) batchSlider.getValue();
+
+                    network.sgd(trainData, null, 1, miniBatchSize);
+
+                    networkDisplay.update();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }
