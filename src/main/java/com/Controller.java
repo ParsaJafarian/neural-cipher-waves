@@ -13,6 +13,8 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
+import static com.nn.display.NeuralNetworkConfig.FIRST_LAYER_NEURONS;
+
 public class Controller {
     public HBox inputSection;
     public ComboBox<Double> learningRateCB;
@@ -41,12 +43,12 @@ public class Controller {
 
         Matrix[][] trainData = new Matrix[][]{
                 new Matrix[]{
-                        Matrix.random(10, 1),
+                        Matrix.random(FIRST_LAYER_NEURONS, 1),
                         new Matrix(new double[][]{{1}, {1}})
                 }
         };
 
-        network = new NeuralNetwork(0.001, "sigmoid", "mse", 10);
+        network = new NeuralNetwork(0.001, "sigmoid", "mse", FIRST_LAYER_NEURONS);
         networkDisplay = new NeuralNetworkDisplay(network, networkContainer);
 
         startStopBtn.setOnAction(e -> {
