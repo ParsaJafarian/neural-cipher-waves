@@ -1,13 +1,12 @@
-package com.mnist;
+package com.nn;
 
-import com.nn.Matrix;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
-import java.util.Arrays;
 
-public class MnistLoader  {
+public class Mnist {
 
-    public Matrix[][] load(String dataFilePath, String labelFilePath) throws IOException {
+    private static Matrix[][] load(String dataFilePath, String labelFilePath) throws IOException {
 
         DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(dataFilePath)));
         int magicNumber = dataInputStream.readInt();
@@ -48,5 +47,13 @@ public class MnistLoader  {
         dataInputStream.close();
         labelInputStream.close();
         return data;
+    }
+
+    public static Matrix[] @NotNull [] loadTrainData() throws IOException {
+        return load("data/train-images.idx3-ubyte", "data/train-labels.idx1-ubyte");
+    }
+
+    public static Matrix[] @NotNull [] loadTestData() throws IOException {
+        return load("data/t10k-images.idx3-ubyte", "data/t10k-labels.idx1-ubyte");
     }
 }
