@@ -6,17 +6,16 @@ import com.nn.display.NeuralNetworkDisplay;
 import com.nn.display.LossSection;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.Alerts.showLastLayerAlert;
 import static com.nn.display.NeuralNetworkConfig.FIRST_LAYER_NEURONS;
+import static com.nn.display.NeuralNetworkConfig.LAST_LAYER_NEURONS;
 
 public class Controller {
     public HBox inputSection;
@@ -49,7 +48,12 @@ public class Controller {
         lossSection = new LossSection(chart, trainingLossLabel);
         epoch = new AtomicInteger(1);
 
-        trainBtn.setOnAction(e -> trainNetworkForOneEpoch());
+        trainBtn.setOnAction(e -> {
+            if (network.getNumNeurons(-1) != LAST_LAYER_NEURONS)
+                showLastLayerAlert();
+            else
+                trainNetworkForOneEpoch();
+        });
         clrBtn.setOnAction(e -> clear());
         layerAdderBtn.setOnAction(e -> networkDisplay.addLayer());
         layerRemoverBtn.setOnAction(e -> networkDisplay.removeLayer());
