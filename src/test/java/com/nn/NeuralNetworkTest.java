@@ -12,7 +12,7 @@ public class NeuralNetworkTest {
 
     @Test
     public void testConstructor() {
-        NeuralNetwork n = new NeuralNetwork(2, 3, 1);
+        NeuralNetwork n = new NeuralNetwork(1, 3, 1);
         assert n.getNumLayers() == 2;
         assert n.getNumNeurons(0) == 3;
         assert n.getNumNeurons(1) == 1;
@@ -34,12 +34,12 @@ public class NeuralNetworkTest {
         assert n.getLoss() == Loss.MSE;
 
         // Check Learning Rate
-        assert n.getLearningRate() == 2.0;
+        assert n.getLearningRate() == 1.0;
     }
 
     @Test
     public void testFeedForward() {
-        NeuralNetwork n = new NeuralNetwork(2, 3, 10, 10);
+        NeuralNetwork n = new NeuralNetwork(1, 3, 10, 10);
         Matrix input = Matrix.ones(3, 1); // 3 input neurons
 
         Matrix output = n.feedForward(input);

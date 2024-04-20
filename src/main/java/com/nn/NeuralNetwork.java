@@ -68,10 +68,9 @@ public class NeuralNetwork {
             activations.add(new Matrix(size, 1));
         }
 
-
-        this.activation = activationFunctions.get(activationFunction);
-        this.loss = losses.get(loss);
-        this.learningRate = learningRate;
+        setActivation(activationFunction);
+        setLoss(loss);
+        setLearningRate(learningRate);
     }
 
     /**
@@ -145,15 +144,6 @@ public class NeuralNetwork {
 
         for (int i = 1; i <= epochs; i++) {
             System.out.println("Epoch " + i + " started");
-//            System.out.println("<---------------------Weights--------------------->");
-//            for (Matrix m : weights) {
-//                System.out.println(m);
-//            }
-//            System.out.println("<---------------------Biases--------------------->");
-//            for (Matrix m : biases) {
-//                System.out.println(m);
-//            }
-
 
             AtomicBoolean isNaN = new AtomicBoolean(false);
 
@@ -180,17 +170,7 @@ public class NeuralNetwork {
             }
 
             System.out.println("Epoch " + i + " complete");
-//            System.out.println("<---------------------Weights--------------------->");
-//            for (Matrix m : weights) {
-//                System.out.println(m);
-//            }
-//            System.out.println("<---------------------Biases--------------------->");
-//            for (Matrix m : biases) {
-//                System.out.println(m);
-//            }
-            if (testData != null) {
-                System.out.println("Accuracy: " + evaluate(testData) * 100 + "%");
-            }
+            System.out.println("Loss: " + evaluate(trainingData));
         }
     }
 
@@ -198,21 +178,27 @@ public class NeuralNetwork {
      * @param testData the test data. Structure: [[input matrix, output matrix], ...]
      * @return the accuracy of the network on the test data
      */
-    private double evaluate(Matrix[] @NotNull [] testData) {
+    public double evaluate(Matrix[] @NotNull [] testData) {
         if (testData.length == 0)
             throw new IllegalArgumentException("Test data is empty");
 
-        int correct = 0;
+        double totalLoss = 0;
         //each data consists of the input and the actual output [input, output] where input and output are matrices
         for (Matrix[] data : testData) {
             Matrix x = data[0];
             Matrix y = data[1];
             //data[0] is the input, data[1] is the actual output
             Matrix output = feedForward(x);
-            if (output.maxIndex() == y.maxIndex())
-                correct++;
+
+            double avgLoss = 0;
+            Matrix outputLoss = loss.f(y, output);
+            for (int i = 0; i < output.getRows(); i++) {
+                avgLoss += outputLoss.get(i, 0);
+            }
+            avgLoss /= output.getRows();
+            totalLoss += avgLoss;
         }
-        return (double) correct / testData.length;
+        return totalLoss / testData.length;
     }
 
     public double predict(Matrix input) {
@@ -309,7 +295,7 @@ public class NeuralNetwork {
         return new ArrayList[]{nablaB, nablaW};
     }
 
-     public int getNumLayers() {
+    public int getNumLayers() {
         return sizes.size();
     }
 
@@ -325,14 +311,15 @@ public class NeuralNetwork {
         return weights;
     }
 
-    public Matrix getWeightsAtLayer(int layerIndex){
+    public Matrix getWeightsAtLayer(int layerIndex) {
         return weights.get(layerIndex - 1);
     }
+
     ArrayList<Matrix> getBiases() {
         return biases;
     }
 
-    public Matrix getBiasesAtLayer(int layerIndex){
+    public Matrix getBiasesAtLayer(int layerIndex) {
         return biases.get(layerIndex - 1);
     }
 
@@ -387,7 +374,7 @@ public class NeuralNetwork {
         return activations;
     }
 
-    public Matrix getActivationsAtLayer(int layerIndex){
+    public Matrix getActivationsAtLayer(int layerIndex) {
         return activations.get(layerIndex);
     }
 
@@ -460,7 +447,7 @@ public class NeuralNetwork {
         }
     }
 
-    public String getSizes(){
+    public String getSizes() {
         return sizes.toString();
     }
 

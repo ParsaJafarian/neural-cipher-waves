@@ -20,7 +20,7 @@ public class Main extends Application {
     private static void show(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("network.fxml"));
         String css = Objects.requireNonNull(Main.class.getResource("network.css")).toExternalForm();
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 600);
         scene.getStylesheets().add(css);
         stage.setTitle("Neural Network Simulation");
         stage.setScene(scene);

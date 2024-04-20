@@ -33,7 +33,6 @@
 -->
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
@@ -53,7 +52,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="571.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Controller">
+<VBox prefHeight="571.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Controller">
   <children>
     <MenuBar prefWidth="805.0" VBox.vgrow="NEVER">
       <menus>
@@ -96,7 +95,7 @@
     </MenuBar>
       <BorderPane prefHeight="546.0" prefWidth="843.0">
          <top>
-            <HBox fx:id="inputSection" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="94.0" prefWidth="843.0" spacing="10.0" style="-fx-border-color: black;" BorderPane.alignment="CENTER">
+            <HBox fx:id="inputSection" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="144.0" prefWidth="843.0" spacing="10.0" style="-fx-border-color: black;" BorderPane.alignment="CENTER">
                <children>
                   <GridPane alignment="CENTER_LEFT" hgap="5.0" prefHeight="105.0" prefWidth="386.0">
                     <columnConstraints>
@@ -127,7 +126,7 @@
                   <Button fx:id="trainBtn" mnemonicParsing="false" text="Train" />
                   <Button fx:id="stopBtn" mnemonicParsing="false" text="Stop" />
                   <Button fx:id="clrBtn" mnemonicParsing="false" text="Clear" />
-                  <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="101.0" prefWidth="91.0">
+                  <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="142.0" prefWidth="115.0">
                      <children>
                         <Label prefHeight="28.0" prefWidth="76.0" text="OUTPUT">
                            <font>
@@ -151,9 +150,9 @@
                         <Insets left="10.0" />
                      </HBox.margin>
                   </VBox>
-                  <LineChart fx:id="trainingChart" minHeight="-Infinity" minWidth="-Infinity" prefHeight="105.0" prefWidth="180.0">
+                  <LineChart fx:id="chart" minHeight="-Infinity" minWidth="-Infinity" prefHeight="105.0" prefWidth="180.0">
                     <xAxis>
-                      <CategoryAxis side="BOTTOM" />
+                      <NumberAxis minorTickCount="0" side="BOTTOM" tickUnit="1.0" />
                     </xAxis>
                     <yAxis>
                       <NumberAxis side="LEFT" />

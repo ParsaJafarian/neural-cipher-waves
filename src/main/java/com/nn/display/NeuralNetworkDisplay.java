@@ -42,14 +42,14 @@ public class NeuralNetworkDisplay {
     public void addLayer() {
         if (network.getNumLayers() > MAX_LAYERS) return;
 
-        network.addLayer(MIN_NEURONS);
+        network.addLayer(LAST_LAYER_NEURONS);
         layers.add(new ArrayList<>());
         addLayerButtons();
 
         int lastLayerIndex = network.getNumLayers() - 1;
         Matrix lastActivations = network.getActivationsAtLayer(lastLayerIndex);
 
-        for (int neuronIndex = 0; neuronIndex < MIN_NEURONS; neuronIndex++) {
+        for (int neuronIndex = 0; neuronIndex < LAST_LAYER_NEURONS; neuronIndex++) {
             double activation = lastActivations.get(neuronIndex, 0);
             addNeuron(lastLayerIndex, activation);
         }
