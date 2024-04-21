@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import static com.nn.display.NeuralNetworkConfig.MAX_NEURONS;
 import static com.nn.display.NeuralNetworkConfig.MIN_NEURONS;
 
 public class DataSection {
@@ -32,8 +33,8 @@ public class DataSection {
             box.getChildren().add(new NumberField());
 
         adderBtn.setOnAction(e -> {
-            NumberField numberField = new NumberField();
-            box.getChildren().add(numberField);
+            if (box.getChildren().size() < MAX_NEURONS)
+                box.getChildren().add(new NumberField());
         });
 
         removerBtn.setOnAction(e -> {
