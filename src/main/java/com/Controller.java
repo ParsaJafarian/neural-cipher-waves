@@ -41,7 +41,7 @@ public class Controller {
     };
 
     @FXML
-    public void initialize() throws IOException {
+    public void initialize() {
         initializeInputSection();
 
         network = new NeuralNetwork(0.001, FIRST_LAYER_NEURONS);

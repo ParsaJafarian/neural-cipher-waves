@@ -53,7 +53,7 @@ public class NeuralNetworkDisplay {
     }
 
     public void addLayer() {
-        if (network.getNumLayers() > MAX_LAYERS) return;
+        if (network.getNumLayers() >= MAX_LAYERS) return;
 
         network.addLayer(LAST_LAYER_NEURONS);
         layers.add(new ArrayList<>());
@@ -147,7 +147,7 @@ public class NeuralNetworkDisplay {
     }
 
     public void update() {
-        for (int layerIndex = 1; layerIndex < network.getNumLayers(); layerIndex++) {
+        for (int layerIndex = 0; layerIndex < network.getNumLayers(); layerIndex++) {
             Matrix activations = network.getActivationsAtLayer(layerIndex);
 
             for (int neuronIndex = 0; neuronIndex < activations.getRows(); neuronIndex++) {
