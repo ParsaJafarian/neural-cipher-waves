@@ -12,4 +12,6 @@ module com.wavesneuralnetwork {
     opens com.nn to javafx.fxml;
     exports com.nn.display;
     opens com.nn.display to javafx.fxml;
+    exports com.data;
+    opens com.data to javafx.fxml;
 }

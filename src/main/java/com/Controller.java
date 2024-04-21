@@ -1,5 +1,6 @@
 package com;
 
+import com.data.DataSection;
 import com.nn.Matrix;
 import com.nn.NeuralNetwork;
 import com.nn.display.NeuralNetworkDisplay;
@@ -9,8 +10,8 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.Alerts.showFirstLayerAlert;
@@ -28,10 +29,13 @@ public class Controller {
     public LineChart<Number, Number> chart;
     public Pane networkContainer;
     public Button layerAdderBtn, layerRemoverBtn;
+    public VBox inputDisplay, outputDisplay;
+    public HBox inputBtns, outputBtns;
     private NeuralNetwork network;
     private NeuralNetworkDisplay networkDisplay;
     private LossSection lossSection;
     private AtomicInteger epoch;
+    private DataSection dataSection;
     private boolean isTraining = false;
     private final Matrix[][] trainData = new Matrix[][]{
             new Matrix[]{
@@ -48,6 +52,7 @@ public class Controller {
         networkDisplay = new NeuralNetworkDisplay(network, networkContainer);
         lossSection = new LossSection(chart, trainingLossLabel);
         epoch = new AtomicInteger(1);
+        dataSection = new DataSection(inputDisplay, inputBtns, outputDisplay, outputBtns);
 
         trainBtn.setOnAction(e -> {
             if (network.getNumNeurons(0) != FIRST_LAYER_NEURONS)

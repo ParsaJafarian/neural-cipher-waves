@@ -45,6 +45,7 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -174,6 +175,41 @@
                </children>
             </VBox>
          </left>
+         <right>
+            <FlowPane prefHeight="402.0" prefWidth="407.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="45.0" prefWidth="405.0" text="Enter Your Data">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <VBox prefHeight="356.0" prefWidth="199.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="204.0" text="Input " />
+                        <HBox fx:id="inputBtns" alignment="CENTER" prefHeight="44.0" prefWidth="211.0" spacing="20.0">
+                           <children>
+                              <Button fx:id="layerAdderBtn1" mnemonicParsing="false" text="+" />
+                              <Button fx:id="layerRemoverBtn1" mnemonicParsing="false" text="-" />
+                           </children>
+                        </HBox>
+                        <VBox fx:id="inputDisplay" alignment="TOP_CENTER" prefHeight="326.0" prefWidth="199.0" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="356.0" prefWidth="208.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="210.0" text="Expected Output " />
+                        <HBox fx:id="outputBtns" alignment="CENTER" prefHeight="44.0" prefWidth="211.0" spacing="20.0">
+                           <children>
+                              <Button fx:id="layerAdderBtn11" mnemonicParsing="false" text="+" />
+                              <Button fx:id="layerRemoverBtn11" mnemonicParsing="false" text="-" />
+                           </children>
+                        </HBox>
+                        <VBox fx:id="outputDisplay" alignment="TOP_CENTER" prefHeight="327.0" prefWidth="208.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </FlowPane>
+         </right>
       </BorderPane>
   </children>
 </VBox>

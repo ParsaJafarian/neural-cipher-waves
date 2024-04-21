@@ -25,4 +25,12 @@ public class Alerts {
                 " model is trained to predict " + FIRST_LAYER_NEURONS + " numbers");
         alert.showAndWait();
     }
+
+    public static void showNumberFieldAlert() {
+        alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Empty field");
+        alert.setContentText("Please enter a number");
+        alert.showAndWait();
+    }
 }
