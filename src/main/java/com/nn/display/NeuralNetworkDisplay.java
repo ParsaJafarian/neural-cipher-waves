@@ -30,7 +30,7 @@ public class NeuralNetworkDisplay {
     }
 
     private void initializeInputLayer() {
-        if (FIRST_LAYER_NEURONS > MAX_NEURONS)
+        if (FIRST_LAYER_NEURONS.get() > MAX_NEURONS)
             throw new IllegalArgumentException("Number of neurons at the first layer exceeds the maximum number of neurons");
 
         layers.add(new ArrayList<>());
@@ -38,7 +38,7 @@ public class NeuralNetworkDisplay {
 
         Matrix lastActivations = network.getActivationsAtLayer(0);
 
-        for (int neuronIndex = 0; neuronIndex < FIRST_LAYER_NEURONS; neuronIndex++) {
+        for (int neuronIndex = 0; neuronIndex < FIRST_LAYER_NEURONS.get(); neuronIndex++) {
             double activation = lastActivations.get(neuronIndex, 0);
             addNeuron(0, activation);
         }
@@ -55,14 +55,14 @@ public class NeuralNetworkDisplay {
     public void addLayer() {
         if (network.getNumLayers() >= MAX_LAYERS) return;
 
-        network.addLayer(LAST_LAYER_NEURONS);
+        network.addLayer(LAST_LAYER_NEURONS.get());
         layers.add(new ArrayList<>());
         addLayerButtons();
 
         int lastLayerIndex = network.getNumLayers() - 1;
         Matrix lastActivations = network.getActivationsAtLayer(lastLayerIndex);
 
-        for (int neuronIndex = 0; neuronIndex < LAST_LAYER_NEURONS; neuronIndex++) {
+        for (int neuronIndex = 0; neuronIndex < LAST_LAYER_NEURONS.get(); neuronIndex++) {
             double activation = lastActivations.get(neuronIndex, 0);
             addNeuron(lastLayerIndex, activation);
         }

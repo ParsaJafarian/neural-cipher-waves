@@ -7,8 +7,7 @@ import javafx.scene.control.Button;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import static com.nn.display.NeuralNetworkConfig.MAX_NEURONS;
-import static com.nn.display.NeuralNetworkConfig.MIN_NEURONS;
+import static com.nn.display.NeuralNetworkConfig.*;
 
 public class DataSection {
     private final VBox inputBox, outputBox;
@@ -43,11 +42,19 @@ public class DataSection {
         });
     }
 
-    public Matrix getInputData() {
+    public Matrix[][] getData() {
+        FIRST_LAYER_NEURONS.set(inputBox.getChildren().size());
+        LAST_LAYER_NEURONS.set(outputBox.getChildren().size());
+        return new Matrix[][]{new Matrix[]{getInputData(), getOutputData()}};
+    }
+
+    @Contract(" -> new")
+    private @NotNull Matrix getInputData() {
         return getData(inputBox);
     }
 
-    public Matrix getOutputData() {
+    @Contract(" -> new")
+    private @NotNull Matrix getOutputData() {
         return getData(outputBox);
     }
 

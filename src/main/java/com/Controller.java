@@ -37,46 +37,42 @@ public class Controller {
     private AtomicInteger epoch;
     private DataSection dataSection;
     private boolean isTraining = false;
-    private final Matrix[][] trainData = new Matrix[][]{
-            new Matrix[]{
-                    new Matrix(new double[][]{{1}, {2}, {3}, {4}, {5}}),
-                    new Matrix(new double[][]{{1}, {4}, {9}, {16}, {25}})
-            }
-    };
 
     @FXML
     public void initialize() {
         initializeInputSection();
 
-        network = new NeuralNetwork(0.001, FIRST_LAYER_NEURONS);
+        network = new NeuralNetwork(0.001, FIRST_LAYER_NEURONS.get());
         networkDisplay = new NeuralNetworkDisplay(network, networkContainer);
-        lossSection = new LossSection(chart, trainingLossLabel);
         epoch = new AtomicInteger(1);
+        lossSection = new LossSection(chart, trainingLossLabel, epoch);
         dataSection = new DataSection(inputDisplay, inputBtns, outputDisplay, outputBtns);
 
         trainBtn.setOnAction(e -> {
-            if (network.getNumNeurons(0) != FIRST_LAYER_NEURONS)
+            Matrix[][] trainData = dataSection.getData();
+            if (network.getNumNeurons(0) != FIRST_LAYER_NEURONS.get())
                 showFirstLayerAlert();
-            else if (network.getNumNeurons(-1) != LAST_LAYER_NEURONS)
+            else if (network.getNumNeurons(-1) != LAST_LAYER_NEURONS.get())
                 showLastLayerAlert();
             else
-                trainNetworkForOneEpoch();
+                trainNetworkForOneEpoch(trainData);
         });
         clrBtn.setOnAction(e -> clear());
         layerAdderBtn.setOnAction(e -> networkDisplay.addLayer());
         layerRemoverBtn.setOnAction(e -> networkDisplay.removeLayer());
     }
 
-    private void trainNetworkForOneEpoch(){
+    private void trainNetworkForOneEpoch(Matrix[][] trainData){
         network.setLearningRate(learningRateCB.getValue());
         network.setActivation(activationCB.getValue());
         network.setLoss(lossCB.getValue());
         int miniBatchSize = (int) batchSlider.getValue();
 
+
         network.sgd(trainData, trainData, 1, miniBatchSize);
 
         double loss = network.evaluate(trainData);
-        lossSection.addData(epoch.getAndIncrement(), loss);
+        lossSection.addData(loss);
 
         networkDisplay.update();
     }
@@ -108,6 +104,8 @@ public class Controller {
                     network.setActivation(activationCB.getValue());
                     network.setLoss(lossCB.getValue());
                     int miniBatchSize = (int) batchSlider.getValue();
+
+                    Matrix[][] trainData = dataSection.getData();
 
                     network.sgd(trainData, null, 1, miniBatchSize);
 
