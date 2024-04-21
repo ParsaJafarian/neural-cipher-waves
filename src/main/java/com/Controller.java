@@ -25,7 +25,7 @@ public class Controller {
     public ComboBox<String> activationCB, lossCB;
     public Slider batchSlider;
     public Button trainBtn, clrBtn, stopBtn;
-    public Label testLossLabel, trainingLossLabel;
+    public Label epochLabel, trainingLossLabel;
     public LineChart<Number, Number> chart;
     public Pane networkContainer;
     public Button layerAdderBtn, layerRemoverBtn;
@@ -34,7 +34,6 @@ public class Controller {
     private NeuralNetwork network;
     private NeuralNetworkDisplay networkDisplay;
     private LossSection lossSection;
-    private AtomicInteger epoch;
     private DataSection dataSection;
     private boolean isTraining = false;
 
@@ -44,8 +43,7 @@ public class Controller {
 
         network = new NeuralNetwork(0.001, FIRST_LAYER_NEURONS.get());
         networkDisplay = new NeuralNetworkDisplay(network, networkContainer);
-        epoch = new AtomicInteger(1);
-        lossSection = new LossSection(chart, trainingLossLabel, epoch);
+        lossSection = new LossSection(chart, trainingLossLabel, epochLabel);
         dataSection = new DataSection(inputDisplay, inputBtns, outputDisplay, outputBtns);
 
         trainBtn.setOnAction(e -> {
@@ -68,7 +66,6 @@ public class Controller {
         network.setLoss(lossCB.getValue());
         int miniBatchSize = (int) batchSlider.getValue();
 
-
         network.sgd(trainData, trainData, 1, miniBatchSize);
 
         double loss = network.evaluate(trainData);
@@ -80,7 +77,6 @@ public class Controller {
     private void clear(){
         networkDisplay.clear();
         lossSection.clear();
-        epoch.set(1);
     }
 
     private void initializeInputSection() {

@@ -1,6 +1,8 @@
 package com.data;
 
 import com.nn.Matrix;
+import javafx.collections.ListChangeListener;
+import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
@@ -21,6 +23,14 @@ public class DataSection {
 
         this.inputBox = inputBox;
         this.outputBox = outputBox;
+
+        inputBox.getChildren().addListener((ListChangeListener.Change<? extends Node> c) -> {
+            FIRST_LAYER_NEURONS.set(inputBox.getChildren().size());
+        });
+
+        outputBox.getChildren().addListener((ListChangeListener.Change<? extends Node> c) -> {
+            LAST_LAYER_NEURONS.set(outputBox.getChildren().size());
+        });
 
         initializeBox(inputBox, inputAdderBtn, inputRemoverBtn);
         initializeBox(outputBox, outputAdderBtn, outputRemoverBtn);
@@ -43,8 +53,6 @@ public class DataSection {
     }
 
     public Matrix[][] getData() {
-        FIRST_LAYER_NEURONS.set(inputBox.getChildren().size());
-        LAST_LAYER_NEURONS.set(outputBox.getChildren().size());
         return new Matrix[][]{new Matrix[]{getInputData(), getOutputData()}};
     }
 

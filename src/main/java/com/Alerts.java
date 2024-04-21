@@ -12,8 +12,8 @@ public class Alerts {
         alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("Invalid number of neurons at last layer");
-        alert.setContentText("The number of neurons at the last layer should be " + LAST_LAYER_NEURONS + " because the" +
-                " model is trained to predict " + LAST_LAYER_NEURONS + " numbers");
+        alert.setContentText("The number of neurons at the last layer should be " + LAST_LAYER_NEURONS.get() + " because the" +
+                " model is trained to predict " + LAST_LAYER_NEURONS.get() + " numbers");
         alert.showAndWait();
     }
 
@@ -21,8 +21,8 @@ public class Alerts {
         alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("Invalid number of neurons at first layer");
-        alert.setContentText("The number of neurons at the first layer should be " + FIRST_LAYER_NEURONS + " because the" +
-                " model is trained to predict " + FIRST_LAYER_NEURONS + " numbers");
+        alert.setContentText("The number of neurons at the first layer should be " + FIRST_LAYER_NEURONS.get() + " because the" +
+                " model is trained to predict " + FIRST_LAYER_NEURONS.get() + " numbers");
         alert.showAndWait();
     }
 

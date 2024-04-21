@@ -136,7 +136,13 @@
                         </Label>
                         <HBox alignment="CENTER_LEFT" prefHeight="24.0" prefWidth="100.0" spacing="10.0">
                            <children>
-                              <Label prefHeight="25.0" prefWidth="74.0" text="Training loss: " />
+                              <Label prefHeight="25.0" prefWidth="74.0" text="Epoch: " />
+                              <Label fx:id="epochLabel" alignment="CENTER_RIGHT" text="x" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="24.0" prefWidth="100.0" spacing="10.0">
+                           <children>
+                              <Label prefHeight="25.0" prefWidth="74.0" text="Loss:" />
                               <Label fx:id="trainingLossLabel" alignment="CENTER_RIGHT" text="x" />
                            </children>
                         </HBox>
@@ -156,19 +162,6 @@
                </children>
             </HBox>
          </top>
-         <left>
-            <VBox prefHeight="441.0" prefWidth="596.0" BorderPane.alignment="CENTER">
-               <children>
-                  <HBox alignment="CENTER" prefHeight="70.0" prefWidth="501.0" spacing="20.0">
-                     <children>
-                        <Button fx:id="layerAdderBtn" mnemonicParsing="false" text="+" />
-                        <Button fx:id="layerRemoverBtn" mnemonicParsing="false" text="-" />
-                     </children>
-                  </HBox>
-                  <Pane fx:id="networkContainer" prefHeight="457.0" prefWidth="596.0" />
-               </children>
-            </VBox>
-         </left>
          <right>
             <FlowPane prefHeight="402.0" prefWidth="407.0" BorderPane.alignment="CENTER">
                <children>
@@ -186,7 +179,7 @@
                               <Button fx:id="layerRemoverBtn1" mnemonicParsing="false" text="-" />
                            </children>
                         </HBox>
-                        <VBox fx:id="inputDisplay" alignment="TOP_CENTER" prefHeight="326.0" prefWidth="199.0" />
+                        <VBox fx:id="inputDisplay" alignment="TOP_CENTER" prefHeight="326.0" prefWidth="199.0" spacing="5.0" />
                      </children>
                   </VBox>
                   <VBox prefHeight="356.0" prefWidth="208.0">
@@ -198,12 +191,25 @@
                               <Button fx:id="layerRemoverBtn11" mnemonicParsing="false" text="-" />
                            </children>
                         </HBox>
-                        <VBox fx:id="outputDisplay" alignment="TOP_CENTER" prefHeight="327.0" prefWidth="208.0" />
+                        <VBox fx:id="outputDisplay" alignment="TOP_CENTER" prefHeight="327.0" prefWidth="208.0" spacing="5.0" />
                      </children>
                   </VBox>
                </children>
             </FlowPane>
          </right>
+         <center>
+            <VBox prefHeight="441.0" prefWidth="596.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="70.0" prefWidth="501.0" spacing="20.0">
+                     <children>
+                        <Button fx:id="layerAdderBtn" mnemonicParsing="false" text="+" />
+                        <Button fx:id="layerRemoverBtn" mnemonicParsing="false" text="-" />
+                     </children>
+                  </HBox>
+                  <Pane fx:id="networkContainer" prefHeight="457.0" prefWidth="596.0" />
+               </children>
+            </VBox>
+         </center>
       </BorderPane>
   </children>
 </VBox>
