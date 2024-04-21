@@ -26,16 +26,29 @@ public class NeuralNetworkDisplay {
         this.weightsGenerator = new WeightsGenerator(network, layers);
 
         initializeInputLayer();
-        initializeHiddenLayers();
+        initializeOtherLayers();
     }
 
     private void initializeInputLayer() {
+        if (FIRST_LAYER_NEURONS > MAX_NEURONS)
+            throw new IllegalArgumentException("Number of neurons at the first layer exceeds the maximum number of neurons");
+
         layers.add(new ArrayList<>());
-        networkContainer.getChildren().add(new Pane());
+        addLayerButtons();
+
+        Matrix lastActivations = network.getActivationsAtLayer(0);
+
+        for (int neuronIndex = 0; neuronIndex < FIRST_LAYER_NEURONS; neuronIndex++) {
+            double activation = lastActivations.get(neuronIndex, 0);
+            addNeuron(0, activation);
+        }
+
+        weightsGenerator.generateLayerWeights(0);
+        System.out.println(network.getSizes());
     }
 
-    private void initializeHiddenLayers() {
-        for (int i = 0; i < MIN_LAYERS; i++)
+    private void initializeOtherLayers() {
+        for (int i = 1; i < MIN_LAYERS; i++)
             addLayer();
     }
 
@@ -79,18 +92,18 @@ public class NeuralNetworkDisplay {
     }
 
     public void removeLayer() {
-        if (network.getNumLayers() <= MIN_LAYERS + 1) return;
+        if (network.getNumLayers() <= MIN_LAYERS) return;
         int lastIndex = network.getNumLayers() - 1;
 
         network.removeLayer();
-        networkContainer.getChildren().remove(btnContainers.get(lastIndex - 1));
+        networkContainer.getChildren().remove(btnContainers.get(lastIndex));
 
         ArrayList<Neuron> lastLayer = layers.get(lastIndex);
 
         for (Neuron neuron : lastLayer)
             neuron.remove();
         layers.remove(lastIndex);
-        btnContainers.remove(lastIndex - 1);
+        btnContainers.remove(lastIndex);
     }
 
     private void addNeuron(int layerIndex, double activation) {

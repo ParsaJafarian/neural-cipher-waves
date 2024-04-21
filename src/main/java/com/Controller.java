@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.Alerts.showFirstLayerAlert;
 import static com.Alerts.showLastLayerAlert;
 import static com.nn.display.NeuralNetworkConfig.FIRST_LAYER_NEURONS;
 import static com.nn.display.NeuralNetworkConfig.LAST_LAYER_NEURONS;
@@ -49,7 +50,9 @@ public class Controller {
         epoch = new AtomicInteger(1);
 
         trainBtn.setOnAction(e -> {
-            if (network.getNumNeurons(-1) != LAST_LAYER_NEURONS)
+            if (network.getNumNeurons(0) != FIRST_LAYER_NEURONS)
+                showFirstLayerAlert();
+            else if (network.getNumNeurons(-1) != LAST_LAYER_NEURONS)
                 showLastLayerAlert();
             else
                 trainNetworkForOneEpoch();

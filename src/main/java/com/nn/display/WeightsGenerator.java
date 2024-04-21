@@ -17,7 +17,7 @@ public class WeightsGenerator {
      * Generate weights between last layer and the before last layer
      */
     void generateLayerWeights(int currLayerIndex) {
-        if (currLayerIndex < 2) return;
+        if (currLayerIndex < 1) return;
 
         int currNumNeurons = network.getNumNeurons(currLayerIndex);
         for (int currNeuronIndex = 0; currNeuronIndex < currNumNeurons; currNeuronIndex++) {
@@ -39,7 +39,7 @@ public class WeightsGenerator {
     }
 
     private void generateWeights(int currNeuronIndex, int currLayerIndex, boolean isInput) {
-        if (isInput && currLayerIndex <= 1) return;
+        if (isInput && currLayerIndex <= 0) return;
         if (!isInput && currLayerIndex == network.getNumLayers() - 1) return;
 
         int otherLayerIndex = isInput ? currLayerIndex - 1 : currLayerIndex + 1;
