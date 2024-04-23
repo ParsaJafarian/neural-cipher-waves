@@ -6,8 +6,6 @@ import java.util.HashMap;
  * Enum for loss functions used in the neural network.
  */
 public enum Loss {
-
-
     /**
      * Mean Squared Error loss function.
      * <br>

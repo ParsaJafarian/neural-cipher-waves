@@ -7,7 +7,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
 
-
 public class LossSection {
     private final XYChart.Series<Number, Number> series = new XYChart.Series<>();
     private final SimpleDoubleProperty lastLoss = new SimpleDoubleProperty(0);
@@ -35,7 +34,7 @@ public class LossSection {
         epoch.set(epoch.get() + 1);
     }
 
-    public void clear(){
+    public void clear() {
         series.getData().clear();
         lastLoss.set(0);
         epoch.set(0);
