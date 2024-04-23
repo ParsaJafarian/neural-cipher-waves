@@ -2,12 +2,10 @@ package com.cipher;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
-
-import static java.lang.Math.round;
-import static java.lang.Math.toIntExact;
 
 
 public class Controller {
@@ -17,6 +15,8 @@ public class Controller {
     public double startII;
     public double startO;
     public double startOO;
+    public TextArea Input;
+    public TextArea Preview;
 
     public Circle innerC;
     public Circle outerC;
@@ -49,6 +49,10 @@ public class Controller {
         double radAngle = Math.atan2(mouseDeltaY, mouseDeltaX);
         double deltaAngle = Math.toDegrees(radAngle)-startI;
         inner.setRotate(startII+deltaAngle);
+        int fromInd = (int) Math.ceil((inner.getRotate()-13.84615384615385/2)/13.84615384615385);
+        int toInd = (int) Math.ceil((outer.getRotate())/13.84615384615385);
+        int key = fromInd-toInd;
+        Preview.setText(CC_Engine.CC_encrypt(Input.getText(),key));
     }
     @FXML
     public void onDraggedO(MouseEvent t){
@@ -57,10 +61,15 @@ public class Controller {
         double radAngle = Math.atan2(mouseDeltaY, mouseDeltaX);
         double deltaAngle = Math.toDegrees(radAngle)-startO;
         outer.setRotate(startOO+deltaAngle);
+        int fromInd = (int) Math.ceil((inner.getRotate()-13.84615384615385/2)/13.84615384615385);
+        int toInd = (int) Math.ceil((outer.getRotate())/13.84615384615385);
+        int key = fromInd-toInd;
+        Preview.setText(CC_Engine.CC_encrypt(Input.getText(),key));
     }
     public void onKeySet(MouseEvent r){
-        int fromInd = (int) Math.ceil(inner.getRotate()/13.84615384615385);
-        System.out.println(fromInd);
+        //int fromInd = (int) Math.ceil((inner.getRotate()-13.84615384615385/2)/13.84615384615385);
+        //int key = fromInd;
+        //Preview.setText(CC_Engine.CC_encrypt(Input.getText(),key));
     }
     @FXML
     public void resetClicked(){
@@ -70,5 +79,6 @@ public class Controller {
         startII=0;
         startO=0;
         startOO=0;
+        Preview.setText(CC_Engine.CC_encrypt(Input.getText(),0));
     }
 }

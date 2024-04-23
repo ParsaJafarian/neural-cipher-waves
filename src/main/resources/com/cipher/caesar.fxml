@@ -52,7 +52,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox alignment="CENTER" prefHeight="770.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cipher.Controller">
+<VBox alignment="CENTER" prefHeight="770.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cipher.Controller">
   <children>
       <TextFlow prefHeight="0.0" prefWidth="0.0" />
     <MenuBar prefHeight="28.0" prefWidth="649.0" VBox.vgrow="NEVER">
@@ -113,7 +113,7 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <TextArea prefHeight="680.0" prefWidth="420.0" promptText="Hi team, I woke up sick. I can't come to work today!" wrapText="true">
+                        <TextArea fx:id="Input" prefHeight="680.0" prefWidth="420.0" promptText="Hi team, I woke up sick. I can't come to work today!" wrapText="true">
                            <padding>
                               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                            </padding>
@@ -178,7 +178,7 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <TextArea disable="true" editable="false" prefHeight="670.0" prefWidth="420.0" text="Kl whdp, L zrnh xs vlfn. L fdq'w frph wr zrun wrgdb!" wrapText="true">
+                        <TextArea fx:id="Preview" editable="false" prefHeight="670.0" prefWidth="420.0" promptText="Kl whdp, L zrnh xs vlfn. L fdq'w frph wr zrun wrgdb!" wrapText="true">
                            <padding>
                               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                            </padding>
