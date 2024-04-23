@@ -1,4 +1,4 @@
-package com.nn;
+package com.nn.algo;
 
 import java.util.HashMap;
 

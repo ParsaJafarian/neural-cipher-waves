@@ -42,10 +42,9 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -53,7 +52,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="571.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Controller">
+<VBox prefHeight="571.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nn.Controller">
   <children>
     <MenuBar prefWidth="805.0" VBox.vgrow="NEVER">
       <menus>
@@ -98,16 +97,15 @@
          <top>
             <HBox fx:id="inputSection" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="117.0" prefWidth="1003.0" spacing="10.0" style="-fx-border-color: black;" BorderPane.alignment="CENTER">
                <children>
-                  <GridPane alignment="CENTER_LEFT" hgap="5.0" prefHeight="105.0" prefWidth="386.0">
+                  <GridPane alignment="CENTER_LEFT" hgap="5.0" prefHeight="115.0" prefWidth="256.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints maxHeight="77.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="77.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <ComboBox fx:id="learningRateCB" prefHeight="25.0" prefWidth="118.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
@@ -116,12 +114,6 @@
                         <Label alignment="CENTER" contentDisplay="CENTER" text="Loss" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM" />
                         <ComboBox fx:id="activationCB" prefHeight="25.0" prefWidth="103.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
                         <ComboBox fx:id="lossCB" prefHeight="25.0" prefWidth="101.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-                        <Label text="Batch Size" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM" />
-                        <Slider fx:id="batchSlider" max="30.0" min="1.0" prefWidth="97.0" showTickLabels="true" showTickMarks="true" value="1.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
-                           <GridPane.margin>
-                              <Insets top="5.0" />
-                           </GridPane.margin>
-                        </Slider>
                      </children>
                   </GridPane>
                   <Button fx:id="trainBtn" mnemonicParsing="false" text="Train" />
@@ -159,46 +151,33 @@
                       <NumberAxis side="LEFT" />
                     </yAxis>
                   </LineChart>
+                  <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="127.0" prefWidth="158.0">
+                     <children>
+                        <Label prefHeight="28.0" prefWidth="98.0" text="PREDICTION">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <HBox alignment="CENTER_LEFT" prefHeight="24.0" prefWidth="100.0" spacing="10.0">
+                           <children>
+                              <Label prefHeight="25.0" prefWidth="74.0" text="Input:" />
+                              <TextField fx:id="predInputField" prefHeight="25.0" prefWidth="33.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="24.0" prefWidth="100.0" spacing="10.0">
+                           <children>
+                              <Label prefHeight="24.0" prefWidth="95.0" text="Predicted Value:" />
+                              <Label fx:id="predOutputLabel" alignment="CENTER_RIGHT" text="x" />
+                           </children>
+                        </HBox>
+                        <Button fx:id="predictBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="97.0" text="Predict" />
+                     </children>
+                  </VBox>
                </children>
             </HBox>
          </top>
-         <right>
-            <FlowPane prefHeight="402.0" prefWidth="407.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="45.0" prefWidth="405.0" text="Enter Your Data">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <VBox prefHeight="356.0" prefWidth="199.0">
-                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="204.0" text="Input " />
-                        <HBox fx:id="inputBtns" alignment="CENTER" prefHeight="44.0" prefWidth="211.0" spacing="20.0">
-                           <children>
-                              <Button fx:id="layerAdderBtn1" mnemonicParsing="false" text="+" />
-                              <Button fx:id="layerRemoverBtn1" mnemonicParsing="false" text="-" />
-                           </children>
-                        </HBox>
-                        <VBox fx:id="inputDisplay" alignment="TOP_CENTER" prefHeight="326.0" prefWidth="199.0" spacing="5.0" />
-                     </children>
-                  </VBox>
-                  <VBox prefHeight="356.0" prefWidth="208.0">
-                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="210.0" text="Expected Output " />
-                        <HBox fx:id="outputBtns" alignment="CENTER" prefHeight="44.0" prefWidth="211.0" spacing="20.0">
-                           <children>
-                              <Button fx:id="layerAdderBtn11" mnemonicParsing="false" text="+" />
-                              <Button fx:id="layerRemoverBtn11" mnemonicParsing="false" text="-" />
-                           </children>
-                        </HBox>
-                        <VBox fx:id="outputDisplay" alignment="TOP_CENTER" prefHeight="327.0" prefWidth="208.0" spacing="5.0" />
-                     </children>
-                  </VBox>
-               </children>
-            </FlowPane>
-         </right>
          <center>
-            <VBox prefHeight="441.0" prefWidth="596.0" BorderPane.alignment="CENTER">
+            <VBox prefHeight="429.0" prefWidth="673.0" BorderPane.alignment="CENTER">
                <children>
                   <HBox alignment="CENTER" prefHeight="70.0" prefWidth="501.0" spacing="20.0">
                      <children>
@@ -206,10 +185,49 @@
                         <Button fx:id="layerRemoverBtn" mnemonicParsing="false" text="-" />
                      </children>
                   </HBox>
-                  <Pane fx:id="networkContainer" prefHeight="457.0" prefWidth="596.0" />
+                  <Pane fx:id="networkContainer" prefHeight="457.0" prefWidth="826.0" />
                </children>
             </VBox>
          </center>
+         <right>
+            <VBox alignment="TOP_CENTER" prefHeight="429.0" prefWidth="371.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="45.0" prefWidth="405.0" text="Enter Your Data">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="209.0" prefWidth="190.0">
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="204.0" text="Input " />
+                              <HBox fx:id="inputBtns" alignment="CENTER" prefHeight="44.0" prefWidth="211.0" spacing="20.0">
+                                 <children>
+                                    <Button fx:id="layerAdderBtn1" mnemonicParsing="false" text="+" />
+                                    <Button fx:id="layerRemoverBtn1" mnemonicParsing="false" text="-" />
+                                 </children>
+                              </HBox>
+                              <VBox fx:id="inputDisplay" alignment="TOP_CENTER" prefHeight="326.0" prefWidth="199.0" spacing="5.0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="239.0" prefWidth="208.0">
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="210.0" text="Expected Output " />
+                              <HBox fx:id="outputBtns" alignment="CENTER" prefHeight="44.0" prefWidth="211.0" spacing="20.0">
+                                 <children>
+                                    <Button fx:id="layerAdderBtn11" mnemonicParsing="false" text="+" />
+                                    <Button fx:id="layerRemoverBtn11" mnemonicParsing="false" text="-" />
+                                 </children>
+                              </HBox>
+                              <VBox fx:id="outputDisplay" alignment="TOP_CENTER" prefHeight="327.0" prefWidth="208.0" spacing="5.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </right>
       </BorderPane>
   </children>
 </VBox>

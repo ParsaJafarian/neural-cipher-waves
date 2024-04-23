@@ -2,8 +2,6 @@ package com.nn.display;
 
 import javafx.beans.property.SimpleIntegerProperty;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class NeuralNetworkConfig {
     public static final int MIN_LAYERS = 2, MAX_LAYERS = 5;
     public static final int MIN_NEURONS = 2, MAX_NEURONS = 10;

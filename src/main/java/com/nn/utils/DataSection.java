@@ -1,6 +1,6 @@
-package com.data;
+package com.nn.utils;
 
-import com.nn.Matrix;
+import com.nn.algo.Matrix;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;

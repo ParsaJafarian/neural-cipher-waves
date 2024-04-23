@@ -1,7 +1,8 @@
 package com.nn.display;
 
-import com.nn.Matrix;
-import com.nn.NeuralNetwork;
+import com.nn.algo.Matrix;
+import com.nn.algo.NeuralNetwork;
+import com.nn.utils.ButtonContainer;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.layout.*;
 

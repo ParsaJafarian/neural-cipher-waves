@@ -1,4 +1,7 @@
-package com.nn;
+package com.nn.algo;
+
+import com.nn.algo.Matrix;
+import com.nn.algo.NeuralNetwork;
 
 import static com.nn.display.NeuralNetworkConfig.MIN_LAYERS;
 import static org.junit.jupiter.api.Assertions.assertEquals;

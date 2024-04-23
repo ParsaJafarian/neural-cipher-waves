@@ -1,4 +1,4 @@
-package com.nn.display;
+package com.nn.utils;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -6,7 +6,6 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
-
 
 public class LossSection {
     private final XYChart.Series<Number, Number> series = new XYChart.Series<>();
@@ -16,13 +15,14 @@ public class LossSection {
     public LossSection(@NotNull LineChart<Number, Number> chart, Label trainingLossLabel, Label epochLabel) {
         chart.getData().clear();
         chart.getData().add(series);
+        chart.setCreateSymbols(false);
 
-        //bind the lastloss to trainingLossLabel with 2 decimal places
+        series.getNode().setId("lossSeries");
+
         lastLoss.addListener((observable, oldValue, newValue) -> {
             trainingLossLabel.setText(String.format("%.2f", newValue));
         });
 
-        //bind the epoch to epochLabel
         epoch.addListener((observable, oldValue, newValue) -> {
             epochLabel.setText(String.valueOf(newValue));
         });
@@ -34,7 +34,7 @@ public class LossSection {
         lastLoss.set(loss);
     }
 
-    public void clear(){
+    public void clear() {
         series.getData().clear();
         lastLoss.set(0);
         epoch.set(0);

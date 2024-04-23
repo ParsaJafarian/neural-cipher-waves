@@ -1,11 +1,11 @@
-package com.nn;
+package com.nn.algo;
 
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.ArrayList;
 
-import static com.nn.NeuralNetworkTester.*;
+import static com.nn.algo.NeuralNetworkTester.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class NeuralNetworkTest {

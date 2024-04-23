@@ -1,6 +1,6 @@
 package com.nn.display;
 
-import com.nn.NeuralNetwork;
+import com.nn.algo.NeuralNetwork;
 
 import java.util.ArrayList;
 
