@@ -33,7 +33,15 @@ public class CC_Engine {
                     char enChar = (char) ('A' + FiPos);
                     encrypted.append(enChar);
                 } else{
+                    if (ensy){
+                        int InPos = character - 'a';
+                        int FiPos = (InPos + key) % 26;
+                        char enChar = (char) ('a' + FiPos);
+                        encrypted.append(enChar);
+                    }
+                    else{
                     encrypted.append(character);
+                }
                 }
             }
             else {
