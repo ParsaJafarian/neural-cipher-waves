@@ -1,4 +1,4 @@
-package com.nn.display;
+package com.nn.utils;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -16,13 +16,14 @@ public class LossSection {
     public LossSection(@NotNull LineChart<Number, Number> chart, Label trainingLossLabel, Label epochLabel) {
         chart.getData().clear();
         chart.getData().add(series);
+        chart.setCreateSymbols(false);
 
-        //bind the lastloss to trainingLossLabel with 2 decimal places
+        series.getNode().setId("lossSeries");
+
         lastLoss.addListener((observable, oldValue, newValue) -> {
             trainingLossLabel.setText(String.format("%.2f", newValue));
         });
 
-        //bind the epoch to epochLabel
         epoch.addListener((observable, oldValue, newValue) -> {
             epochLabel.setText(String.valueOf(newValue));
         });

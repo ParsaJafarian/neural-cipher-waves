@@ -1,4 +1,4 @@
-package com.nn.display;
+package com.nn.utils;
 
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -16,11 +16,11 @@ public class ButtonContainer extends HBox {
         this.getChildren().add(removeNeuronBtn);
     }
 
-    void setAddNeuronAction(Runnable action) {
+    public void setAddNeuronAction(Runnable action) {
         ((Button) this.getChildren().get(0)).setOnAction(e -> action.run());
     }
 
-    void setRemoveNeuronAction(Runnable action) {
+    public void setRemoveNeuronAction(Runnable action) {
         ((Button) this.getChildren().get(1)).setOnAction(e -> action.run());
     }
 }

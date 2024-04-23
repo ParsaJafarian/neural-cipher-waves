@@ -1,4 +1,4 @@
-package com.nn;
+package com.nn.algo;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

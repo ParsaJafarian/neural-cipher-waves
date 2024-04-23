@@ -1,4 +1,4 @@
-package com.nn;
+package com.nn.algo;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -10,8 +10,8 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.nn.Activation.activationFunctions;
-import static com.nn.Loss.losses;
+import static com.nn.algo.Activation.activationFunctions;
+import static com.nn.algo.Loss.losses;
 import static com.nn.display.NeuralNetworkConfig.*;
 
 /**

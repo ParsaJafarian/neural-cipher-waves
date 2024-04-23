@@ -1,4 +1,4 @@
-package com;
+package com.nn.utils;
 
 import static com.nn.display.NeuralNetworkConfig.FIRST_LAYER_NEURONS;
 import static com.nn.display.NeuralNetworkConfig.LAST_LAYER_NEURONS;
