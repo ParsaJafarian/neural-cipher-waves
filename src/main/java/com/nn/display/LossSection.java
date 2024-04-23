@@ -29,9 +29,9 @@ public class LossSection {
     }
 
     public void addData(double loss) {
+        epoch.set(epoch.get() + 1);
         series.getData().add(new XYChart.Data<>(epoch.get(), loss));
         lastLoss.set(loss);
-        epoch.set(epoch.get() + 1);
     }
 
     public void clear(){
