@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
+import javafx.animation.AnimationTimer;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
@@ -59,9 +60,6 @@ public class SpringController implements Initializable {
     String angularF;
     boolean cont = true;
     ArrayList<Circle> dots = new ArrayList<>();
-    Timeline alert = new Timeline(new KeyFrame(new Duration(0.1), event -> {
-        dotCreation();
-    }));
     double endSpring;
     double totalE;
     double amplitude;
@@ -73,7 +71,16 @@ public class SpringController implements Initializable {
     private Label angF;
     @FXML
     private Button exit;
-
+    LineChart r;
+    XYChart.Series series;
+    XYChart.Series series2;
+    ArrayList time;
+    int t =0;
+    Timeline alert = new Timeline(new KeyFrame(new Duration(0.1), event -> {
+        dotCreation();
+        addEnergy(time, series, series2);
+    }));
+    PathTransition pathTransition;
     /**
      * Initializes the controller class.
      */
@@ -82,21 +89,22 @@ public class SpringController implements Initializable {
         // TODO
         path.setStartX(path.getStartX() + (block.getWidth() / 2));
         endSpring = path.getEndX();
-        PathTransition pathTransition = new PathTransition(new Duration(800), path, block);
+        System.out.println(path.getStartX());
+        pathTransition = new PathTransition(new Duration(800), path, block);
         pathTransition.setCycleCount(Animation.INDEFINITE);
         pathTransition.setInterpolator(Interpolator.EASE_BOTH);
         //pathTransition.jumpTo(new Duration(currentTimeMillis()));
         pathTransition.setAutoReverse(true);
         pathTransition.play();
-        alert.play();
+        
 
         setAngularVelocityAndPeriod(pathTransition);
         equationCreation();
+        alert.play();
 
         freq.valueProperty().addListener((observable, oldvalue, newvalue) -> {
             pathTransition.setRate((double) newvalue);
-            setAngularVelocityAndPeriod(pathTransition);
-            freq.setOnMouseReleased(e -> {
+            setAngularVelocityAndPeriod(pathTransition);            freq.setOnMouseReleased(e -> {
                 equationCreation();
             });
         });
@@ -161,19 +169,22 @@ public class SpringController implements Initializable {
     }
 
     public void equationCreation() {
+        pathTransition.stop();
+        pathTransition.play();
         amplitude = Math.round((path.getEndX() - path.getStartX()) / 100 * 100.0) / 100.0;
         String equ = String.valueOf(amplitude) + "sin" + "(" + angularF + "t" + " + π/2)";
         equation.setText(equ);
         totalE = 0.5 * springConstant * Math.pow(amplitude, 2);
         graphCreation();
     }
-    LineChart r;
+    
 
     public void graphCreation() {
+        t=0;
         back.getChildren().remove(r);
-        ArrayList potential = new ArrayList<>();
-        ArrayList kinetic = new ArrayList<>();
-        ArrayList time = new ArrayList<>();
+        //ArrayList potential = new ArrayList<>();
+        //ArrayList kinetic = new ArrayList<>();
+        time = new ArrayList<>();
         NumberAxis x = new NumberAxis(0, dur, 1);
         x.setLabel("Time (period)");
         NumberAxis y = new NumberAxis(0, totalE, 1);
@@ -189,31 +200,44 @@ public class SpringController implements Initializable {
         }
 
         //Potential enrrgy values according to the time values created above
-        for (int i = 0; i < time.size(); i++) {
-            double displacement = amplitude * Math.sin(((2 * Math.PI) / dur) * (double) time.get(i));
-            double val = 0.5 * springConstant * Math.pow(displacement, 2);
-            potential.add(val);
-        }
-        XYChart.Series series = new XYChart.Series<>();
+        series = new XYChart.Series<>();
         series.setName("Potential Energy");
-        for (int i = 0; i < time.size(); i++) {
-            series.getData().add(new XYChart.Data(time.get(i), potential.get(i)));
-        }
-
+//        for (int i = 0; i < time.size(); i++) {
+//            double displacement = amplitude * Math.sin(((2 * Math.PI) / dur) * (double) time.get(i));
+//            double val = 0.5 * springConstant * Math.pow(displacement, 2);
+//            potential.add(val);
+//            series.getData().add(new XYChart.Data(time.get(i), potential.get(i)));
+//        }
+        
         //Total energy value: TotalE
         //Kinetic enrrgy values according to the time values created above
-        for (int i = 0; i < time.size(); i++) {
-            double val = totalE - (double) potential.get(i);
-            kinetic.add(val);
-        }
-        XYChart.Series series2 = new XYChart.Series<>();
+        series2 = new XYChart.Series<>();
         series2.setName("Kinetic Energy");
-        for (int i = 0; i < time.size(); i++) {
-            series2.getData().add(new XYChart.Data(time.get(i), kinetic.get(i)));
-        }
+//        for (int i = 0; i < time.size(); i++) {
+//            double val = totalE - (double) potential.get(i);
+//            kinetic.add(val);
+//            series2.getData().add(new XYChart.Data(time.get(i), kinetic.get(i)));
+//        }
+        
 
         r.getData().addAll(series, series2);
         r.setCreateSymbols(false);
         back.getChildren().add(r);
+    }
+    
+    public void findTime(){
+        System.out.println(path.getStartX());
+    }
+    
+    
+    public void addEnergy(ArrayList time, XYChart.Series series, XYChart.Series series2){
+        if (t<time.size()) {
+            double displacement = amplitude * Math.sin(((2 * Math.PI) / dur) * (double) time.get(t));
+            double val = 0.5 * springConstant * Math.pow(displacement, 2);
+            series.getData().add(new XYChart.Data(time.get(t), val));
+            double val2 = totalE - (double) val;
+            series2.getData().add(new XYChart.Data(time.get(t), val2));
+            t++;
+        }
     }
 }
