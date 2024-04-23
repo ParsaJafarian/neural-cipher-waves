@@ -12,6 +12,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static com.nn.utils.Alerts.showFirstLayerAlert;
 import static com.nn.utils.Alerts.showLastLayerAlert;
 import static com.nn.display.NeuralNetworkConfig.FIRST_LAYER_NEURONS;
@@ -32,7 +34,6 @@ public class Controller {
     private NeuralNetworkDisplay networkDisplay;
     private LossSection lossSection;
     private DataSection dataSection;
-    private boolean isTraining = false;
 
     @FXML
     public void initialize() {
@@ -43,21 +44,23 @@ public class Controller {
         lossSection = new LossSection(chart, trainingLossLabel, epochLabel);
         dataSection = new DataSection(inputDisplay, inputBtns, outputDisplay, outputBtns);
 
-        trainBtn.setOnAction(e -> {
-            Matrix[][] trainData = dataSection.getData();
-            if (network.getNumNeurons(0) != FIRST_LAYER_NEURONS.get())
-                showFirstLayerAlert();
-            else if (network.getNumNeurons(-1) != LAST_LAYER_NEURONS.get())
-                showLastLayerAlert();
-            else
-                trainNetworkForOneEpoch(trainData);
-        });
+        trainBtn.setOnAction(e -> train());
         clrBtn.setOnAction(e -> clear());
         layerAdderBtn.setOnAction(e -> networkDisplay.addLayer());
         layerRemoverBtn.setOnAction(e -> networkDisplay.removeLayer());
     }
 
-    private void trainNetworkForOneEpoch(Matrix[][] trainData){
+    private void train(){
+        Matrix[][] trainData = dataSection.getData();
+        if (network.getNumNeurons(0) != FIRST_LAYER_NEURONS.get())
+            showFirstLayerAlert();
+        else if (network.getNumNeurons(-1) != LAST_LAYER_NEURONS.get())
+            showLastLayerAlert();
+        else
+            trainForOneEpoch(trainData);
+    }
+
+    private void trainForOneEpoch(Matrix[][] trainData){
         network.setLearningRate(learningRateCB.getValue());
         network.setActivation(activationCB.getValue());
         network.setLoss(lossCB.getValue());
@@ -84,25 +87,5 @@ public class Controller {
 
         lossCB.getItems().addAll("mse", "mae");
         lossCB.getSelectionModel().select(0);
-    }
-
-    private void train(){
-        new Thread(() -> {
-            while (isTraining) {
-                try {
-                    network.setLearningRate(learningRateCB.getValue());
-                    network.setActivation(activationCB.getValue());
-                    network.setLoss(lossCB.getValue());
-
-                    Matrix[][] trainData = dataSection.getData();
-
-                    network.sgd(trainData, null, 1, 1);
-
-                    networkDisplay.update();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
     }
 }
