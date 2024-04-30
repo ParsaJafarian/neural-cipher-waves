@@ -3,6 +3,7 @@ package com.cipher;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -20,6 +21,7 @@ public class Controller {
     public TextArea Input;
     public TextArea Preview;
 
+    public RadioButton decrypt;
     public Circle innerC;
     public Circle outerC;
     @FXML
@@ -72,7 +74,7 @@ public class Controller {
         {
             key = fromInd-toInd;
         }
-        Preview.setText(CC_Engine.CC_encrypt(Input.getText(),key,Ensy.isSelected()));
+        Preview.setText(CC_Engine.CC_encrypt(Input.getText(),key,Ensy.isSelected(),decrypt.isSelected()));
     }
     @FXML
     public void onDraggedO(MouseEvent t){
@@ -102,7 +104,7 @@ public class Controller {
         {
             key = fromInd-toInd;
         }
-        Preview.setText(CC_Engine.CC_encrypt(Input.getText(),key,Ensy.isSelected()));
+        Preview.setText(CC_Engine.CC_encrypt(Input.getText(),key,Ensy.isSelected(),decrypt.isSelected()));
     }
     public void onKeySet(MouseEvent r){
         //int fromInd = (int) Math.ceil((inner.getRotate()-13.84615384615385/2)/13.84615384615385);
@@ -117,6 +119,6 @@ public class Controller {
         startII=0;
         startO=0;
         startOO=0;
-        Preview.setText(CC_Engine.CC_encrypt(Input.getText(),0,Ensy.isSelected()));
+        Preview.setText(CC_Engine.CC_encrypt(Input.getText(),0,Ensy.isSelected(),decrypt.isSelected()));
     }
 }

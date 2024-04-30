@@ -114,11 +114,20 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <TextArea fx:id="Input" prefHeight="680.0" prefWidth="420.0" promptText="Hi team, I woke up sick. I can't come to work today!" wrapText="true">
+                        <TextArea fx:id="Input" prefHeight="640.0" prefWidth="343.0" promptText="Hi team, I woke up sick. I can't come to work today!" wrapText="true">
                            <padding>
                               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                            </padding>
                         </TextArea>
+                        <HBox alignment="CENTER" prefHeight="44.0" prefWidth="343.0">
+                           <children>
+                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Select File">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                   <VBox alignment="TOP_CENTER" prefHeight="707.0" prefWidth="412.0">
@@ -136,7 +145,7 @@
                                     <Insets right="5.0" />
                                  </HBox.margin>
                               </RadioButton>
-                              <RadioButton mnemonicParsing="false" prefHeight="45.0" prefWidth="125.0" styleClass="toggle-button" stylesheets="@caesar.css" text="Decrypt   " toggleGroup="$ende">
+                              <RadioButton fx:id="decrypt" mnemonicParsing="false" prefHeight="45.0" prefWidth="125.0" styleClass="toggle-button" stylesheets="@caesar.css" text="Decrypt   " toggleGroup="$ende">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -184,11 +193,20 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <TextArea fx:id="Preview" editable="false" prefHeight="670.0" prefWidth="420.0" promptText="Kl whdp, L zrnh xs vlfn. L fdq'w frph wr zrun wrgdb!" wrapText="true">
+                        <TextArea fx:id="Preview" editable="false" prefHeight="640.0" prefWidth="343.0" promptText="Kl whdp, L zrnh xs vlfn. L fdq'w frph wr zrun wrgdb!" wrapText="true">
                            <padding>
                               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                            </padding>
                         </TextArea>
+                        <HBox alignment="CENTER" prefHeight="44.0" prefWidth="343.0">
+                           <children>
+                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Save File">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                </children>
