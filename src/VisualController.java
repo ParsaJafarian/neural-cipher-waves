@@ -46,14 +46,6 @@ public class VisualController implements Initializable {
     private Circle node;
     @FXML
     private AnchorPane back;
-
-    ArrayList<Circle> dots = new ArrayList<>();
-    /**
-     * Initializes the controller class.
-     */
-    Timeline alert = new Timeline(new KeyFrame(new Duration(0.1), event -> {
-        dotCreation();
-    }));
     @FXML
     private Slider freq;
     @FXML
@@ -66,11 +58,21 @@ public class VisualController implements Initializable {
     private Label angF;
     @FXML
     private Label period;
+    @FXML
+    public Button exit;
+    
+    
+    ArrayList<Circle> dots = new ArrayList<>();
+    /**
+     * Initializes the controller class.
+     */
+    Timeline alert = new Timeline(new KeyFrame(new Duration(0.1), event -> {
+        dotCreation();
+    }));
     double angle;
     String angularF;
     boolean cont = true;
-    @FXML
-    public Button exit;
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

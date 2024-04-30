@@ -49,7 +49,6 @@ public class PendulumController implements Initializable {
     private Line rope2;
     @FXML
     private Circle object2;
-    private Arc path2;
     @FXML
     private Button Shape1;
     @FXML
@@ -58,11 +57,6 @@ public class PendulumController implements Initializable {
     private Slider lengthSlider;
     @FXML
     private Slider angleSlider;
-
-    double angleVal;
-    double length;
-    double period;
-    double angularF;
     @FXML
     private Line lineReference;
     @FXML
@@ -77,12 +71,21 @@ public class PendulumController implements Initializable {
     private Label equationText;
     @FXML
     private Label equationText1;
-    double pendulumStartingHeight;
-    double mass;
     @FXML
     private LineChart<?, ?> EChart;
     @FXML
     private Button exit;
+    
+    
+    private Arc path2;
+    double angleVal;
+    double length;
+    double period;
+    double angularF;
+    double pendulumStartingHeight;
+    double mass;
+    LineChart r;
+    
 
     /**
      * Initializes the controller class.
@@ -160,6 +163,7 @@ public class PendulumController implements Initializable {
         rope.startYProperty().bind(pivot.centerYProperty());
         rope.endXProperty().bind(obj.translateXProperty().add(obj.getCenterX()));
         rope.endYProperty().bind(obj.translateYProperty().add(obj.getCenterY()));
+        obj.setVisible(true);
     }
 
     public void equationCreation() {
@@ -170,8 +174,6 @@ public class PendulumController implements Initializable {
         equationText.setText(equ);
         graphCreation();
     }
-
-    LineChart r;
 
     public void graphCreation() {
         back.getChildren().remove(r);

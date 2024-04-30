@@ -25,6 +25,8 @@ public class MenuController implements Initializable {
     private Button pendulum;
     @FXML
     private Button spring;
+    
+    
     private VisualController visual = new VisualController();
     /**
      * Initializes the controller class.

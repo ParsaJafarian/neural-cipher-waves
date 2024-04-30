@@ -56,7 +56,31 @@ public class SpringController implements Initializable {
     private Label period;
     @FXML
     private Label constant;
-
+    @FXML
+    private LineChart<?, ?> kineticGraph;
+    @FXML
+    private Label angF;
+    @FXML
+    private Button exit;
+    @FXML
+    private Line springPartA;
+    @FXML
+    private Line springPartB;
+    @FXML
+    private Line springPartE;
+    @FXML
+    private Line springPartD;
+    @FXML
+    private Line springPartC;
+    @FXML
+    private Line springPartF;
+    @FXML
+    private Line springPartH;
+    @FXML
+    private Line springPartG;
+    @FXML
+    private Rectangle stand;
+    
     String angularF;
     boolean cont = true;
     ArrayList<Circle> dots = new ArrayList<>();
@@ -65,12 +89,6 @@ public class SpringController implements Initializable {
     double amplitude;
     double springConstant;
     double dur;
-    @FXML
-    private LineChart<?, ?> kineticGraph;
-    @FXML
-    private Label angF;
-    @FXML
-    private Button exit;
     LineChart r;
     XYChart.Series series;
     XYChart.Series series2;
@@ -81,19 +99,37 @@ public class SpringController implements Initializable {
         addEnergy(time, series, series2);
     }));
     PathTransition pathTransition;
+    
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
+     
+//        springPartA.endXProperty().bind(springPartB.translateXProperty().add(springPartB.startXProperty()));;
+//        springPartA.endYProperty().bind(springPartB.translateYProperty().add(springPartB.startYProperty()));;
+//        springPartB.endXProperty().bind(springPartC.translateXProperty().add(springPartC.startXProperty()));;
+//        springPartB.endYProperty().bind(springPartC.translateYProperty().add(springPartC.startYProperty()));;
+//        springPartC.endXProperty().bind(springPartD.translateXProperty().add(springPartD.startXProperty()));;
+//        springPartC.endYProperty().bind(springPartD.translateYProperty().add(springPartD.startYProperty()));;
+//        springPartD.endXProperty().bind(springPartE.translateXProperty().add(springPartE.startXProperty()));;
+//        springPartD.endYProperty().bind(springPartE.translateYProperty().add(springPartE.startYProperty()));;
+//        springPartE.endXProperty().bind(springPartF.translateXProperty().add(springPartF.startXProperty()));;
+//        springPartE.endYProperty().bind(springPartF.translateYProperty().add(springPartF.startYProperty()));;
+//        springPartF.endXProperty().bind(springPartG.translateXProperty().add(springPartG.startXProperty()));;
+//        springPartF.endYProperty().bind(springPartG.translateYProperty().add(springPartG.startYProperty()));;
+//        springPartG.endXProperty().bind(block.translateXProperty().add(block.getTranslateX()));
+//        springPartG.endYProperty().bind(block.translateYProperty().add(block.getTranslateX()));
+
+        
         path.setStartX(path.getStartX() + (block.getWidth() / 2));
         endSpring = path.getEndX();
-        System.out.println(path.getStartX());
         pathTransition = new PathTransition(new Duration(800), path, block);
         pathTransition.setCycleCount(Animation.INDEFINITE);
         pathTransition.setInterpolator(Interpolator.EASE_BOTH);
-        //pathTransition.jumpTo(new Duration(currentTimeMillis()));
         pathTransition.setAutoReverse(true);
         pathTransition.play();
         
@@ -104,7 +140,10 @@ public class SpringController implements Initializable {
 
         freq.valueProperty().addListener((observable, oldvalue, newvalue) -> {
             pathTransition.setRate((double) newvalue);
-            setAngularVelocityAndPeriod(pathTransition);            freq.setOnMouseReleased(e -> {
+            setAngularVelocityAndPeriod(pathTransition);         
+            pathTransition.stop();
+            pathTransition.play();
+            freq.setOnMouseReleased(e -> {
                 equationCreation();
             });
         });
@@ -184,7 +223,7 @@ public class SpringController implements Initializable {
         back.getChildren().remove(r);
         //ArrayList potential = new ArrayList<>();
         //ArrayList kinetic = new ArrayList<>();
-        time = new ArrayList<>();
+        
         NumberAxis x = new NumberAxis(0, dur, 1);
         x.setLabel("Time (period)");
         NumberAxis y = new NumberAxis(0, totalE, 1);
@@ -195,29 +234,21 @@ public class SpringController implements Initializable {
         r.setLayoutX(kineticGraph.getLayoutX());
         r.setLayoutY(kineticGraph.getLayoutY());
         //creating arrayList for time values for creating energy graphs
-        for (double i = 0; i < dur; i += 0.01) {
+        time = new ArrayList<>();
+        for (double i = 0; i < dur; i += 0.017) {
             time.add(i);
         }
 
         //Potential enrrgy values according to the time values created above
         series = new XYChart.Series<>();
         series.setName("Potential Energy");
-//        for (int i = 0; i < time.size(); i++) {
-//            double displacement = amplitude * Math.sin(((2 * Math.PI) / dur) * (double) time.get(i));
-//            double val = 0.5 * springConstant * Math.pow(displacement, 2);
-//            potential.add(val);
-//            series.getData().add(new XYChart.Data(time.get(i), potential.get(i)));
-//        }
+
         
         //Total energy value: TotalE
         //Kinetic enrrgy values according to the time values created above
         series2 = new XYChart.Series<>();
         series2.setName("Kinetic Energy");
-//        for (int i = 0; i < time.size(); i++) {
-//            double val = totalE - (double) potential.get(i);
-//            kinetic.add(val);
-//            series2.getData().add(new XYChart.Data(time.get(i), kinetic.get(i)));
-//        }
+
         
 
         r.getData().addAll(series, series2);
@@ -225,9 +256,6 @@ public class SpringController implements Initializable {
         back.getChildren().add(r);
     }
     
-    public void findTime(){
-        System.out.println(path.getStartX());
-    }
     
     
     public void addEnergy(ArrayList time, XYChart.Series series, XYChart.Series series2){
@@ -239,5 +267,7 @@ public class SpringController implements Initializable {
             series2.getData().add(new XYChart.Data(time.get(t), val2));
             t++;
         }
+        else{time.clear();
+            graphCreation();}
     }
 }
