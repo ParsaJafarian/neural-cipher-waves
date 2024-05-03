@@ -1,5 +1,6 @@
 package com.cipher;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -8,9 +9,20 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
 
 public class Controller {
+    public File inputFile;
+    public Button savB;
+    public Button selB;
     public CheckBox Ensy;
     public final String dict = "abcdefghijklmnopqrstuvwxyz";
     public Button reset;
@@ -106,10 +118,37 @@ public class Controller {
         }
         Preview.setText(CC_Engine.CC_encrypt(Input.getText(),key,Ensy.isSelected(),decrypt.isSelected()));
     }
-    public void onKeySet(MouseEvent r){
-        //int fromInd = (int) Math.ceil((inner.getRotate()-13.84615384615385/2)/13.84615384615385);
-        //int key = fromInd;
-        //Preview.setText(CC_Engine.CC_encrypt(Input.getText(),key));
+    public void onsavB() throws FileNotFoundException {
+        Stage pupop = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File("data/cipher"));
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showSaveDialog(pupop);
+        if (file != null) {
+            saveTextToFile(Preview.getText(), file);
+        }
+    }
+    private void saveTextToFile(String content, File file) throws FileNotFoundException {
+        PrintWriter writer;
+        writer = new PrintWriter(file);
+        writer.println(content);
+        writer.close();
+    }
+    public void onselB() throws FileNotFoundException {
+        Stage pupop = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Text Files", "*.txt")
+        );
+        fileChooser.setInitialDirectory(new File("data/cipher"));
+        File selectedFile = fileChooser.showOpenDialog(pupop);
+        inputFile = selectedFile;
+        Input.clear();
+        Scanner scanner = new Scanner(selectedFile);
+        while (scanner.hasNext()){
+            Input.setText(Input.getText()+scanner.next());
+        }
     }
     @FXML
     public void resetClicked(){

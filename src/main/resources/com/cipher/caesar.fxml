@@ -121,7 +121,7 @@
                         </TextArea>
                         <HBox alignment="CENTER" prefHeight="44.0" prefWidth="343.0">
                            <children>
-                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Select File">
+                              <Button fx:id="selB" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onselB" text="Select File">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
@@ -176,7 +176,7 @@
                                  </image>
                               </ImageView>
                               <Circle fx:id="outerC" fill="#00438200" onMouseDragged="#onDraggedO" onMousePressed="#onMousePressedO" radius="208.0" stroke="BLACK" strokeType="INSIDE" />
-                              <Circle fx:id="innerC" fill="#1f93ff00" onMouseDragged="#onDraggedI" onMousePressed="#onMousePressedI" onMouseReleased="#onKeySet" radius="164.0" stroke="BLACK" strokeType="INSIDE" />
+                              <Circle fx:id="innerC" fill="#1f93ff00" onMouseDragged="#onDraggedI" onMousePressed="#onMousePressedI" radius="164.0" stroke="BLACK" strokeType="INSIDE" />
                            </children>
                         </StackPane>
                         <Button fx:id="reset" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#resetClicked" text="Reset" textAlignment="CENTER">
@@ -200,7 +200,7 @@
                         </TextArea>
                         <HBox alignment="CENTER" prefHeight="44.0" prefWidth="343.0">
                            <children>
-                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Save File">
+                              <Button fx:id="savB" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onsavB" text="Save File">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
