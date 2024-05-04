@@ -30,6 +30,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
@@ -75,12 +76,13 @@ public class SpringController implements Initializable {
     @FXML
     private Line springPartF;
     @FXML
-    private Line springPartH;
-    @FXML
     private Line springPartG;
     @FXML
+    private Line springPartH;
+
+    @FXML
     private Rectangle stand;
-    
+
     String angularF;
     boolean cont = true;
     ArrayList<Circle> dots = new ArrayList<>();
@@ -93,38 +95,43 @@ public class SpringController implements Initializable {
     XYChart.Series series;
     XYChart.Series series2;
     ArrayList time;
-    int t =0;
-    Timeline alert = new Timeline(new KeyFrame(new Duration(0.1), event -> {
-        dotCreation();
-        addEnergy(time, series, series2);
-    }));
+    int t = 0;
+//    Timeline alert = new Timeline(new KeyFrame(new Duration(0.1), event -> {
+//        dotCreation();
+//        addEnergy(time, series, series2);
+//    }));
+    private AnimationTimer timer;
     PathTransition pathTransition;
-    
-    
+    @FXML
+    private Polyline springPoly;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
-     
-//        springPartA.endXProperty().bind(springPartB.translateXProperty().add(springPartB.startXProperty()));;
-//        springPartA.endYProperty().bind(springPartB.translateYProperty().add(springPartB.startYProperty()));;
-//        springPartB.endXProperty().bind(springPartC.translateXProperty().add(springPartC.startXProperty()));;
-//        springPartB.endYProperty().bind(springPartC.translateYProperty().add(springPartC.startYProperty()));;
-//        springPartC.endXProperty().bind(springPartD.translateXProperty().add(springPartD.startXProperty()));;
-//        springPartC.endYProperty().bind(springPartD.translateYProperty().add(springPartD.startYProperty()));;
-//        springPartD.endXProperty().bind(springPartE.translateXProperty().add(springPartE.startXProperty()));;
-//        springPartD.endYProperty().bind(springPartE.translateYProperty().add(springPartE.startYProperty()));;
-//        springPartE.endXProperty().bind(springPartF.translateXProperty().add(springPartF.startXProperty()));;
-//        springPartE.endYProperty().bind(springPartF.translateYProperty().add(springPartF.startYProperty()));;
-//        springPartF.endXProperty().bind(springPartG.translateXProperty().add(springPartG.startXProperty()));;
-//        springPartF.endYProperty().bind(springPartG.translateYProperty().add(springPartG.startYProperty()));;
-//        springPartG.endXProperty().bind(block.translateXProperty().add(block.getTranslateX()));
-//        springPartG.endYProperty().bind(block.translateYProperty().add(block.getTranslateX()));
 
+//        springPartA.endXProperty().bind(springPartB.translateXProperty().add(springPartB.startXProperty()));;
+//        springPartB.endXProperty().bind(springPartC.translateXProperty().add(springPartC.startXProperty()));;
+//        springPartC.endXProperty().bind(springPartD.translateXProperty().add(springPartD.startXProperty()));;
+//        springPartD.endXProperty().bind(springPartE.translateXProperty().add(springPartE.startXProperty()));;
+//        springPartE.endXProperty().bind(springPartF.translateXProperty().add(springPartF.startXProperty()));;
+//        springPartF.endXProperty().bind(springPartG.translateXProperty().add(springPartG.startXProperty()));;
+//        springPartG.startXProperty().bind(springPartG.translateXProperty().add(springPartH.endXProperty()));;
+//        springPartG.endXProperty().bind(springPartH.translateXProperty().add(springPartH.startXProperty()));;
+//        springPartH.endXProperty().bind(springPartH.startXProperty().add(springPartH.startXProperty()));
+//        springPartH.startXProperty().bind(block.translateXProperty().add(block.xProperty()));
         
+        
+        timer = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                dotCreation();
+                addEnergy(time, series, series2);
+            }
+        };
+        timer.start();
         path.setStartX(path.getStartX() + (block.getWidth() / 2));
         endSpring = path.getEndX();
         pathTransition = new PathTransition(new Duration(800), path, block);
@@ -132,18 +139,20 @@ public class SpringController implements Initializable {
         pathTransition.setInterpolator(Interpolator.EASE_BOTH);
         pathTransition.setAutoReverse(true);
         pathTransition.play();
-        
 
         setAngularVelocityAndPeriod(pathTransition);
         equationCreation();
-        alert.play();
+        //alert.play();
 
         freq.valueProperty().addListener((observable, oldvalue, newvalue) -> {
+            cont = false;
             pathTransition.setRate((double) newvalue);
-            setAngularVelocityAndPeriod(pathTransition);         
-            pathTransition.stop();
-            pathTransition.play();
+            setAngularVelocityAndPeriod(pathTransition);
+            block.setVisible(false);
+
             freq.setOnMouseReleased(e -> {
+                cont = true;
+                block.setVisible(true);
                 equationCreation();
             });
         });
@@ -163,9 +172,9 @@ public class SpringController implements Initializable {
             pathTransition.play();
             equationCreation();
         });
-        
-        exit.setOnAction(e->{
-        try {
+
+        exit.setOnAction(e -> {
+            try {
                 //changes the root of the scene to direct the user to the slideshow before the race starts
                 exit.getScene().setRoot(FXMLLoader.load(getClass().getResource("Menu.fxml")));
             } catch (IOException ex) {
@@ -186,9 +195,11 @@ public class SpringController implements Initializable {
                 translate.play();
                 translate.setOnFinished(e -> {
                     back.getChildren().remove(translate.getNode());
+                    dots.remove(translate.getNode());
                 });
+            } else {
+                back.getChildren().removeAll(dots);
             }
-            alert.play();
 
         });
     }
@@ -216,14 +227,13 @@ public class SpringController implements Initializable {
         totalE = 0.5 * springConstant * Math.pow(amplitude, 2);
         graphCreation();
     }
-    
 
     public void graphCreation() {
-        t=0;
+        t = 0;
         back.getChildren().remove(r);
         //ArrayList potential = new ArrayList<>();
         //ArrayList kinetic = new ArrayList<>();
-        
+
         NumberAxis x = new NumberAxis(0, dur, 1);
         x.setLabel("Time (period)");
         NumberAxis y = new NumberAxis(0, totalE, 1);
@@ -243,23 +253,18 @@ public class SpringController implements Initializable {
         series = new XYChart.Series<>();
         series.setName("Potential Energy");
 
-        
         //Total energy value: TotalE
         //Kinetic enrrgy values according to the time values created above
         series2 = new XYChart.Series<>();
         series2.setName("Kinetic Energy");
 
-        
-
         r.getData().addAll(series, series2);
         r.setCreateSymbols(false);
         back.getChildren().add(r);
     }
-    
-    
-    
-    public void addEnergy(ArrayList time, XYChart.Series series, XYChart.Series series2){
-        if (t<time.size()) {
+
+    public void addEnergy(ArrayList time, XYChart.Series series, XYChart.Series series2) {
+        if (t < time.size()) {
             double displacement = amplitude * Math.sin(((2 * Math.PI) / dur) * (double) time.get(t));
             double val = 0.5 * springConstant * Math.pow(displacement, 2);
             series.getData().add(new XYChart.Data(time.get(t), val));
@@ -267,7 +272,6 @@ public class SpringController implements Initializable {
             series2.getData().add(new XYChart.Data(time.get(t), val2));
             t++;
         }
-        else{time.clear();
-            graphCreation();}
+
     }
 }

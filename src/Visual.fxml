@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="back" maxHeight="200.0" minHeight="800.0" prefHeight="800.0" prefWidth="1500.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VisualController">
+<AnchorPane id="AnchorPane" fx:id="back" maxHeight="200.0" minHeight="800.0" prefHeight="800.0" prefWidth="1500.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VisualController">
    <children>
       <Circle fx:id="border" fill="#568aba00" layoutX="361.0" layoutY="276.0" radius="232.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="10.0" />
       <Circle fx:id="path" fill="#1f93ff00" layoutX="361.0" layoutY="276.0" radius="216.0" stroke="RED" strokeType="INSIDE" />
@@ -18,7 +18,7 @@
             <Font name="System Bold" size="31.0" />
          </font>
       </Label>
-      <Slider fx:id="amp" layoutX="265.0" layoutY="744.0" max="60.0" min="-60.0" prefHeight="14.0" prefWidth="560.0" />
+      <Slider fx:id="amp" layoutX="265.0" layoutY="744.0" max="30.0" min="-60.0" prefHeight="14.0" prefWidth="560.0" />
       <Label layoutX="77.0" layoutY="728.0" prefHeight="46.0" prefWidth="170.0" text="Amplitude" textFill="WHITE">
          <font>
             <Font name="System Bold" size="31.0" />

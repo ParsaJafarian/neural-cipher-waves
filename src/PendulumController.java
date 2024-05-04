@@ -52,8 +52,6 @@ public class PendulumController implements Initializable {
     @FXML
     private Button Shape1;
     @FXML
-    private Button button2;
-    @FXML
     private Slider lengthSlider;
     @FXML
     private Slider angleSlider;
@@ -75,8 +73,7 @@ public class PendulumController implements Initializable {
     private LineChart<?, ?> EChart;
     @FXML
     private Button exit;
-    
-    
+
     private Arc path2;
     double angleVal;
     double length;
@@ -85,7 +82,16 @@ public class PendulumController implements Initializable {
     double pendulumStartingHeight;
     double mass;
     LineChart r;
-    
+    @FXML
+    private Button Shape2;
+    @FXML
+    private Button Shape3;
+    @FXML
+    private Button Shape4;
+    @FXML
+    private Circle object3;
+    @FXML
+    private Circle object4;
 
     /**
      * Initializes the controller class.
@@ -93,7 +99,7 @@ public class PendulumController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        ropeSet(object);
+        ropeSetCircle(object);
         mass = 1;
         angleVal = angleSlider.getValue();
         length = lengthSlider.getValue();
@@ -111,31 +117,33 @@ public class PendulumController implements Initializable {
             angularF = (2 * Math.PI) / period;
             pathTransition.setDuration(Duration.seconds(period / 2));
             arcPathCreation(length * 500, angleVal, pathTransition);
-            lengthSlider.setOnMouseReleased(e->{
-            equationCreation();
+            lengthSlider.setOnMouseReleased(e -> {
+                equationCreation();
             });
         });
         angleSlider.valueProperty().addListener((observable, oldvalue, newvalue) -> {
             angleVal = (double) newvalue;
             arcPathCreation(length * 500, angleVal, pathTransition);
-            angleSlider.setOnMouseReleased(e->{
-            equationCreation();
+            angleSlider.setOnMouseReleased(e -> {
+                equationCreation();
             });
         });
 
         Shape1.setOnAction(e -> {
-            if (!pathTransition.getNode().equals(object2)) {
-                pathTransition.getNode().setVisible(false);
-            }
-            ropeSet(object2);
-            mass = 2;
-            pathTransition.setNode(object2);
-            pathTransition.stop();
-            pathTransition.play();
+            setNewObjectCircle(pathTransition, object);
+        });
+        Shape2.setOnAction(e -> {
+            setNewObjectCircle(pathTransition, object2);
+        });
+        Shape3.setOnAction(e -> {
+            setNewObjectCircle(pathTransition, object3);
+        });
+        Shape4.setOnAction(e -> {
+            setNewObjectCircle(pathTransition, object4);
         });
 
-        exit.setOnAction(e->{
-        try {
+        exit.setOnAction(e -> {
+            try {
                 //changes the root of the scene to direct the user to the slideshow before the race starts
                 exit.getScene().setRoot(FXMLLoader.load(getClass().getResource("Menu.fxml")));
             } catch (IOException ex) {
@@ -143,11 +151,30 @@ public class PendulumController implements Initializable {
         });
     }
 
+    public void setNewObjectCircle(PathTransition pathTransition, Circle shape) {
+        if (!pathTransition.getNode().equals(shape)) {
+            pathTransition.getNode().setVisible(false);
+        }
+        ropeSetCircle(shape);
+        mass = 2;
+        pathTransition.setNode(shape);
+        pathTransition.stop();
+        pathTransition.play();
+    }
+
+    public void ropeSetCircle(Circle obj) {
+        rope.startXProperty().bind(pivot.centerXProperty());
+        rope.startYProperty().bind(pivot.centerYProperty());
+        rope.endXProperty().bind(obj.translateXProperty().add(obj.getCenterX()));
+        rope.endYProperty().bind(obj.translateYProperty().add(obj.getCenterY()));
+        obj.setVisible(true);
+    }
+
     public void arcPathCreation(double length, double angle, PathTransition pathTransition) {
         double rad = angle * (Math.PI / 180);
         double yDifference = length - (length * Math.cos(rad));
         double xDifference = length * Math.sin(rad);
-        
+
         path.setLayoutX(0);
         path.setLayoutY(0);
         path.setCenterX(lineReference.getLayoutX());
@@ -156,14 +183,6 @@ public class PendulumController implements Initializable {
         path.setRadiusY(yDifference);
         pathTransition.stop();
         pathTransition.play();
-    }
-
-    public void ropeSet(Circle obj) {
-        rope.startXProperty().bind(pivot.centerXProperty());
-        rope.startYProperty().bind(pivot.centerYProperty());
-        rope.endXProperty().bind(obj.translateXProperty().add(obj.getCenterX()));
-        rope.endYProperty().bind(obj.translateYProperty().add(obj.getCenterY()));
-        obj.setVisible(true);
     }
 
     public void equationCreation() {
@@ -178,7 +197,7 @@ public class PendulumController implements Initializable {
     public void graphCreation() {
         back.getChildren().remove(r);
         double dur = Math.round(period * 100.0) / 100.0;
-        double totalE = (length - (length * Math.cos((angleVal*(Math.PI/180))))) * 9.81 * mass;
+        double totalE = (length - (length * Math.cos((angleVal * (Math.PI / 180))))) * 9.81 * mass;
         ArrayList potential = new ArrayList<>();
         ArrayList kinetic = new ArrayList<>();
         ArrayList time = new ArrayList<>();
@@ -190,18 +209,18 @@ public class PendulumController implements Initializable {
         r = new LineChart(x, y);
         r.setMaxHeight(350);
         r.setMaxWidth(400);
-        r.setLayoutX(EChart.getLayoutX()-20);
-        r.setLayoutY(EChart.getLayoutY()-20);
+        r.setLayoutX(EChart.getLayoutX() - 20);
+        r.setLayoutY(EChart.getLayoutY() - 20);
         //creating arrayList for time values for creating energy graphs
-        for (double i = 0; i < dur*2; i += 0.01) {
+        for (double i = 0; i < dur * 2; i += 0.01) {
             time.add(i);
         }
 
         //Potential enrrgy values according to the time values created above
         for (int i = 0; i < time.size(); i++) {
-            double angle = (angleVal*(Math.PI / 180)) * Math.cos((angularF) * (double) time.get(i));
+            double angle = (angleVal * (Math.PI / 180)) * Math.cos((angularF) * (double) time.get(i));
             double heightDifference = length - (length * Math.cos(angle));
-            double val = mass*9.81*heightDifference;
+            double val = mass * 9.81 * heightDifference;
             potential.add(val);
             System.out.println(val);
         }

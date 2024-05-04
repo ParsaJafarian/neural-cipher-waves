@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.Animation;
+import javafx.animation.AnimationTimer;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
@@ -60,15 +61,8 @@ public class VisualController implements Initializable {
     private Label period;
     @FXML
     public Button exit;
-    
-    
     ArrayList<Circle> dots = new ArrayList<>();
-    /**
-     * Initializes the controller class.
-     */
-    Timeline alert = new Timeline(new KeyFrame(new Duration(0.1), event -> {
-        dotCreation();
-    }));
+    private AnimationTimer timer;
     double angle;
     String angularF;
     boolean cont = true;
@@ -77,6 +71,14 @@ public class VisualController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        timer = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                dotCreation();
+            }
+        };
+        timer.start();
+        
         double borderRadius = border.getRadius();
         double pathRadius = path.getRadius();
         amp.setValue(0);
@@ -85,33 +87,36 @@ public class VisualController implements Initializable {
         pathTransition.setCycleCount(Animation.INDEFINITE);
         pathTransition.setInterpolator(Interpolator.LINEAR);
         pathTransition.play();
-        alert.play();
 
         setAngularVelocityAndPeriod(pathTransition);
         equationCreation();
 
         freq.valueProperty().addListener((observable, oldvalue, newvalue) -> {
+            cont = false;
             pathTransition.setRate((double) newvalue);
             setAngularVelocityAndPeriod(pathTransition);
+            freq.setOnMouseReleased(e->{
             equationCreation();
+            cont = true;
+            });
         });
 
         amp.setOnMousePressed(e -> {
-            //cont = false;
+            cont = false;
             amp.valueProperty().addListener((observable, oldvalue, newvalue) -> {
 
                 pathTransition.stop();
-                angle = (Math.atan2(pathTransition.getNode().getTranslateY() - path.getLayoutY(), pathTransition.getNode().getTranslateX() - path.getLayoutX()) * 180) / Math.PI;
+                //angle = (Math.atan2(pathTransition.getNode().getTranslateY() - path.getLayoutY(), pathTransition.getNode().getTranslateX() - path.getLayoutX()) * 180) / Math.PI;
                 border.setRadius(borderRadius + (double) newvalue);
                 path.setRadius(pathRadius + (double) newvalue);
-                path.setRotate(angle);
+                //path.setRotate(angle);
                 node.setVisible(false);
                 equationCreation();
             });
         });
 
         amp.setOnMouseReleased(e -> {
-            //    cont = true;
+            cont = true;
             node.setVisible(true);
             pathTransition.play();
         });
@@ -129,7 +134,7 @@ public class VisualController implements Initializable {
     public void dotCreation() {
         Platform.runLater(() -> {
             if (cont) {
-                Circle dot = new Circle(600, node.getTranslateY(), 5, Color.WHITE);
+                Circle dot = new Circle(600+amp.getValue(), node.getTranslateY(), 5, Color.WHITE);
                 back.getChildren().add(dot);
                 TranslateTransition translate = new TranslateTransition(new Duration(10000), dot);
                 dots.add(dot);
@@ -140,8 +145,9 @@ public class VisualController implements Initializable {
                     back.getChildren().remove(translate.getNode());
                 });
             }
-            alert.play();
-
+            else{
+               back.getChildren().removeAll(dots);
+            }
         });
     }
 
