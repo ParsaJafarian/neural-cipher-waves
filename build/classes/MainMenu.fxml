@@ -161,7 +161,7 @@
       </VBox>
       <VBox layoutX="461.0" layoutY="317.0" prefHeight="363.0" prefWidth="36.0">
          <children>
-            <Label prefHeight="63.0" prefWidth="36.0" text="F" textFill="#6f5327">
+            <Label prefHeight="63.0" prefWidth="36.0" text="C" textFill="#6f5327">
                <font>
                   <Font name="Microsoft Yi Baiti" size="62.0" />
                </font>
@@ -181,7 +181,7 @@
                   <Font name="Microsoft Yi Baiti" size="62.0" />
                </font>
             </Label>
-            <Label prefHeight="63.0" prefWidth="36.0" text="F" textFill="#6f5327">
+            <Label prefHeight="63.0" prefWidth="36.0" text="G" textFill="#6f5327">
                <font>
                   <Font name="Microsoft Yi Baiti" size="62.0" />
                </font>
