@@ -18,6 +18,7 @@ public class LossSection {
         chart.setCreateSymbols(false);
 
         series.getNode().setId("lossSeries");
+        series.getNode().setStyle("-fx-stroke: black; -fx-stroke-width: 1;");
 
         lastLoss.addListener((observable, oldValue, newValue) -> {
             trainingLossLabel.setText(String.format("%.2f", newValue));

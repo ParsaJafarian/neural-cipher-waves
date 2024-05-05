@@ -1,14 +1,241 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Arc?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="$CONTROLLER_NAME$"
-            prefHeight="400.0" prefWidth="600.0" >
-
+<AnchorPane id="AnchorPane" maxHeight="800.0" maxWidth="1600.0" minHeight="800.0" minWidth="1600.0" prefHeight="800.0" prefWidth="1600.0" style="-fx-border-width: 10; -fx-border-color: #6f5327; -fx-border-insets: 10;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.MainMenuController">
+    <children>
+        <Label layoutX="500.0" layoutY="105.0" prefHeight="104.0" prefWidth="601.0" text="Neural-Cipher-Waves" textFill="#6f5327">
+            <font>
+                <Font name="System Bold" size="58.0" />
+            </font>
+        </Label>
+        <Button fx:id="start" layoutX="660.0" layoutY="286.0" mnemonicParsing="false" prefHeight="114.0" prefWidth="280.0" text="Start" textFill="#6f5327">
+            <font>
+                <Font name="Agency FB Bold" size="56.0" />
+            </font>
+        </Button>
+        <Button fx:id="info" layoutX="712.0" layoutY="431.0" mnemonicParsing="false" prefHeight="0.0" prefWidth="178.0" text="Info" textFill="#6f5327">
+            <font>
+                <Font name="Agency FB Bold" size="56.0" />
+            </font>
+        </Button>
+        <Button fx:id="exit" layoutX="30.0" layoutY="673.0" maxHeight="104.0" maxWidth="97.0" minHeight="80.0" minWidth="80.0" mnemonicParsing="false" prefHeight="104.0" prefWidth="97.0" style="-fx-background-radius: 40; -fx-border-radius: 40; -fx-background-color: transparent;" textFill="#6f5327">
+            <font>
+                <Font name="Agency FB Bold" size="56.0" />
+            </font>
+            <graphic>
+                <ImageView fitHeight="107.0" fitWidth="135.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@photos/exit.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Circle fill="#6f5327" layoutX="127.0" layoutY="132.0" radius="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+        <Line endX="44.0" endY="89.0" layoutX="243.0" layoutY="135.0" startX="-116.0" startY="-3.0" stroke="#6f5327" strokeWidth="5.0" />
+        <Line endX="27.0" endY="-68.0" layoutX="272.0" layoutY="135.0" startX="-145.0" startY="-3.0" stroke="#6f5327" strokeWidth="5.0" />
+        <Circle fill="#6f5327" layoutX="291.0" layoutY="63.0" radius="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+        <Circle fill="#6f5327" layoutX="291.0" layoutY="228.0" radius="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+        <Line endX="73.0" endY="-71.0" layoutX="433.0" layoutY="234.0" startX="-145.0" startY="-3.0" stroke="#6f5327" strokeWidth="5.0" />
+        <Line endX="54.0" endY="86.0" layoutX="452.0" layoutY="65.0" startX="-145.0" startY="-3.0" stroke="#6f5327" strokeWidth="5.0" />
+        <Circle fill="#6f5327" layoutX="1473.0" layoutY="136.0" radius="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+        <Circle fill="#6f5327" layoutX="1309.0" layoutY="63.0" radius="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+        <Circle fill="#6f5327" layoutX="1309.0" layoutY="228.0" radius="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+        <Line endX="105.0" endY="-42.0" layoutX="1368.0" layoutY="178.0" startX="-59.0" startY="-115.0" stroke="#6f5327" strokeWidth="5.0" />
+        <Line endX="105.0" endY="-139.0" layoutX="1368.0" layoutY="275.0" startX="-59.0" startY="-47.0" stroke="#6f5327" strokeWidth="5.0" />
+        <Line endX="77.0" endY="-73.0" layoutX="1232.0" layoutY="136.0" startX="-140.0" startY="14.0" stroke="#6f5327" strokeWidth="5.0" />
+        <Line endX="117.0" endY="-43.0" layoutX="1192.0" layoutY="271.0" startX="-99.0" startY="-99.0" stroke="#6f5327" strokeWidth="5.0" />
+        <Circle fill="#61616100" layoutX="397.0" layoutY="506.0" radius="198.0" stroke="#6f5327" strokeType="INSIDE" strokeWidth="5.0" />
+        <VBox layoutX="233.0" layoutY="407.0" prefHeight="263.0" prefWidth="36.0">
+            <children>
+                <Label prefHeight="38.0" prefWidth="36.0" text="B" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="63.0" prefWidth="36.0" text="C" textFill="#6f5327" underline="true">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="63.0" prefWidth="36.0" text="D" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+        <VBox layoutX="296.0" layoutY="318.0" prefHeight="359.0" prefWidth="45.0">
+            <children>
+                <Label prefHeight="75.0" prefWidth="58.0" text="G" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="75.0" prefWidth="69.0" text="H" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="63.0" prefWidth="36.0" text="I" textFill="#6f5327" underline="true">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="63.0" prefWidth="36.0" text="J" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="63.0" prefWidth="36.0" text="K" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+        <VBox layoutX="353.0" layoutY="329.0" prefHeight="375.0" prefWidth="37.0">
+            <children>
+                <Label prefHeight="38.0" prefWidth="36.0" text="N" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="63.0" prefWidth="36.0" text="O" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="12.0" prefWidth="37.0" text="P" textFill="#6f5327" underline="true">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="95.0" prefWidth="37.0" text="Q" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="63.0" prefWidth="36.0" text="R" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+        <VBox layoutX="407.0" layoutY="307.0" prefHeight="359.0" prefWidth="36.0">
+            <children>
+                <Label prefHeight="38.0" prefWidth="36.0" text="F" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="88.0" prefWidth="37.0" text="G" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="63.0" prefWidth="36.0" text="H" textFill="#6f5327" underline="true">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="63.0" prefWidth="36.0" text="I" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="63.0" prefWidth="36.0" text="J" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+        <VBox layoutX="461.0" layoutY="317.0" prefHeight="363.0" prefWidth="36.0">
+            <children>
+                <Label prefHeight="63.0" prefWidth="36.0" text="C" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="38.0" prefWidth="36.0" text="D" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="63.0" prefWidth="36.0" text="E" textFill="#6f5327" underline="true">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="63.0" prefWidth="36.0" text="F" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="63.0" prefWidth="36.0" text="G" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+        <VBox layoutX="525.0" layoutY="404.0" prefHeight="269.0" prefWidth="37.0">
+            <children>
+                <Label prefHeight="80.0" prefWidth="37.0" text="Q" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="67.0" prefWidth="36.0" text="R" textFill="#6f5327" underline="true">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+                <Label prefHeight="2.0" prefWidth="36.0" text="S" textFill="#6f5327">
+                    <font>
+                        <Font name="Microsoft Yi Baiti" size="62.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+        <Line endX="33.0" endY="421.0" layoutX="251.0" layoutY="275.0" startX="33.0" startY="48.0" stroke="#6f5327" strokeWidth="5.0" />
+        <Line endX="25.0" endY="407.0" layoutX="320.0" layoutY="286.0" startX="25.0" startY="32.0" stroke="#6f5327" strokeWidth="5.0" />
+        <Line endX="25.0" endY="407.0" layoutX="422.0" layoutY="286.0" startX="25.0" startY="32.0" stroke="#6f5327" strokeWidth="5.0" />
+        <Line endX="25.0" endY="459.0" layoutX="372.0" layoutY="297.0" startX="25.0" startY="-34.0" stroke="#6f5327" strokeWidth="5.0" />
+        <Line endX="25.0" endY="396.0" layoutX="484.0" layoutY="295.0" startX="25.0" startY="26.0" stroke="#6f5327" strokeWidth="5.0" />
+        <Circle fill="#6f5327" layoutX="548.0" layoutY="381.0" radius="23.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+        <Arc fill="TRANSPARENT" layoutX="528.0" layoutY="421.0" length="80.0" radiusX="100.0" radiusY="100.0" stroke="#6f5327" strokeType="INSIDE" strokeWidth="5.0" />
+        <Line endX="165.0" endY="162.0" layoutX="443.0" layoutY="244.0" startX="185.0" startY="177.0" stroke="#6f5327" strokeWidth="5.0" />
+        <Line endX="161.0" endY="117.0" layoutX="467.0" layoutY="304.0" startX="171.0" startY="96.0" stroke="#6f5327" strokeWidth="5.0" />
+        <Line endX="117.0" endY="-214.0" layoutX="1192.0" layoutY="482.0" startX="59.0" startY="82.0" stroke="#6f5327" strokeWidth="5.0" />
+        <Circle fill="#6f5327" layoutX="1247.0" layoutY="568.0" radius="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+        <Arc fill="TRANSPARENT" layoutX="1255.0" layoutY="541.0" length="80.0" radiusX="104.0" radiusY="100.0" startAngle="-146.3" stroke="#6f5327" strokeType="INSIDE" strokeWidth="5.0" />
+        <Line endX="170.0" endY="178.0" layoutX="1102.0" layoutY="443.0" startX="195.53564453125" startY="189.0" stroke="#6f5327" strokeWidth="5.0" />
+        <Line endX="159.0" endY="78.0" layoutX="1120.0" layoutY="571.0" startX="174.0" startY="64.5355224609375" stroke="#6f5327" strokeWidth="5.0" />
+        <AnchorPane fx:id="infoPane" layoutX="571.0" layoutY="172.0" prefHeight="498.0" prefWidth="461.0" style="-fx-background-color: white;" visible="false">
+            <children>
+                <TextArea layoutX="13.0" layoutY="18.0" prefHeight="462.0" prefWidth="425.0" text="Project Description&#10;&#10;What is NCPS?&#10;NCPS (Neural Network, Cryptographer, Physics Simulator) &#10;is a three-layered desktop toolbox application that can be of aid &#10;in a variety of use cases in the fields of &#10;Neural Network, Cryptography and Physics Simulations. &#10;&#10;The goal of NCPS?&#10;The application consists of three parts; &#10;Each part provides distinct functionality for users. &#10;NCPS is primarily designed for individual use-cases. &#10;However, the code is open-source and under MIT license &#10;which enables anyone to parse the code and embed &#10;a specific tool for commercial use. &#10;&#10;Details and implementation?&#10;The algorithms, formulas, features, ideas, and further&#10;implementation details are the following:&#10;&#10;&#10;">
+                    <font>
+                        <Font size="14.0" />
+                    </font></TextArea>
+                <Button fx:id="closeInfo" layoutX="189.0" layoutY="436.0" mnemonicParsing="false" text="Close" textFill="#86714c">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Button>
+            </children>
+        </AnchorPane>
+    </children>
 </AnchorPane>

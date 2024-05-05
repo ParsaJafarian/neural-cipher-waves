@@ -28,7 +28,8 @@ public class Neuron extends StackPane {
         Circle circle = new Circle(2 * RADIUS);
 
         Label value = new Label();
-        value.setId("activationValue");
+
+        value.setStyle("-fx-text-fill: white;");
         value.textProperty().bind(prop.asString("%.2f"));
         value.toFront();
 
@@ -82,7 +83,6 @@ public class Neuron extends StackPane {
     private static class WeightLine extends Line {
         WeightLine(@NotNull Neuron prevNeuron, @NotNull Neuron currNeuron) {
             super();
-            this.setId("weightLine");
             this.toBack();
 
             this.startXProperty().bind(prevNeuron.outputXProperty());
