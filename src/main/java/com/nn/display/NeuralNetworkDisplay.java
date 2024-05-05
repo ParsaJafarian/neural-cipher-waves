@@ -14,7 +14,6 @@ import static com.nn.display.NeuralNetworkConfig.*;
  * This class consists of the visible neural display accessible in Simulation
  */
 public class NeuralNetworkDisplay {
-
     private final Pane networkContainer;
     private final NeuralNetwork network;
     private final ArrayList<ArrayList<Neuron>> layers = new ArrayList<>();
@@ -45,7 +44,6 @@ public class NeuralNetworkDisplay {
         }
 
         weightsGenerator.generateLayerWeights(0);
-        System.out.println(network.getSizes());
     }
 
     private void initializeOtherLayers() {
@@ -53,6 +51,9 @@ public class NeuralNetworkDisplay {
             addLayer();
     }
 
+    /**
+     * Add a layer to backend algo and update the display accordingly
+     */
     public void addLayer() {
         if (network.getNumLayers() >= MAX_LAYERS) return;
 
@@ -69,11 +70,10 @@ public class NeuralNetworkDisplay {
         }
 
         weightsGenerator.generateLayerWeights(lastLayerIndex);
-        System.out.println(network.getSizes());
     }
 
     /**
-     * Add buttons to add or remove neurons from the layer
+     * Add buttons to add or remove neurons from the current last layer
      */
     private void addLayerButtons() {
         int lastLayerIndex = network.getNumLayers() - 1;
@@ -92,6 +92,9 @@ public class NeuralNetworkDisplay {
         return layers.get(layerIndex).get(neuronIndex);
     }
 
+    /**
+     * Remove the last layer from the backend algo and update the display accordingly
+     */
     public void removeLayer() {
         if (network.getNumLayers() <= MIN_LAYERS) return;
         int lastIndex = network.getNumLayers() - 1;
@@ -107,6 +110,11 @@ public class NeuralNetworkDisplay {
         btnContainers.remove(lastIndex);
     }
 
+    /**
+     * General method to add a neuron to the display for when a layer is added or the addNeuron button is clicked
+     * @param layerIndex the index of the layer to add the neuron to
+     * @param activation the activation value of the neuron
+     */
     private void addNeuron(int layerIndex, double activation) {
         if (layers.get(layerIndex).size() >= MAX_NEURONS) return;
 
@@ -120,9 +128,12 @@ public class NeuralNetworkDisplay {
         networkContainer.getChildren().add(neuron);
 
         weightsGenerator.generateWeights(lastNeuronIndex, layerIndex);
-        System.out.println(network.getSizes());
     }
 
+    /**
+     * Remove the neuron at layerIndex
+     * @param layerIndex the index of the layer to remove the neuron from
+     */
     private void removeNeuron(int layerIndex) {
         if (network.getNumNeurons(layerIndex) <= MIN_NEURONS) return;
         int lastNeuronIndex = network.getNumNeurons(layerIndex) - 1;
@@ -135,6 +146,10 @@ public class NeuralNetworkDisplay {
         neuron.remove();
     }
 
+    /**
+     * Specific method for adding a neuron through the addNeuron button
+     * @param layerIndex the index of the layer to add the neuron to
+     */
     private void addNeuronThroughBtn(int layerIndex) {
         network.addNeuron(layerIndex);
         Matrix activation = network.getActivationsAtLayer(layerIndex);
@@ -142,11 +157,17 @@ public class NeuralNetworkDisplay {
         addNeuron(layerIndex, activationValue);
     }
 
+    /**
+     * Clear the display and the backend algo
+     */
     public void clear() {
         network.clear();
         update();
     }
 
+    /**
+     * Update the display so that the activation values are up to date
+     */
     public void update() {
         for (int layerIndex = 0; layerIndex < network.getNumLayers(); layerIndex++) {
             Matrix activations = network.getActivationsAtLayer(layerIndex);

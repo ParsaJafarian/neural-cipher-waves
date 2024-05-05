@@ -47,28 +47,6 @@ public class Matrix {
         this.data = data;
     }
 
-    public Matrix(int[][] d) {
-        this.rows = d.length;
-        this.cols = d[0].length;
-        this.data = new double[rows][cols];
-        for (int i = 0; i < rows; i++)
-            for (int j = 0; j < cols; j++)
-                this.data[i][j] = d[i][j];
-    }
-
-    /**
-     * Turns a nxm matrix into a (n*m)x1 matrix
-     *
-     * @return a new matrix that is the vectorized version of this matrix
-     */
-    public Matrix flatten() {
-        Matrix result = new Matrix(rows * cols, 1);
-        for (int i = 0; i < rows; i++)
-            for (int j = 0; j < cols; j++)
-                result.data[i * cols + j][0] = data[i][j];
-        return result;
-    }
-
     public static @NotNull Matrix ones(int rows, int cols) {
         Matrix result = new Matrix(rows, cols);
         for (int i = 0; i < rows; i++)
@@ -264,10 +242,6 @@ public class Matrix {
      */
     public double get(int r, int c) {
         return data[r][c];
-    }
-
-    public void set(int r, int c, int i) {
-        data[r][c] = i;
     }
 
     public boolean hasNan() {

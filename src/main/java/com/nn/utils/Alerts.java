@@ -5,6 +5,9 @@ import static com.nn.display.NeuralNetworkConfig.LAST_LAYER_NEURONS;
 
 import javafx.scene.control.Alert;
 
+/**
+ * Utility class for displaying alerts
+ */
 public class Alerts {
     private static javafx.scene.control.Alert alert;
 

@@ -36,10 +36,6 @@ public enum Activation {
             return m.map(x -> (double) x * (1 - (double) x));
         }
 
-        public double der(double x) {
-            return x * (1 - x);
-        }
-
         public String toString() {
             return "sigmoid";
         }
@@ -64,10 +60,6 @@ public enum Activation {
         @Override
         public Matrix der(Matrix m) {
             return m.map(x -> 1 - Math.pow((double) x, 2));
-        }
-
-        public double der(double x) {
-            return 1 - Math.pow(x, 2);
         }
 
         public String toString() {
@@ -96,10 +88,6 @@ public enum Activation {
             return m.map(x -> (double) ( x > 0 ? 1 : 0));
         }
 
-        public double der(double x) {
-            return x > 0 ? 1 : 0;
-        }
-
         public String toString() {
             return "relu";
         }
@@ -125,22 +113,6 @@ public enum Activation {
      */
     public abstract Matrix der(Matrix m);
 
-    public abstract double der(double x);
-
     public abstract String toString();
-
-    public boolean equals(Activation a){
-        return this.toString().equals(a.toString());
-    }
-
-    public boolean equals(String s){
-        return this.toString().equals(s);
-    }
-
-    public static Activation getActivation(String activation) {
-        if (!activationFunctions.containsKey(activation))
-            throw new IllegalArgumentException("Activation function not found");
-        return activationFunctions.get(activation);
-    }
 
 }

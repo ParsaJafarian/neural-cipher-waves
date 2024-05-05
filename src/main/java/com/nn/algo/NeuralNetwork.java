@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.nn.algo.Activation.activationFunctions;
 import static com.nn.algo.Loss.losses;
@@ -145,28 +144,11 @@ public class NeuralNetwork {
         for (int i = 1; i <= epochs; i++) {
             System.out.println("Epoch " + i + " started");
 
-            AtomicBoolean isNaN = new AtomicBoolean(false);
 
             for (int j = 0; j < trainingData.length; j += miniBatchSize) {
                 shuffleData(trainingData);
                 Matrix[][] miniBatch = Arrays.copyOfRange(trainingData, j, j + miniBatchSize);
                 updateMiniBatch(miniBatch);
-                for (Matrix m : weights) {
-                    if (m.hasNan()) {
-                        isNaN.set(true);
-                        break;
-                    }
-                }
-                for (Matrix m : biases) {
-                    if (m.hasNan()) {
-                        isNaN.set(true);
-                        break;
-                    }
-                }
-                if (isNaN.get()) {
-                    System.out.println("NaN detected in weights or biases in epoch " + i + " mini batch " + j / miniBatchSize);
-                    break;
-                }
             }
 
             System.out.println("Epoch " + i + " complete");
@@ -226,9 +208,7 @@ public class NeuralNetwork {
         ArrayList<Matrix> nablaB = nablas[0];
         ArrayList<Matrix> nablaW = nablas[1];
 
-
         for (Matrix[] inputs : miniBatch) {
-
             ArrayList<Matrix>[] deltaNablas = backpropagation(inputs);
             ArrayList<Matrix> deltaNablaB = deltaNablas[0];
             ArrayList<Matrix> deltaNablaW = deltaNablas[1];
@@ -311,16 +291,8 @@ public class NeuralNetwork {
         return weights;
     }
 
-    public Matrix getWeightsAtLayer(int layerIndex) {
-        return weights.get(layerIndex - 1);
-    }
-
     ArrayList<Matrix> getBiases() {
         return biases;
-    }
-
-    public Matrix getBiasesAtLayer(int layerIndex) {
-        return biases.get(layerIndex - 1);
     }
 
 
@@ -384,6 +356,9 @@ public class NeuralNetwork {
         this.loss = losses.get(value);
     }
 
+    /**
+     * Clear activations, weights and biases while keeping the sizes of the layers the same.
+     */
     public void clear() {
         activations.clear();
         for (int size : sizes)
@@ -398,6 +373,10 @@ public class NeuralNetwork {
         }
     }
 
+    /**
+     * Add a layer to the network with the specified number of neurons.
+     * @param numberOfNeurons the number of neurons in the added layer
+     */
     public void addLayer(int numberOfNeurons) {
         sizes.add(numberOfNeurons);
         activations.add(new Matrix(numberOfNeurons, 1));
@@ -405,6 +384,9 @@ public class NeuralNetwork {
         biases.add(Matrix.random(numberOfNeurons, 1));
     }
 
+    /**
+     * Remove the last layer from the network.
+     */
     public void removeLayer() {
         if (getNumLayers() <= MIN_LAYERS) return;
 
@@ -445,10 +427,6 @@ public class NeuralNetwork {
             Matrix newNextWeight = add ? oldNextWeight.addColumn() : oldNextWeight.removeColumn();
             weights.set(layerIndex, newNextWeight);
         }
-    }
-
-    public String getSizes() {
-        return sizes.toString();
     }
 
     public void addNeuron(int layerIndex) {

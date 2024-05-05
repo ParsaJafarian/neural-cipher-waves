@@ -17,6 +17,10 @@ public class Neuron extends StackPane {
     private final ArrayList<WeightLine> inputLines = new ArrayList<>();
     private final ArrayList<WeightLine> outputLines = new ArrayList<>();
 
+    /**
+     * StackPane representing a neuron that holds the activation value and has connections to other neurons
+     * @param activation the activation value of the neuron
+     */
     public Neuron(double activation) {
         super();
 
@@ -24,11 +28,9 @@ public class Neuron extends StackPane {
         getStyleClass().add("neuron");
 
         DoubleProperty prop = new SimpleDoubleProperty(activation);
-
         Circle circle = new Circle(2 * RADIUS);
 
         Label value = new Label();
-
         value.setStyle("-fx-text-fill: white;");
         value.textProperty().bind(prop.asString("%.2f"));
         value.toFront();
@@ -45,13 +47,11 @@ public class Neuron extends StackPane {
         Pane parent = (Pane) this.getParent();
         parent.getChildren().remove(this);
 
-        for (WeightLine inputLine : inputLines) {
+        for (WeightLine inputLine : inputLines)
             parent.getChildren().remove(inputLine);
-        }
 
-        for (WeightLine outputLine : outputLines) {
+        for (WeightLine outputLine : outputLines)
             parent.getChildren().remove(outputLine);
-        }
     }
 
     public void connectToPrevNeuron(Neuron prevNeuron) {
@@ -60,9 +60,12 @@ public class Neuron extends StackPane {
         WeightLine weightLine = new WeightLine(prevNeuron, this);
         inputLines.add(weightLine);
         prevNeuron.outputLines.add(weightLine);
+
         Pane parent = (Pane) this.getParent();
         parent.getChildren().add(weightLine);
     }
+
+    //custom properties so that lines don't go through the center of the neuron
 
     private DoubleProperty inputXProperty() {
         return this.translateXProperty();
@@ -80,6 +83,9 @@ public class Neuron extends StackPane {
         return this.translateYProperty().add(RADIUS);
     }
 
+    /**
+     * Line representing the weight between two neurons
+     */
     private static class WeightLine extends Line {
         WeightLine(@NotNull Neuron prevNeuron, @NotNull Neuron currNeuron) {
             super();

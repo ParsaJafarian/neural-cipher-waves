@@ -2,7 +2,13 @@ package com.nn.utils;
 
 import javafx.scene.control.TextField;
 
+/**
+ * A TextField that accepts only positive double values
+ */
 public class NumberField extends TextField {
+    /**
+     * Creates a new NumberField
+     */
     public NumberField() {
         super();
         this.setPromptText("Enter number");
@@ -20,6 +26,9 @@ public class NumberField extends TextField {
         return Double.parseDouble(this.getText());
     }
 
+    /**
+     * Makes the field accept only positive double values
+     */
     private void makeFieldNumeric() {
         this.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("^[\\d-.]+$")) {
@@ -30,6 +39,9 @@ public class NumberField extends TextField {
         });
     }
 
+    /**
+     * Limits the field to accept only values less than or equal to 100
+     */
     private void limitField() {
         this.textProperty().addListener((observable, oldValue, newValue) -> {
             try {
@@ -40,6 +52,9 @@ public class NumberField extends TextField {
         });
     }
 
+    /**
+     * Focuses on the field when it is empty for error prevention
+     */
     private void focusWhenEmpty() {
         this.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && this.getText().isEmpty())

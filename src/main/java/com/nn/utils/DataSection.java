@@ -11,9 +11,19 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.nn.display.NeuralNetworkConfig.*;
 
+/**
+ * Display section where user inputs an input vector and output vector
+ */
 public class DataSection {
     private final VBox inputBox, outputBox;
 
+    /**
+     *
+     * @param inputBox Container holding input number fields
+     * @param inputBtns Container holding input buttons which add and remove input number fields
+     * @param outputBox Container holding output number fields
+     * @param outputBtns Container holding output buttons which add and remove output number fields
+     */
     public DataSection(VBox inputBox, @NotNull HBox inputBtns, VBox outputBox, @NotNull HBox outputBtns) {
         Button inputAdderBtn = (Button) inputBtns.getChildren().get(0);
         Button inputRemoverBtn = (Button) inputBtns.getChildren().get(1);
@@ -36,6 +46,12 @@ public class DataSection {
         initializeBox(outputBox, outputAdderBtn, outputRemoverBtn);
     }
 
+    /**
+     * Initialize the button actions for adding and removing number fields according to the box
+     * @param box The box containing the number fields
+     * @param adderBtn The button that adds a number field to the box
+     * @param removerBtn The button that removes a number field from the box
+     */
     private void initializeBox(VBox box, @NotNull Button adderBtn, @NotNull Button removerBtn) {
         //add initial text fields
         for (int i = 0; i < MIN_NEURONS; i++)
@@ -66,6 +82,11 @@ public class DataSection {
         return getData(outputBox);
     }
 
+    /**
+     * Extract the data from the number fields in the box
+     * @param box The box containing the number fields
+     * @return The data extracted from the number fields
+     */
     @Contract("_ -> new")
     private @NotNull Matrix getData(@NotNull VBox box) {
         double[][] data = new double[box.getChildren().size()][1];

@@ -4,17 +4,25 @@ import com.nn.algo.NeuralNetwork;
 
 import java.util.ArrayList;
 
+/**
+ * This class is responsible for generating weights between neurons in the neural network.
+ */
 public class WeightsGenerator {
     private final NeuralNetwork network;
     private final ArrayList<ArrayList<Neuron>> layers;
 
+    /**
+     * Constructor for the WeightsGenerator class.
+     * @param network The neural network to generate weights for.
+     * @param layers The display layers of the neural network.
+     */
     public WeightsGenerator( NeuralNetwork network, ArrayList<ArrayList<Neuron>> layers) {
         this.network = network;
         this.layers = layers;
     }
 
     /**
-     * Generate weights between last layer and the before last layer
+     * Generate weights between
      */
     void generateLayerWeights(int currLayerIndex) {
         if (currLayerIndex < 1) return;
@@ -38,6 +46,14 @@ public class WeightsGenerator {
         generateWeights(currNeuronIndex, currLayerIndex, false);
     }
 
+    /**
+     * Generate weights between the current neuron and the neurons in the other layer.
+     * If input is true, input weight lines are generated, otherwise output weight lines are generated.
+     *
+     * @param currNeuronIndex The index of the current neuron.
+     * @param currLayerIndex The index of the current layer.
+     * @param isInput True if the current neuron is in the input layer, false otherwise.
+     */
     private void generateWeights(int currNeuronIndex, int currLayerIndex, boolean isInput) {
         if (isInput && currLayerIndex <= 0) return;
         if (!isInput && currLayerIndex == network.getNumLayers() - 1) return;

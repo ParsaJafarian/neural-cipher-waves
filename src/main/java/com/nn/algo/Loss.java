@@ -52,17 +52,4 @@ public enum Loss {
 
     public abstract Matrix der(Matrix y, Matrix a);
 
-    public static Loss getLoss(String loss) {
-        if (!losses.containsKey(loss))
-            throw new IllegalArgumentException("Loss function not found");
-        return losses.get(loss);
-    }
-
-    public boolean equals(Loss l){
-        return this.toString().equals(l.toString());
-    }
-
-    public boolean equals(String s){
-        return this.toString().equals(s);
-    }
 }

@@ -50,7 +50,12 @@ public class Controller {
         layerRemoverBtn.setOnAction(e -> networkDisplay.removeLayer());
     }
 
-    private void train(){
+    /**
+     * If the number of neurons at the first layer is not equal to the number of input fields, show an alert
+     * If the number of neurons at the last layer is not equal to the number of output fields, show an alert
+     * Otherwise, train the model
+     */
+    private void train() {
         Matrix[][] trainData = dataSection.getData();
         if (network.getNumNeurons(0) != FIRST_LAYER_NEURONS.get())
             showFirstLayerAlert();
@@ -60,7 +65,12 @@ public class Controller {
             trainForOneEpoch(trainData);
     }
 
-    private void trainForOneEpoch(Matrix[][] trainData){
+    /**
+     * Train the model and update the display for one epoch
+     *
+     * @param trainData The training data
+     */
+    private void trainForOneEpoch(Matrix[][] trainData) {
         network.setLearningRate(learningRateCB.getValue());
         network.setActivation(activationCB.getValue());
         network.setLoss(lossCB.getValue());
@@ -73,11 +83,17 @@ public class Controller {
         networkDisplay.update();
     }
 
-    private void clear(){
+    /**
+     * Clear the display
+     */
+    private void clear() {
         networkDisplay.clear();
         lossSection.clear();
     }
 
+    /**
+     * Initialize the input section with default values
+     */
     private void initializeInputSection() {
         learningRateCB.getItems().addAll(0.001, 0.01, 0.1, 1.0);
         learningRateCB.getSelectionModel().select(0);
