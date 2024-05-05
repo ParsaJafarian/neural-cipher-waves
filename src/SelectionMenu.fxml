@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" maxHeight="800.0" maxWidth="1600.0" minHeight="800.0" minWidth="1600.0" prefHeight="800.0" prefWidth="1600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="SelectionMenuController">
+<AnchorPane id="AnchorPane" maxHeight="800.0" maxWidth="1600.0" minHeight="800.0" minWidth="1600.0" prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SelectionMenuController">
    <children>
       <Label layoutX="593.0" layoutY="67.0" prefHeight="104.0" prefWidth="424.0" text="Selection Menu" textFill="#6f5327">
          <font>
@@ -24,7 +23,7 @@
             <ImageView fitHeight="320.0" fitWidth="354.0" pickOnBounds="true" preserveRatio="true" />
          </graphic>
       </Button>
-      <Button layoutX="1012.0" layoutY="283.0" mnemonicParsing="false" prefHeight="321.0" prefWidth="356.0" style="-fx-border-color: #6f5327; -fx-border-width: 5;">
+      <Button fx:id="physics" layoutX="1012.0" layoutY="283.0" mnemonicParsing="false" prefHeight="321.0" prefWidth="356.0" style="-fx-border-color: #6f5327; -fx-border-width: 5;">
          <graphic>
             <ImageView fitHeight="320.0" fitWidth="354.0" pickOnBounds="true" preserveRatio="true" />
          </graphic>
@@ -44,5 +43,6 @@
             <Font name="System Bold" size="32.0" />
          </font>
       </Label>
+      <Button fx:id="back" layoutX="22.0" layoutY="20.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="52.0" text="Back" />
    </children>
 </AnchorPane>

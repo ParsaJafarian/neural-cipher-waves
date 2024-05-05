@@ -28,6 +28,8 @@ public class MenuController implements Initializable {
     
     
     private VisualController visual = new VisualController();
+    @FXML
+    private Button exit;
     /**
      * Initializes the controller class.
      */
@@ -36,7 +38,6 @@ public class MenuController implements Initializable {
         // TODO
         circular.setOnAction((ActionEvent e) -> {
             try {
-                //changes the root of the scene to direct the user to the slideshow before the race starts
                 circular.getScene().setRoot(FXMLLoader.load(getClass().getResource("Visual.fxml")));
             } catch (IOException ex) {
             }
@@ -54,6 +55,14 @@ public class MenuController implements Initializable {
             try {
                 //changes the root of the scene to direct the user to the slideshow before the race starts
                 circular.getScene().setRoot(FXMLLoader.load(getClass().getResource("Pendulum.fxml")));
+            } catch (IOException ex) {
+            }
+        });
+        
+        exit.setOnAction((ActionEvent e) -> {
+            try {
+                //changes the root of the scene to direct the user to the slideshow before the race starts
+                exit.getScene().setRoot(FXMLLoader.load(getClass().getResource("SelectionMenu.fxml")));
             } catch (IOException ex) {
             }
         });

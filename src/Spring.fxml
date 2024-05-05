@@ -6,8 +6,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Polyline?>
@@ -41,7 +39,7 @@
           <NumberAxis side="LEFT" />
         </yAxis>
       </LineChart>
-      <Label fx:id="period" layoutX="730.0" layoutY="483.0" prefHeight="52.0" prefWidth="237.0" text="Period:" textFill="WHITE">
+      <Label layoutX="730.0" layoutY="483.0" prefHeight="52.0" prefWidth="237.0" text="Period:" textFill="WHITE">
          <font>
             <Font name="System Bold" size="30.0" />
          </font>
@@ -53,17 +51,12 @@
       </Label>
       <Rectangle fx:id="block" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="120.0" stroke="BLACK" strokeType="INSIDE" width="120.0" />
       <Rectangle fx:id="stand" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="200.0" layoutX="47.0" layoutY="127.0" stroke="BLACK" strokeType="INSIDE" width="18.0" />
-      <Label fx:id="constant" layoutX="730.0" layoutY="548.0" prefHeight="52.0" prefWidth="237.0" text="Spring Constant:" textFill="WHITE">
+      <Label layoutX="730.0" layoutY="548.0" prefHeight="52.0" prefWidth="237.0" text="Spring Constant:" textFill="WHITE">
          <font>
             <Font name="System Bold" size="30.0" />
          </font>
       </Label>
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="209.0" layoutX="-34.0" layoutY="124.0" stroke="BLACK" strokeType="INSIDE" width="86.0" />
-      <ImageView fitHeight="217.0" fitWidth="487.0" layoutX="85.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true" visible="false">
-         <image>
-            <Image url="@../../Screenshot%202024-02-27%20at%2012.22.55%E2%80%AFPM.png" />
-         </image>
-      </ImageView>
       <Line fx:id="path" endX="300.0" endY="-0.5" layoutX="172.0" layoutY="231.0" startX="-108.0" startY="-0.5" stroke="RED" visible="false" />
       <Label fx:id="equation" layoutX="957.0" layoutY="348.0" prefHeight="49.0" prefWidth="368.0" textFill="WHITE">
          <font>

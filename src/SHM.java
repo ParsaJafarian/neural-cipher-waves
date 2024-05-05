@@ -26,11 +26,11 @@ public class SHM extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         //makes the root the welcome screen 
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("menu.fxml")));
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("MainMenu.fxml")));
         //creates scene
         Scene scene = new Scene(root);
         
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Physics");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

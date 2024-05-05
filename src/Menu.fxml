@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" minWidth="1500.0" prefHeight="800.0" prefWidth="1600.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MenuController">
+<AnchorPane id="AnchorPane" minWidth="1500.0" prefHeight="800.0" prefWidth="1600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MenuController">
    <children>
-      <Button fx:id="circular" layoutX="150.0" layoutY="332.0" mnemonicParsing="false">
+      <Button fx:id="circular" layoutX="150.0" layoutY="332.0" mnemonicParsing="false" style="-fx-border-color: #724e3c; -fx-border-width: 4;">
          <graphic>
             <ImageView fitHeight="300.0" fitWidth="430.0" pickOnBounds="true">
                <image>
@@ -18,7 +18,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="pendulum" layoutX="1035.0" layoutY="332.0" mnemonicParsing="false">
+      <Button fx:id="pendulum" layoutX="1035.0" layoutY="332.0" mnemonicParsing="false" style="-fx-border-color: #724e3c; -fx-border-width: 4;">
          <graphic>
             <ImageView fitHeight="300.0" fitWidth="400.0" pickOnBounds="true">
                <image>
@@ -27,7 +27,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="spring" layoutX="607.0" layoutY="332.0" mnemonicParsing="false">
+      <Button fx:id="spring" layoutX="607.0" layoutY="332.0" mnemonicParsing="false" style="-fx-border-color: #724e3c; -fx-border-width: 4;">
          <graphic>
             <ImageView fitHeight="300.0" fitWidth="400.0" pickOnBounds="true">
                <image>
@@ -36,10 +36,19 @@
             </ImageView>
          </graphic>
       </Button>
-      <Label layoutX="566.0" layoutY="134.0" prefHeight="79.0" prefWidth="497.0" text="Physics Simulator" textFill="WHITE" underline="true">
+      <Label layoutX="566.0" layoutY="134.0" prefHeight="79.0" prefWidth="497.0" text="Physics Simulator" textFill="#724e3c" underline="true">
          <font>
             <Font name="System Bold Italic" size="59.0" />
          </font>
       </Label>
+      <Button fx:id="exit" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="93.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="93.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Photos/download.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </AnchorPane>
