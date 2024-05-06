@@ -10,6 +10,12 @@ public class NeuralNetworkTester {
 
     private static NeuralNetwork network;
 
+    /**
+     * Test adding a neuron to the specified layer
+     *
+     * @param layerIndex the index of the layer to add the neuron to
+     * @param sizes the sizes of the layers in the network
+     */
     static void testAddNeuron(int layerIndex, int... sizes) {
         network = new NeuralNetwork(0.001, "relu", "mse", sizes);
         int oldNumNeurons = network.getNumNeurons(layerIndex);
@@ -41,6 +47,11 @@ public class NeuralNetworkTester {
         }
     }
 
+    /**
+     * Test removing a neuron from the specified layer
+     * @param numNeurons the number of neurons to remove
+     * @param sizes the sizes of the layers in the network
+     */
     static void testAddLayer(int numNeurons, int... sizes) {
         network = new NeuralNetwork(0.001, "relu", "mse", sizes);
         int oldNumLayers = network.getNumLayers();
@@ -67,6 +78,10 @@ public class NeuralNetworkTester {
         assertEquals(1, lastActivation.getColumns());
     }
 
+    /**
+     * Test removing a layer from the network
+     * @param sizes the sizes of the layers in the network
+     */
     static void testRemoveLayer(int... sizes) {
         network = new NeuralNetwork(0.001, "relu", "mse", sizes);
         int oldNumLayers = network.getNumLayers();
