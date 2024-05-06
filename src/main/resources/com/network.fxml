@@ -42,7 +42,6 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -52,7 +51,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="571.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nn.Controller">
+<VBox prefHeight="571.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nn.Controller">
   <children>
     <MenuBar prefWidth="805.0" VBox.vgrow="NEVER">
       <menus>
@@ -97,6 +96,7 @@
          <top>
             <HBox fx:id="inputSection" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="117.0" prefWidth="1003.0" spacing="10.0" style="-fx-border-color: black;" BorderPane.alignment="CENTER">
                <children>
+                  <Button fx:id="backBtn" mnemonicParsing="false" text="Back" />
                   <GridPane alignment="CENTER_LEFT" hgap="5.0" prefHeight="115.0" prefWidth="256.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -151,28 +151,6 @@
                       <NumberAxis side="LEFT" />
                     </yAxis>
                   </LineChart>
-                  <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="127.0" prefWidth="158.0">
-                     <children>
-                        <Label prefHeight="28.0" prefWidth="98.0" text="PREDICTION">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <HBox alignment="CENTER_LEFT" prefHeight="24.0" prefWidth="100.0" spacing="10.0">
-                           <children>
-                              <Label prefHeight="25.0" prefWidth="74.0" text="Input:" />
-                              <TextField fx:id="predInputField" prefHeight="25.0" prefWidth="33.0" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" prefHeight="24.0" prefWidth="100.0" spacing="10.0">
-                           <children>
-                              <Label prefHeight="24.0" prefWidth="95.0" text="Predicted Value:" />
-                              <Label fx:id="predOutputLabel" alignment="CENTER_RIGHT" text="x" />
-                           </children>
-                        </HBox>
-                        <Button fx:id="predictBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="97.0" text="Predict" />
-                     </children>
-                  </VBox>
                </children>
             </HBox>
          </top>

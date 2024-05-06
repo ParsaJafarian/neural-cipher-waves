@@ -11,8 +11,6 @@ import java.util.Objects;
 
 public class Main extends Application {
 
-    //#6f5327 -> brown
-
     @Override
     public void start(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main-menu.fxml")));

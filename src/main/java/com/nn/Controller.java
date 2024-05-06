@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.SceneSwitcher.switchToScene;
 import static com.nn.utils.Alerts.showFirstLayerAlert;
 import static com.nn.utils.Alerts.showLastLayerAlert;
 import static com.nn.display.NeuralNetworkConfig.FIRST_LAYER_NEURONS;
@@ -30,6 +31,7 @@ public class Controller {
     public Button layerAdderBtn, layerRemoverBtn;
     public VBox inputDisplay, outputDisplay;
     public HBox inputBtns, outputBtns;
+    public Button backBtn;
     private NeuralNetwork network;
     private NeuralNetworkDisplay networkDisplay;
     private LossSection lossSection;
@@ -48,6 +50,7 @@ public class Controller {
         clrBtn.setOnAction(e -> clear());
         layerAdderBtn.setOnAction(e -> networkDisplay.addLayer());
         layerRemoverBtn.setOnAction(e -> networkDisplay.removeLayer());
+        backBtn.setOnAction(e -> switchToScene(backBtn, "selection-menu.fxml"));
     }
 
     /**

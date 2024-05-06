@@ -1,4 +1,4 @@
-package com;
+package com.waves;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -19,7 +19,7 @@ public class SHM extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         //makes the root the welcome screen
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("waves/menu.fxml")));
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("menu.fxml")));
         //creates scene
         Scene scene = new Scene(root);
 

@@ -15,6 +15,8 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
+import static com.SceneSwitcher.switchToScene;
+
 /**
  * FXML Controller class
  *
@@ -40,13 +42,7 @@ public class MainMenuController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         //creates a highlight effect on the "Start" button
         highlightButton(start);
-        start.setOnAction((ActionEvent e) -> {
-            try {
-                start.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("selection-menu.fxml"))));
-            } catch (IOException ex) {
-                Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
+        start.setOnAction(e -> switchToScene(start, "selection-menu.fxml"));
 
         //creates a highlight effect on the "Info" button
         highlightButton(info);
