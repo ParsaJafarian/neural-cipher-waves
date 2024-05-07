@@ -1,10 +1,11 @@
-package com.nn;
+package com.nn.algo;
+
+import java.util.HashMap;
 
 /**
  * Enum for loss functions used in the neural network.
  */
 public enum Loss {
-
     /**
      * Mean Squared Error loss function.
      * <br>
@@ -42,7 +43,13 @@ public enum Loss {
         }
     };
 
+    static final HashMap<String, Loss> losses = new java.util.HashMap<>() {{
+        put("mse", Loss.MSE);
+        put("mae", Loss.MAE);
+    }};
+
     public abstract Matrix f(Matrix y, Matrix a);
 
     public abstract Matrix der(Matrix y, Matrix a);
+
 }

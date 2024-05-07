@@ -1,4 +1,6 @@
-package com.nn;
+package com.nn.algo;
+
+import java.util.HashMap;
 
 /**
  * Enum for activation functions used in the neural network.
@@ -11,7 +13,7 @@ package com.nn;
  *     </ul>
  * </p>
  */
-enum Activation {
+public enum Activation {
     /**
      * Sigmoid activation function.
      * <br>
@@ -34,8 +36,8 @@ enum Activation {
             return m.map(x -> (double) x * (1 - (double) x));
         }
 
-        public double der(double x) {
-            return x * (1 - x);
+        public String toString() {
+            return "sigmoid";
         }
     },
     /**
@@ -60,8 +62,8 @@ enum Activation {
             return m.map(x -> 1 - Math.pow((double) x, 2));
         }
 
-        public double der(double x) {
-            return 1 - Math.pow(x, 2);
+        public String toString() {
+            return "tanh";
         }
     },
     /**
@@ -86,10 +88,16 @@ enum Activation {
             return m.map(x -> (double) ( x > 0 ? 1 : 0));
         }
 
-        public double der(double x) {
-            return x > 0 ? 1 : 0;
+        public String toString() {
+            return "relu";
         }
     };
+
+    static final HashMap<String, Activation> activationFunctions = new HashMap<>() {{
+        put("sigmoid", Activation.SIGMOID);
+        put("tanh", Activation.TANH);
+        put("relu", Activation.RELU);
+    }};
 
     /**
      * @param m matrix to apply the function to
@@ -105,6 +113,6 @@ enum Activation {
      */
     public abstract Matrix der(Matrix m);
 
-    public abstract double der(double x);
+    public abstract String toString();
 
 }

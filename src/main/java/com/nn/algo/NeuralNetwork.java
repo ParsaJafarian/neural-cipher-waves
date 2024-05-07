@@ -1,30 +1,29 @@
-package com.nn;
+package com.nn.algo;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.nn.algo.Activation.activationFunctions;
+import static com.nn.algo.Loss.losses;
+import static com.nn.display.NeuralNetworkConfig.*;
 
 /**
  * Neural network class for creating and training neural networks.
  */
-public class Network {
+public class NeuralNetwork {
     private double learningRate;
-    private static final HashMap<String, Loss> losses = new HashMap<>() {{
-        put("mse", Loss.MSE);
-        put("mae", Loss.MAE);
-    }};
+
     /**
      * An array of sizes of the layers in the network.
      * Each element represents a layer while the value represents the number of neurons in that layer.
      */
-    private final int[] sizes;
-    private final int numLayers;
+    private final LinkedList<Integer> sizes;
 
     private final ArrayList<Matrix> activations;
     /**
@@ -38,50 +37,39 @@ public class Network {
      * The biases vector for each layer is of size (n x 1) where n is the number of neurons in that layer.
      */
     private final ArrayList<Matrix> biases;
-    private final Activation activation;
-    private final Loss loss;
-    private static final HashMap<String, Activation> activationFunctions = new HashMap<>() {{
-        put("sigmoid", Activation.SIGMOID);
-        put("tanh", Activation.TANH);
-        put("relu", Activation.RELU);
-    }};
+    private Activation activation;
+    private Loss loss;
 
     /**
      * Constructor for the network.
      *
      * @param learningRate       learning rate of the network
      * @param activationFunction activation function of the network
-     * @param costFunction       cost function of the network
+     * @param loss               cost function of the network
      * @param sizes              sizes of the layers in the network.
      */
-    public Network(double learningRate, String activationFunction, String costFunction, int @NotNull ... sizes) {
-        if (learningRate <= 0.0)
-            throw new IllegalArgumentException("Learning rate must be positive");
-        if (sizes.length < 2)
-            throw new IllegalArgumentException("Network must have at least 2 layers");
-        if (Arrays.stream(sizes).anyMatch(x -> x <= 0))
-            throw new IllegalArgumentException("Invalid layer sizes");
-        if (!activationFunctions.containsKey(activationFunction))
-            throw new IllegalArgumentException("Activation function not found");
-        if (!losses.containsKey(costFunction))
-            throw new IllegalArgumentException("Cost function not found");
+    public NeuralNetwork(double learningRate, String activationFunction, String loss, int @NotNull ... sizes) {
 
-        //initialize weights and biases
+        this.sizes = new LinkedList<>();
+        for (int size : sizes)
+            this.sizes.add(size);
+
         weights = new ArrayList<>();
         biases = new ArrayList<>();
         activations = new ArrayList<>();
 
-        for (int i = 0; i < sizes.length - 1; i++) {
-            weights.add(Matrix.random(sizes[i + 1], sizes[i]));
-            biases.add(Matrix.random(sizes[i + 1], 1));
+        for (int i = 0; i < getNumLayers() - 1; i++) {
+            weights.add(Matrix.random(getNumNeurons(i + 1), getNumNeurons(i)));
+            biases.add(Matrix.random(getNumNeurons(i + 1), 1));
         }
 
-        this.sizes = sizes;
-        this.numLayers = sizes.length;
-        this.activation = activationFunctions.get(activationFunction);
-        this.loss = losses.get(costFunction);
-        this.learningRate = learningRate;
+        for (int size : sizes) {
+            activations.add(new Matrix(size, 1));
+        }
 
+        setActivation(activationFunction);
+        setLoss(loss);
+        setLearningRate(learningRate);
     }
 
     /**
@@ -90,20 +78,20 @@ public class Network {
      * @param learningRate learning rate of the network
      * @param sizes        sizes of the layers in the network
      */
-    public Network(double learningRate, int... sizes) {
+    public NeuralNetwork(double learningRate, int... sizes) {
         this(learningRate, "sigmoid", "mse", sizes);
     }
 
     /**
      * Feed forward the inputs through the network with the current weights and biases and activation function.
      *
-     * @param inputs      input to the network
-     * @param zs          array to store the z values of the network (passed in as an empty array)
+     * @param inputs input to the network
+     * @param zs     array to store the z values of the network (passed in as an empty array)
      * @return the output of the network
      */
     private Matrix feedForward(@NotNull Matrix inputs, ArrayList<Matrix> zs) {
         //if input size is not equal to the first layer size and it's not a column vector, throw an exception
-        if (inputs.getRows() != sizes[0] || inputs.getCols() != 1)
+        if (inputs.getRows() != getNumNeurons(0) || inputs.getColumns() != 1)
             throw new IllegalArgumentException("Invalid input size");
 
         //clear the activations ArrayList and add the inputs to it
@@ -112,7 +100,7 @@ public class Network {
 
         Matrix outputs = inputs.clone();
 
-        for (int i = 0; i < numLayers - 1; i++) {
+        for (int i = 0; i < getNumLayers() - 1; i++) {
             Matrix z = weights.get(i).dot(outputs).add(biases.get(i));
             zs.add(z);
             outputs = activation.f(z);
@@ -155,52 +143,16 @@ public class Network {
 
         for (int i = 1; i <= epochs; i++) {
             System.out.println("Epoch " + i + " started");
-//            System.out.println("<---------------------Weights--------------------->");
-//            for (Matrix m : weights) {
-//                System.out.println(m);
-//            }
-//            System.out.println("<---------------------Biases--------------------->");
-//            for (Matrix m : biases) {
-//                System.out.println(m);
-//            }
 
-
-            AtomicBoolean isNaN = new AtomicBoolean(false);
 
             for (int j = 0; j < trainingData.length; j += miniBatchSize) {
                 shuffleData(trainingData);
                 Matrix[][] miniBatch = Arrays.copyOfRange(trainingData, j, j + miniBatchSize);
                 updateMiniBatch(miniBatch);
-                for (Matrix m : weights) {
-                    if (m.hasNan()) {
-                        isNaN.set(true);
-                        break;
-                    }
-                }
-                for (Matrix m : biases) {
-                    if (m.hasNan()) {
-                        isNaN.set(true);
-                        break;
-                    }
-                }
-                if (isNaN.get()) {
-                    System.out.println("NaN detected in weights or biases in epoch " + i + " mini batch " + j/miniBatchSize);
-                    break;
-                }
             }
 
             System.out.println("Epoch " + i + " complete");
-//            System.out.println("<---------------------Weights--------------------->");
-//            for (Matrix m : weights) {
-//                System.out.println(m);
-//            }
-//            System.out.println("<---------------------Biases--------------------->");
-//            for (Matrix m : biases) {
-//                System.out.println(m);
-//            }
-            if (testData != null) {
-                System.out.println("Accuracy: " + evaluate(testData) * 100 + "%");
-            }
+            System.out.println("Loss: " + evaluate(trainingData));
         }
     }
 
@@ -208,21 +160,27 @@ public class Network {
      * @param testData the test data. Structure: [[input matrix, output matrix], ...]
      * @return the accuracy of the network on the test data
      */
-    private double evaluate(Matrix[][] testData) {
+    public double evaluate(Matrix[] @NotNull [] testData) {
         if (testData.length == 0)
             throw new IllegalArgumentException("Test data is empty");
 
-        int correct = 0;
+        double totalLoss = 0;
         //each data consists of the input and the actual output [input, output] where input and output are matrices
         for (Matrix[] data : testData) {
             Matrix x = data[0];
             Matrix y = data[1];
             //data[0] is the input, data[1] is the actual output
             Matrix output = feedForward(x);
-            if (output.maxIndex() == y.maxIndex())
-                correct++;
+
+            double avgLoss = 0;
+            Matrix outputLoss = loss.f(y, output);
+            for (int i = 0; i < output.getRows(); i++) {
+                avgLoss += outputLoss.get(i, 0);
+            }
+            avgLoss /= output.getRows();
+            totalLoss += avgLoss;
         }
-        return (double) correct / testData.length;
+        return totalLoss / testData.length;
     }
 
     public double predict(Matrix input) {
@@ -237,8 +195,10 @@ public class Network {
         ArrayList<Matrix> nablaB = new ArrayList<>();
         ArrayList<Matrix> nablaW = new ArrayList<>();
 
-        for (Matrix bias : biases) nablaB.add(Matrix.zeros(bias.getRows(), bias.getCols()));
-        for (Matrix matrix : weights) nablaW.add(Matrix.zeros(matrix.getRows(), matrix.getCols()));
+        for (Matrix bias : biases)
+            nablaB.add(Matrix.zeros(bias.getRows(), bias.getColumns()));
+        for (Matrix matrix : weights)
+            nablaW.add(Matrix.zeros(matrix.getRows(), matrix.getColumns()));
 
         return new ArrayList[]{nablaB, nablaW};
     }
@@ -248,9 +208,7 @@ public class Network {
         ArrayList<Matrix> nablaB = nablas[0];
         ArrayList<Matrix> nablaW = nablas[1];
 
-
         for (Matrix[] inputs : miniBatch) {
-
             ArrayList<Matrix>[] deltaNablas = backpropagation(inputs);
             ArrayList<Matrix> deltaNablaB = deltaNablas[0];
             ArrayList<Matrix> deltaNablaW = deltaNablas[1];
@@ -292,56 +250,56 @@ public class Network {
         //delta^L = (a^L - y) (+) f'(z^L)
         Matrix a = activations.get(activations.size() - 1); //a^L
         Matrix z = zs.get(zs.size() - 1); //z^L
-        Matrix delta = loss.der(y, a).multiply(activation.der(z));
+        Matrix delta = loss.der(y, a).hadamard(activation.der(z));
 
         //deltaNablaB^L = delta^L
         nablaB.set(nablaB.size() - 1, delta);
         //deltaNablaW^L = delta^L * a^(L-1)
         nablaW.set(nablaW.size() - 1, delta.dot(activations.get(activations.size() - 2).transpose()));
 
-        for (int l = 2; l < numLayers; l++) {
-            z = zs.get(zs.size() - l); //z^(l)
-            a = activations.get(activations.size() - l - 1); //a^(l-1)
-            Matrix sp = activation.der(z); //f'(z^l)
+        for (int i = 2; i < getNumLayers(); i++) {
+            z = zs.get(zs.size() - i); //z^(i)
+            a = activations.get(activations.size() - i - 1); //a^(i-1)
+            Matrix sp = activation.der(z); //f'(z^i)
 
-            //delta^(l)= ((w^(l+1))^T * delta^(l+1)) (+) f'(z^l)
-            delta = weights.get(weights.size() - l + 1).transpose().dot(delta).multiply(sp);
+            //delta^(i)= ((w^(i+1))^T * delta^(i+1)) (+) f'(z^i)
+            delta = weights.get(weights.size() - i + 1).transpose().dot(delta).hadamard(sp);
 
-            //deltaNablaB^l = delta^l
-            nablaB.set(nablaB.size() - l, delta);
+            //deltaNablaB^i = delta^i
+            nablaB.set(nablaB.size() - i, delta);
 
-            //deltaNablaW^l = delta^l * a^(l-1)
-            nablaW.set(nablaW.size() - l, delta.dot(a.transpose()));
+            //deltaNablaW^i = delta^i * a^(i-1)
+            nablaW.set(nablaW.size() - i, delta.dot(a.transpose()));
         }
 
         return new ArrayList[]{nablaB, nablaW};
     }
 
     public int getNumLayers() {
-        return numLayers;
+        return sizes.size();
     }
 
-    public int[] getSizes() {
-        return sizes;
+    /**
+     * @param layerIndex the index of the layer. Can be negative to get the layer from the end
+     * @return the number of neurons in the layer
+     */
+    public int getNumNeurons(int layerIndex) {
+        return layerIndex < 0 ? sizes.get(getNumLayers() + layerIndex) : sizes.get(layerIndex);
     }
 
-    public ArrayList<Matrix> getWeights() {
+    ArrayList<Matrix> getWeights() {
         return weights;
     }
 
-    public ArrayList<Matrix> getBiases() {
+    ArrayList<Matrix> getBiases() {
         return biases;
     }
 
-    public Activation getActivationFunction() {
-        return activation;
-    }
 
     @Override
     public String toString() {
         return "Network{" +
-                ", sizes=" + Arrays.toString(sizes) +
-                ", numLayers=" + numLayers +
+                ", sizes=" + sizes +
                 ", weights=" + weights +
                 ", biases=" + biases +
                 ", activationFunction='" + activation + '\'' +
@@ -353,10 +311,31 @@ public class Network {
     }
 
     public void setLearningRate(double learningRate) {
+        if (learningRate <= 0)
+            throw new IllegalArgumentException("Learning rate must be greater than 0");
+        if (Double.isNaN(learningRate))
+            throw new IllegalArgumentException("Learning rate must not be NaN");
+        if (learningRate > 1)
+            throw new IllegalArgumentException("Learning rate must be less than or equal to 1");
+
         this.learningRate = learningRate;
     }
 
-    public Loss getCostFunction() {
+    public void setActivation(String activationFunction) {
+        if (!activationFunctions.containsKey(activationFunction))
+            throw new IllegalArgumentException("Activation function not found");
+        this.activation = activationFunctions.get(activationFunction);
+    }
+
+    /**
+     * @return the activation function
+     */
+    public Activation getActivation() {
+        return activation;
+    }
+
+
+    public Loss getLoss() {
         return loss;
     }
 
@@ -364,9 +343,97 @@ public class Network {
      * @return a deep copy of the activations of the network
      */
     public ArrayList<Matrix> getActivations() {
-//        ArrayList<Matrix> copy = new ArrayList<>();
-//        activations.forEach(x -> copy.add(x.clone()));
-//        return copy;
         return activations;
+    }
+
+    public Matrix getActivationsAtLayer(int layerIndex) {
+        return activations.get(layerIndex);
+    }
+
+    public void setLoss(String value) {
+        if (!losses.containsKey(value))
+            throw new IllegalArgumentException("Loss function not found");
+        this.loss = losses.get(value);
+    }
+
+    /**
+     * Clear activations, weights and biases while keeping the sizes of the layers the same.
+     */
+    public void clear() {
+        activations.clear();
+        for (int size : sizes)
+            activations.add(new Matrix(size, 1));
+
+        weights.clear();
+        biases.clear();
+
+        for (int i = 0; i < getNumLayers() - 1; i++) {
+            weights.add(Matrix.random(getNumNeurons(i + 1), getNumNeurons(i)));
+            biases.add(Matrix.random(getNumNeurons(i + 1), 1));
+        }
+    }
+
+    /**
+     * Add a layer to the network with the specified number of neurons.
+     * @param numberOfNeurons the number of neurons in the added layer
+     */
+    public void addLayer(int numberOfNeurons) {
+        sizes.add(numberOfNeurons);
+        activations.add(new Matrix(numberOfNeurons, 1));
+        weights.add(Matrix.random(numberOfNeurons, getNumNeurons(-2)));
+        biases.add(Matrix.random(numberOfNeurons, 1));
+    }
+
+    /**
+     * Remove the last layer from the network.
+     */
+    public void removeLayer() {
+        if (getNumLayers() <= MIN_LAYERS) return;
+
+        sizes.removeLast();
+        activations.remove(activations.size() - 1);
+        weights.remove(weights.size() - 1);
+        biases.remove(biases.size() - 1);
+    }
+
+    /**
+     * @param layerIndex the index of the layer. Can be negative to get the layer from the end
+     * @param add        true to add a neuron, false to remove a neuron
+     */
+    private void addOrRemoveNeuron(int layerIndex, boolean add) {
+        if (layerIndex < 0) layerIndex = getNumLayers() + layerIndex;
+        if (add && getNumNeurons(layerIndex) >= MAX_NEURONS) return;
+        if (!add && getNumNeurons(layerIndex) <= MIN_NEURONS) return;
+
+        int oldNumNeurons = getNumNeurons(layerIndex);
+        sizes.set(layerIndex, add ? oldNumNeurons + 1 : oldNumNeurons - 1);
+
+        Matrix oldActivation = activations.get(layerIndex);
+        Matrix newActivation = add ? oldActivation.addRow() : oldActivation.removeRow();
+        activations.set(layerIndex, newActivation);
+
+        if (layerIndex > 0) {
+            Matrix oldBias = biases.get(layerIndex - 1);
+            Matrix newBias = add ? oldBias.addRow() : oldBias.removeRow();
+            biases.set(layerIndex - 1, newBias);
+
+            Matrix oldWeight = weights.get(layerIndex - 1);
+            Matrix newWeight = add ? oldWeight.addRow() : oldWeight.removeRow();
+            weights.set(layerIndex - 1, newWeight);
+        }
+
+        if (layerIndex + 1 < getNumLayers()) {
+            Matrix oldNextWeight = weights.get(layerIndex);
+            Matrix newNextWeight = add ? oldNextWeight.addColumn() : oldNextWeight.removeColumn();
+            weights.set(layerIndex, newNextWeight);
+        }
+    }
+
+    public void addNeuron(int layerIndex) {
+        addOrRemoveNeuron(layerIndex, true);
+    }
+
+    public void removeNeuron(int layerIndex) {
+        addOrRemoveNeuron(layerIndex, false);
     }
 }

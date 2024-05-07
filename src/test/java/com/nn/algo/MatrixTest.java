@@ -1,5 +1,6 @@
-package com.nn;
+package com.nn.algo;
 
+import com.nn.algo.Matrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,7 +11,7 @@ public class MatrixTest {
     public void testConstructor() {
         Matrix m = Matrix.ones(2, 3);
         assert m.getRows() == 2;
-        assert m.getCols() == 3;
+        assert m.getColumns() == 3;
     }
 
     @Test
@@ -32,7 +33,7 @@ public class MatrixTest {
     @Test
     public void testMap1() {
         Matrix m = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}});
-        Matrix result = m.map(x -> (double) x * 2);
+        Matrix result = m.map(x -> x * 2);
         Matrix actual = new Matrix(new double[][]{{2, 4, 6}, {8, 10, 12}});
         assertTrue(result.equals(actual), "Expected " + actual + " but got " + result);
     }
@@ -40,7 +41,7 @@ public class MatrixTest {
     @Test
     public void testMap2() {
         Matrix m = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}});
-        Matrix result = m.map(x -> (double) x /4);
+        Matrix result = m.map(x -> (double) x / 4);
         Matrix actual = new Matrix(new double[][]{{0.25, 0.5, 0.75}, {1, 1.25, 1.5}});
         assertTrue(result.equals(actual), "Expected " + actual + " but got " + result);
     }
@@ -79,7 +80,7 @@ public class MatrixTest {
     public void testHadamardProduct1() {
         Matrix m1 = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}});
         Matrix m2 = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}});
-        Matrix result = m1.multiply(m2);
+        Matrix result = m1.hadamard(m2);
         Matrix actual = new Matrix(new double[][]{{1, 4, 9}, {16, 25, 36}});
         assertTrue(result.equals(actual), "Expected " + actual + " but got " + result);
     }
@@ -88,7 +89,7 @@ public class MatrixTest {
     public void testHadamardProduct2() {
         Matrix m1 = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}});
         Matrix m2 = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}});
-        assertThrows(IllegalArgumentException.class, () -> m1.multiply(m2.transpose()));
+        assertThrows(IllegalArgumentException.class, () -> m1.hadamard(m2.transpose()));
     }
 
     @Test
@@ -121,6 +122,26 @@ public class MatrixTest {
     public void testConstructor2() {
         Matrix m = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}});
         assert m.getRows() == 2;
-        assert m.getCols() == 3;
+        assert m.getColumns() == 3;
+    }
+
+    @Test
+    public void testAddRow() {
+        Matrix m = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}});
+        Matrix result = m.addRow();
+
+        Matrix actual = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}, {0, 0, 0}});
+
+        assertTrue(result.equals(actual), "Expected " + actual + " but got " + result);
+    }
+
+    @Test
+    public void testAddColumn() {
+        Matrix m = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}});
+        Matrix result = m.addColumn();
+
+        Matrix actual = new Matrix(new double[][]{{1, 2, 3, 0}, {4, 5, 6, 0}});
+
+        assertTrue(result.equals(actual), "Expected " + actual + " but got " + result);
     }
 }

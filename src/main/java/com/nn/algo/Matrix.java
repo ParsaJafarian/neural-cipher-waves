@@ -1,4 +1,4 @@
-package com.nn;
+package com.nn.algo;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -45,27 +45,6 @@ public class Matrix {
         this.rows = data.length;
         this.cols = data[0].length;
         this.data = data;
-    }
-
-    public Matrix(int[][] d) {
-        this.rows = d.length;
-        this.cols = d[0].length;
-        this.data = new double[rows][cols];
-        for (int i = 0; i < rows; i++)
-            for (int j = 0; j < cols; j++)
-                this.data[i][j] = d[i][j];
-    }
-
-    /**
-     * Turns a nxm matrix into a (n*m)x1 matrix
-     * @return a new matrix that is the vectorized version of this matrix
-     */
-    public Matrix flatten() {
-        Matrix result = new Matrix(rows * cols, 1);
-        for (int i = 0; i < rows; i++)
-            for (int j = 0; j < cols; j++)
-                result.data[i * cols + j][0] = data[i][j];
-        return result;
     }
 
     public static @NotNull Matrix ones(int rows, int cols) {
@@ -153,7 +132,7 @@ public class Matrix {
      * @param m matrix to multiply
      * @return a new matrix that is the Hadamard product of this matrix and m
      */
-    public Matrix multiply(@NotNull Matrix m) {
+    public Matrix hadamard(@NotNull Matrix m) {
         if (rows != m.rows || cols != m.cols)
             throw new IllegalArgumentException("Invalid matrix size");
 
@@ -212,15 +191,15 @@ public class Matrix {
         return rows;
     }
 
-    public int getCols() {
+    public int getColumns() {
         return cols;
     }
 
     @Override
     public String toString() {
         StringBuilder matrix = new StringBuilder();
-        for(int i = 0; i < rows; i++) {
-            for(int j = 0; j < cols; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 matrix.append(data[i][j]).append(" ");
             }
             matrix.append("\n");
@@ -265,10 +244,6 @@ public class Matrix {
         return data[r][c];
     }
 
-    public void set(int r, int c, int i) {
-        data[r][c] = i;
-    }
-
     public boolean hasNan() {
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < cols; j++)
@@ -276,4 +251,47 @@ public class Matrix {
                     return true;
         return false;
     }
+
+    public Matrix addRow(){
+        Matrix result = new Matrix(rows + 1, cols); // Create a new matrix with one additional row
+        for (int i = 0; i < rows; i++) {
+            if (cols >= 0) {
+                System.arraycopy(data[i], 0, result.data[i], 0, cols); // Copy existing data
+            }
+        }
+        return result;
+    }
+
+    public Matrix addColumn() {
+        Matrix result = new Matrix(rows, cols + 1); // Create a new matrix with one additional column
+        for (int i = 0; i < rows; i++) {
+            if (cols >= 0) {
+                System.arraycopy(data[i], 0, result.data[i], 0, cols); // Copy existing data
+            }
+        }
+        return result;
+    }
+
+    public Matrix removeRow() {
+        Matrix result = new Matrix(rows - 1, cols); // Create a new matrix with one less row
+        for (int i = 0, k = 0; i < rows; i++) {
+            if (i == rows - 1) continue; // Skip the row to be removed
+            System.arraycopy(data[i], 0, result.data[k], 0, cols); // Copy existing data
+            k++;
+        }
+        return result;
+    }
+
+    public Matrix removeColumn() {
+        Matrix result = new Matrix(rows, cols - 1); // Create a new matrix with one less column
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0, k = 0; j < cols; j++) {
+                if (j == cols - 1) continue; // Skip the column to be removed
+                result.data[i][k] = data[i][j]; // Copy existing data
+                k++;
+            }
+        }
+        return result;
+    }
+
 }
