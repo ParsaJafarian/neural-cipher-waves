@@ -2,6 +2,9 @@ module com.wavesneuralnetwork {
     requires javafx.controls;
     requires javafx.fxml;
 
+    // parsa M
+    requires commons.math3;
+
     requires org.kordamp.bootstrapfx.core;
     requires org.jetbrains.annotations;
     requires java.desktop;
@@ -17,6 +20,8 @@ module com.wavesneuralnetwork {
     opens com.nn.utils to javafx.fxml;
     exports com.nn;
     opens com.nn to javafx.fxml;
+    exports com.cipher;
+    opens com.cipher to javafx.fxml;
     exports com.waves;
     opens com.waves to javafx.fxml;
 }
