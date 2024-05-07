@@ -94,7 +94,7 @@
     </MenuBar>
       <BorderPane prefHeight="546.0" prefWidth="843.0">
          <top>
-            <HBox fx:id="inputSection" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="117.0" prefWidth="1003.0" spacing="10.0" style="-fx-border-color: black;" BorderPane.alignment="CENTER">
+            <HBox fx:id="inputSection" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="117.0" prefWidth="1003.0" spacing="10.0" style="-fx-border-color: #6f5327;" BorderPane.alignment="CENTER">
                <children>
                   <Button fx:id="backBtn" mnemonicParsing="false" text="Back" />
                   <GridPane alignment="CENTER_LEFT" hgap="5.0" prefHeight="115.0" prefWidth="256.0">

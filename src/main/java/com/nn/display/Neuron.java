@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +30,7 @@ public class Neuron extends StackPane {
 
         DoubleProperty prop = new SimpleDoubleProperty(activation);
         Circle circle = new Circle(2 * RADIUS);
+        circle.setFill(Paint.valueOf("#6f5327"));
 
         Label value = new Label();
         value.setStyle("-fx-text-fill: white;");
@@ -90,6 +92,7 @@ public class Neuron extends StackPane {
         WeightLine(@NotNull Neuron prevNeuron, @NotNull Neuron currNeuron) {
             super();
             this.toBack();
+            this.setStroke(Paint.valueOf("#6f5327"));
 
             this.startXProperty().bind(prevNeuron.outputXProperty());
             this.startYProperty().bind(prevNeuron.outputYProperty());
