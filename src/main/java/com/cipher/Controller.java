@@ -1,6 +1,5 @@
 package com.cipher;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -14,7 +13,6 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -24,7 +22,6 @@ public class Controller {
     public Button savB;
     public Button selB;
     public CheckBox Ensy;
-    public final String dict = "abcdefghijklmnopqrstuvwxyz";
     public Button reset;
     public double startI;
     public double startII;

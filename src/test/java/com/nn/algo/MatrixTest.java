@@ -1,6 +1,5 @@
 package com.nn.algo;
 
-import com.nn.algo.Matrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

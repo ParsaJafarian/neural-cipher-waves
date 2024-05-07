@@ -1,10 +1,8 @@
 package com.cipher;
 
 
-import javafx.fxml.FXML;
 
 import static java.lang.Character.*;
-import java.util.function.Function;
 public class CC_Engine {
     public static final String puncset = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
     public static void main(String[] args) {
