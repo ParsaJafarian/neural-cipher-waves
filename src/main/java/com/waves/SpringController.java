@@ -71,6 +71,22 @@ public class SpringController implements Initializable {
     ArrayList<Double> time;
     int t = 0;
     PathTransition pathTransition;
+    @FXML
+    Line springPartA;
+    @FXML
+    Line springPartB;
+    @FXML
+    Line springPartC;
+    @FXML
+    Line springPartD;
+    @FXML
+    Line springPartE;
+    @FXML
+    Line springPartF;
+    @FXML
+    Line springPartG;
+    @FXML
+    Rectangle stand;
 
     /**
      * Initializes the controller class.
@@ -85,6 +101,32 @@ public class SpringController implements Initializable {
             }
         };
         timer.start();
+
+        block.translateXProperty().addListener((observableValue, oldValue, newValue) -> {
+            //number of spring segments
+            int springSegments =3;
+            //this gives me the space that the spring has to compress or stretch
+            double displacement = (Double.parseDouble(newValue.toString())-160+62.8);
+            //5 segments on my spring
+            double segmentspace = displacement/springSegments;
+            double positionXOfEndPoints = segmentspace/2;
+            //find the back of the spring system, that does not move
+            double backCoordinate = stand.getLayoutX()+stand.getWidth();
+            springPartA.setStartX(backCoordinate);
+            springPartA.setEndX(springPartA.getStartX()+positionXOfEndPoints);
+            springPartB.setStartX(springPartA.getEndX());
+            springPartB.setEndX(springPartA.getEndX()+positionXOfEndPoints);
+            springPartC.setStartX(springPartB.getEndX());
+            springPartC.setEndX(springPartB.getEndX()+positionXOfEndPoints);
+            springPartD.setStartX(springPartC.getEndX());
+            springPartD.setEndX(springPartC.getEndX()+positionXOfEndPoints);
+            springPartE.setStartX(springPartD.getEndX());
+            springPartE.setEndX(springPartD.getEndX()+positionXOfEndPoints);
+            springPartF.setStartX(springPartE.getEndX());
+            springPartF.setEndX(springPartE.getEndX()+positionXOfEndPoints);
+            springPartG.setStartX(springPartF.getEndX());
+            springPartG.setEndX(Double.parseDouble(newValue.toString()));
+        });
         path.setStartX(path.getStartX() + (block.getWidth() / 2));
         endSpring = path.getEndX();
         pathTransition = new PathTransition(new Duration(800), path, block);
@@ -93,6 +135,7 @@ public class SpringController implements Initializable {
         pathTransition.setAutoReverse(true);
         pathTransition.play();
 
+
         setAngularVelocityAndPeriod(pathTransition);
         equationCreation();
 
@@ -100,11 +143,9 @@ public class SpringController implements Initializable {
             cont = false;
             pathTransition.setRate((double) newvalue);
             setAngularVelocityAndPeriod(pathTransition);
-            block.setVisible(false);
 
             freq.setOnMouseReleased(e -> {
                 cont = true;
-                block.setVisible(true);
                 equationCreation();
             });
         });
@@ -114,13 +155,11 @@ public class SpringController implements Initializable {
             amp.valueProperty().addListener((observable, oldvalue, newvalue) -> {
                 pathTransition.stop();
                 path.setEndX(path.getStartX() + (double) newvalue);
-                block.setVisible(false);
             });
         });
 
         amp.setOnMouseReleased(e -> {
             cont = true;
-            block.setVisible(true);
             pathTransition.play();
             equationCreation();
         });
@@ -137,7 +176,7 @@ public class SpringController implements Initializable {
     public void dotCreation() {
         Platform.runLater(() -> {
             if (cont) {
-                Circle dot = new Circle(block.getTranslateX(), (block.getTranslateY() + 200), 5, Color.WHITE);
+                Circle dot = new Circle(block.getTranslateX(), (block.getTranslateY() + 200), 5, Color.BURLYWOOD);
                 back.getChildren().add(dot);
                 TranslateTransition translate = new TranslateTransition(new Duration(10000), dot);
                 dots.add(dot);

@@ -119,7 +119,7 @@ public class VisualController implements Initializable {
     public void dotCreation() {
         Platform.runLater(() -> {
             if (cont) {
-                Circle dot = new Circle(600+amp.getValue(), node.getTranslateY(), 5, Color.WHITE);
+                Circle dot = new Circle(600+amp.getValue(), node.getTranslateY(), 5, Color.BURLYWOOD);
                 back.getChildren().add(dot);
                 TranslateTransition translate = new TranslateTransition(new Duration(10000), dot);
                 dots.add(dot);
