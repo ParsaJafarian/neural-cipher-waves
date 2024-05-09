@@ -100,7 +100,7 @@ public class PendulumController implements Initializable {
             length = (double) newvalue;
             period = (2 * Math.PI) * (Math.sqrt((length) / 9.81));
             angularF = (2 * Math.PI) / period;
-            //since one cycle of transition is hald of a period of the motion, we make the duration of the animation period/2
+            //since one cycle of transition is half of a period of the motion, we make the duration of the animation period/2
             pathTransition.setDuration(Duration.seconds(period / 2));
             arcPathCreation(length * 500, angleVal, pathTransition);
 
@@ -115,10 +115,26 @@ public class PendulumController implements Initializable {
         });
 
         //changes the object attached to the pendulum string when clicking on the specified buttons
-        Shape1.setOnAction(e -> setNewObjectCircle(pathTransition, object));
-        Shape2.setOnAction(e -> setNewObjectCircle(pathTransition, object2));
-        Shape3.setOnAction(e -> setNewObjectCircle(pathTransition, object3));
-        Shape4.setOnAction(e -> setNewObjectCircle(pathTransition, object4));
+        Shape1.setOnAction(e -> {
+            setNewObjectCircle(pathTransition, object);
+            mass =1;
+            equationCreation();
+        });
+        Shape2.setOnAction(e -> {
+            setNewObjectCircle(pathTransition, object);
+            mass =10;
+            equationCreation();
+        });
+        Shape3.setOnAction(e -> {
+            setNewObjectCircle(pathTransition, object);
+            mass =50;
+            equationCreation();
+        });
+        Shape4.setOnAction(e -> {
+            setNewObjectCircle(pathTransition, object);
+            mass =100;
+            equationCreation();
+        });
 
         //exits the physics simulation
         exit.setOnAction(e -> {

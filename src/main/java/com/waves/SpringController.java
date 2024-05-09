@@ -104,6 +104,7 @@ public class SpringController implements Initializable {
         timer.start();
 
         block.translateXProperty().addListener((observableValue, oldValue, newValue) -> {
+            Line[] lines = {springPartA,springPartB,springPartC,springPartD,springPartE,springPartF,springPartG};
             //number of spring segments
             int springSegments =3;
             //this gives me the space that the spring has to compress or stretch
@@ -113,20 +114,21 @@ public class SpringController implements Initializable {
             double positionXOfEndPoints = segmentspace/2;
             //find the back of the spring system, that does not move
             double backCoordinate = stand.getLayoutX()+stand.getWidth();
-            springPartA.setStartX(backCoordinate);
-            springPartA.setEndX(springPartA.getStartX()+positionXOfEndPoints);
-            springPartB.setStartX(springPartA.getEndX());
-            springPartB.setEndX(springPartA.getEndX()+positionXOfEndPoints);
-            springPartC.setStartX(springPartB.getEndX());
-            springPartC.setEndX(springPartB.getEndX()+positionXOfEndPoints);
-            springPartD.setStartX(springPartC.getEndX());
-            springPartD.setEndX(springPartC.getEndX()+positionXOfEndPoints);
-            springPartE.setStartX(springPartD.getEndX());
-            springPartE.setEndX(springPartD.getEndX()+positionXOfEndPoints);
-            springPartF.setStartX(springPartE.getEndX());
-            springPartF.setEndX(springPartE.getEndX()+positionXOfEndPoints);
-            springPartG.setStartX(springPartF.getEndX());
-            springPartG.setEndX(Double.parseDouble(newValue.toString()));
+            for (int i = 0; i < lines.length; i++) {
+                if (i==0){
+                    lines[i].setStartX(backCoordinate);
+                    lines[i].setEndX(lines[i].getStartX()+positionXOfEndPoints);
+                }
+                if (i>0 && i< lines.length-1){
+                    lines[i].setStartX(lines[i-1].getEndX());
+                    lines[i].setEndX(lines[i-1].getEndX()+positionXOfEndPoints);
+                }
+                if (i==lines.length-1){
+                    lines[i].setStartX(lines[i-1].getEndX());
+                    lines[i].setEndX(Double.parseDouble(newValue.toString()));
+                }
+            }
+
         });
 
         path.setStartX(path.getStartX() + (block.getWidth() / 2));

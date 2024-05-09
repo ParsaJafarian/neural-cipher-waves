@@ -67,13 +67,13 @@
             </font>
         </Label>
         <Button fx:id="exit" layoutX="17.0" layoutY="14.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="70.0" text="Exit" />
-        <Line fx:id="springPartA" endX="-68.83493041992188" endY="-89.03204345703125" layoutY="251.0" startX="-111.66506958007812" startY="-20.108978271484375" stroke="#79613e" strokeWidth="3.0" />
-        <Line fx:id="springPartB" endX="-35.8349609375" endY="119.03204345703125" layoutY="184.0" startX="-113.83493041992188" startY="-22.03204345703125" stroke="#79613e" strokeWidth="3.0" />
-        <Line fx:id="springPartC" endX="-89.956298828125" endY="-35.121307373046875" layoutY="203.0" startX="-166.713623046875" startY="102.15338134765625" stroke="#79613e" strokeWidth="3.0" />
-        <Line fx:id="springPartD" endX="-24.1650390625" endY="89.03204345703125" layoutY="213.0" startX="-97.8349609375" startY="-43.0" stroke="#79613e" strokeWidth="3.0" />
-        <Line fx:id="springPartE" endX="-89.956298828125" endY="-35.121307373046875" layoutY="202.0" startX="-168.043701171875" startY="102.15338134765625" stroke="#79613e" strokeWidth="3.0" />
-        <Line fx:id="springPartF" endX="-118.8349609375" endY="-21.608978271484375" layoutY="252.0" startX="-159.8349609375" startY="-87.24261474609375" stroke="#79613e" strokeWidth="3.0" />
-        <Line fx:id="springPartG" endX="-73.0" endY="-24.0" layoutY="257.0" startX="-119.0" startY="-24.0" stroke="#79613e" strokeWidth="3.0" />
+        <Line fx:id="springPartA" endX="-68.83493041992188" endY="-89.03204345703125" layoutY="251.0" startX="-111.66506958007812" startY="-20.108978271484375" strokeWidth="6.0" />
+        <Line fx:id="springPartB" endX="-35.8349609375" endY="119.03204345703125" layoutY="184.0" startX="-113.83493041992188" startY="-22.03204345703125" strokeWidth="6.0" />
+        <Line fx:id="springPartC" endX="-89.956298828125" endY="-35.121307373046875" layoutY="203.0" startX="-166.713623046875" startY="102.15338134765625" strokeWidth="6.0" />
+        <Line fx:id="springPartD" endX="-24.1650390625" endY="89.03204345703125" layoutY="213.0" startX="-97.8349609375" startY="-43.0" strokeWidth="6.0" />
+        <Line fx:id="springPartE" endX="-89.956298828125" endY="-35.121307373046875" layoutY="202.0" startX="-168.043701171875" startY="102.15338134765625" strokeWidth="6.0" />
+        <Line fx:id="springPartF" endX="-118.8349609375" endY="-21.608978271484375" layoutY="252.0" startX="-159.8349609375" startY="-87.24261474609375" strokeWidth="6.0" />
+        <Line fx:id="springPartG" endX="-73.0" endY="-24.0" layoutY="257.0" startX="-119.0" startY="-24.0" strokeWidth="6.0" />
       <Line endX="-89.5" endY="-102.0" layoutX="229.0" layoutY="334.0" startX="-163.786376953125" startY="-100.98765563964844" stroke="WHITE" />
       <Label layoutX="730.0" layoutY="484.0" prefHeight="52.0" prefWidth="292.0" text="Period:" textFill="#b9955f">
          <font>
