@@ -12,8 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import static com.SceneSwitcher.switchToScene;
 import static com.nn.utils.Alerts.showFirstLayerAlert;
 import static com.nn.utils.Alerts.showLastLayerAlert;
@@ -24,7 +22,7 @@ public class Controller {
     public HBox inputSection;
     public ComboBox<Double> learningRateCB;
     public ComboBox<String> activationCB, lossCB;
-    public Button trainBtn, clrBtn, stopBtn;
+    public Button trainBtn, clrBtn;
     public Label epochLabel, trainingLossLabel;
     public LineChart<Number, Number> chart;
     public Pane networkContainer;
