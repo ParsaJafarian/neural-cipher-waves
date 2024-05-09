@@ -43,11 +43,11 @@ public class MainMenuController implements Initializable {
             infoPane.setVisible(true);
         });
 
+        //creates a highlight effect on the "Close" button in the info screen
         highlightButton(closeInfo);
         closeInfo.setOnAction(e -> {
             infoPane.setVisible(false);
         });
-
 
         //closes the application upon pressing on the exit button
         exit.setOnAction(e -> {
@@ -55,7 +55,10 @@ public class MainMenuController implements Initializable {
         });
     }
 
-    //style settings to make the buttons turn yellow when mouse is hovering over it and goes back to normal when the mouse is no longer on top of it.
+    /**
+     * style settings to make the buttons turn yellow when mouse is hovering over it and goes back to normal when the mouse is no longer on top of it.
+     * @param button buttonm that changes when interacted with
+     */
     public void highlightButton(Button button) {
         button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: grey"));
         button.setOnMouseExited(e -> button.setStyle(null));

@@ -15,6 +15,8 @@ import static com.SceneSwitcher.switchToScene;
  * @author david
  */
 public class SelectionMenuController implements Initializable {
+    @FXML
+    private Button cipher;
 
     @FXML
     private Button physics;
@@ -31,5 +33,6 @@ public class SelectionMenuController implements Initializable {
         back.setOnAction(e -> switchToScene(back, "main-menu.fxml"));
         neuralNetwork.setOnAction(e -> switchToScene(neuralNetwork, "network.fxml"));
         physics.setOnAction(e -> switchToScene(physics, "waves/menu.fxml"));
+        cipher.setOnAction(e -> switchToScene(cipher,"cipher/caesar.fxml"));
     }
 }

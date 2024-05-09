@@ -1,10 +1,7 @@
 package com.cipher;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
@@ -15,6 +12,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
+
+import static com.SceneSwitcher.switchToScene;
 
 
 public class Controller {
@@ -37,8 +36,14 @@ public class Controller {
     private ImageView inner;
 
     @FXML
+    private MenuItem back;
+
+    @FXML
     private ImageView outer;
 
+    public void Init(){
+        //back.setOnAction(e -> switchToScene(back,"selection-menu.fxml"));
+    }
     @FXML
     public void onMousePressedI(MouseEvent e){
         double mouseDeltaX = e.getX();

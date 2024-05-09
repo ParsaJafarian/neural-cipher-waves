@@ -49,9 +49,9 @@ public class VisualController implements Initializable {
     private Label period;
     @FXML
     public Button exit;
-    ArrayList<Circle> dots = new ArrayList<>();
-    String angularF;
-    boolean cont = true;
+    private ArrayList<Circle> dots = new ArrayList<>();
+    private  String angularF;
+    private  boolean cont = true;
 
 
     @Override
@@ -116,10 +116,13 @@ public class VisualController implements Initializable {
 
     }
 
+    /**
+     * with the use of an AnimationTimer, creates circles based on the simple harmonic motion that moves horizontally in order to create sinusoidal wave
+     */
     public void dotCreation() {
         Platform.runLater(() -> {
             if (cont) {
-                Circle dot = new Circle(600+amp.getValue(), node.getTranslateY(), 5, Color.WHITE);
+                Circle dot = new Circle(600+amp.getValue(), node.getTranslateY(), 5, Color.BURLYWOOD);
                 back.getChildren().add(dot);
                 TranslateTransition translate = new TranslateTransition(new Duration(10000), dot);
                 dots.add(dot);
@@ -134,6 +137,10 @@ public class VisualController implements Initializable {
         });
     }
 
+    /**
+     * calculates and displays the angular velocity and period of the motion on the application
+     * @param pathTransition the path transition used to create the circular motion.
+     */
     public void setAngularVelocityAndPeriod(PathTransition pathTransition) {
         if (pathTransition.getRate() == 0) {
             period.setText("no movement");
@@ -147,9 +154,117 @@ public class VisualController implements Initializable {
         }
     }
 
+    //computes the equation based on the information obtained through static variables.
     public void equationCreation() {
         String equ = Math.round((border.getRadius()) * 100.0) / 100.0 + "sin" + "(" + angularF + "t" + " + π/2)";
         equation.setText(equ);
     }
 
+
+    //GETTERS AND SETTERS
+
+
+    public Circle getNode() {
+        return node;
+    }
+
+    public void setNode(Circle node) {
+        this.node = node;
+    }
+
+    public Circle getPath() {
+        return path;
+    }
+
+    public void setPath(Circle path) {
+        this.path = path;
+    }
+
+    public AnchorPane getBack() {
+        return back;
+    }
+
+    public void setBack(AnchorPane back) {
+        this.back = back;
+    }
+
+    public Slider getFreq() {
+        return freq;
+    }
+
+    public void setFreq(Slider freq) {
+        this.freq = freq;
+    }
+
+    public Slider getAmp() {
+        return amp;
+    }
+
+    public void setAmp(Slider amp) {
+        this.amp = amp;
+    }
+
+    public Circle getBorder() {
+        return border;
+    }
+
+    public void setBorder(Circle border) {
+        this.border = border;
+    }
+
+    public Label getEquation() {
+        return equation;
+    }
+
+    public void setEquation(Label equation) {
+        this.equation = equation;
+    }
+
+    public Label getAngF() {
+        return angF;
+    }
+
+    public void setAngF(Label angF) {
+        this.angF = angF;
+    }
+
+    public Label getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(Label period) {
+        this.period = period;
+    }
+
+    public Button getExit() {
+        return exit;
+    }
+
+    public void setExit(Button exit) {
+        this.exit = exit;
+    }
+
+    public ArrayList<Circle> getDots() {
+        return dots;
+    }
+
+    public void setDots(ArrayList<Circle> dots) {
+        this.dots = dots;
+    }
+
+    public String getAngularF() {
+        return angularF;
+    }
+
+    public void setAngularF(String angularF) {
+        this.angularF = angularF;
+    }
+
+    public boolean isCont() {
+        return cont;
+    }
+
+    public void setCont(boolean cont) {
+        this.cont = cont;
+    }
 }

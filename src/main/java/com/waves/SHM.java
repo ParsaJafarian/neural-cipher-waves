@@ -23,7 +23,7 @@ public class SHM extends Application {
         //creates scene
         Scene scene = new Scene(root);
 
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Physics");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -35,4 +35,12 @@ public class SHM extends Application {
         launch(args);
     }
 
+
+    public Parent getRoot() {
+        return root;
+    }
+
+    public void setRoot(Parent root) {
+        this.root = root;
+    }
 }
