@@ -35,6 +35,7 @@ public class MenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        //opens the circular motion application when the button is pressed
         circular.setOnAction((ActionEvent e) -> {
             try {
                 circular.getScene().setRoot(FXMLLoader.load(getClass().getResource("Visual.fxml")));
@@ -42,22 +43,23 @@ public class MenuController implements Initializable {
             }
         });
 
+        //opens the spring motion application when the button is pressed
         spring.setOnAction((ActionEvent e) -> {
             try {
-                //changes the root of the scene to direct the user to the slideshow before the race starts
                 circular.getScene().setRoot(FXMLLoader.load(getClass().getResource("Spring.fxml")));
             } catch (IOException ex) {
             }
         });
 
+        //opens the pendulum application when the button is pressed
         pendulum.setOnAction((ActionEvent e) -> {
             try {
-                //changes the root of the scene to direct the user to the slideshow before the race starts
                 circular.getScene().setRoot(FXMLLoader.load(getClass().getResource("Pendulum.fxml")));
             } catch (IOException ex) {
             }
         });
 
+        //returns to the previous selection screen when the exit button is pressed.
         exit.setOnAction(e -> switchToScene(exit, "selection-menu.fxml"));
     }
 

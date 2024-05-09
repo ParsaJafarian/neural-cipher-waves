@@ -56,37 +56,38 @@ public class SpringController implements Initializable {
     private Label angF;
     @FXML
     private Button exit;
+    @FXML
+    private Line springPartA;
+    @FXML
+    private Line springPartB;
+    @FXML
+    private Line springPartC;
+    @FXML
+    private Line springPartD;
+    @FXML
+    private Line springPartE;
+    @FXML
+    private Line springPartF;
+    @FXML
+    private Line springPartG;
+    @FXML
+    private Rectangle stand;
 
-    String angularF;
-    boolean cont = true;
-    ArrayList<Circle> dots = new ArrayList<>();
-    double endSpring;
-    double totalE;
-    double amplitude;
-    double springConstant;
-    double dur;
-    LineChart<Number, Number> r;
-    XYChart.Series<Number, Number> series;
-    XYChart.Series<Number, Number> series2;
-    ArrayList<Double> time;
-    int t = 0;
-    PathTransition pathTransition;
-    @FXML
-    Line springPartA;
-    @FXML
-    Line springPartB;
-    @FXML
-    Line springPartC;
-    @FXML
-    Line springPartD;
-    @FXML
-    Line springPartE;
-    @FXML
-    Line springPartF;
-    @FXML
-    Line springPartG;
-    @FXML
-    Rectangle stand;
+    private String angularF;
+    private boolean cont = true;
+    private  ArrayList<Circle> dots = new ArrayList<>();
+    private double endSpring;
+    private double totalE;
+    private double amplitude;
+    private double springConstant;
+    private double dur;
+    private LineChart<Number, Number> chart;
+    private XYChart.Series<Number, Number> series;
+    private XYChart.Series<Number, Number> series2;
+    private ArrayList<Double> time;
+    private int t = 0;
+    private PathTransition pathTransition;
+
 
     /**
      * Initializes the controller class.
@@ -127,6 +128,7 @@ public class SpringController implements Initializable {
             springPartG.setStartX(springPartF.getEndX());
             springPartG.setEndX(Double.parseDouble(newValue.toString()));
         });
+
         path.setStartX(path.getStartX() + (block.getWidth() / 2));
         endSpring = path.getEndX();
         pathTransition = new PathTransition(new Duration(800), path, block);
@@ -173,6 +175,9 @@ public class SpringController implements Initializable {
         });
     }
 
+    /**
+     * with the use of an AnimationTimer, creates circles based on the simple harmonic motion that moves horizontally in order to create sinusoidal wave
+     */
     public void dotCreation() {
         Platform.runLater(() -> {
             if (cont) {
@@ -195,6 +200,10 @@ public class SpringController implements Initializable {
         });
     }
 
+    /**
+     * calculates and displays the angular velocity and period of the motion on the application
+     * @param pathTransition the path transition used to create the circular motion.
+     */
     public void setAngularVelocityAndPeriod(PathTransition pathTransition) {
         if (pathTransition.getRate() == 0) {
             period.setText("no movement");
@@ -209,6 +218,9 @@ public class SpringController implements Initializable {
         }
     }
 
+    /**
+     *  Uses the static methods that are instantiated whenever the sliders are changed by the user in order to create the equation for the simple harmonic motion
+     */
     public void equationCreation() {
         pathTransition.stop();
         pathTransition.play();
@@ -219,40 +231,56 @@ public class SpringController implements Initializable {
         graphCreation();
     }
 
+    /**
+     * instantiates and assigns values to static variables that create the energy chart of the spring motion.
+     */
     public void graphCreation() {
+        //t is the index that is used to cycle through the different values of time stored in the "time" arraylist
         t = 0;
-        back.getChildren().remove(r);
+        //removes previous chart that was created for another equation
+        back.getChildren().remove(chart);
 
+        //creates the axis needed for the chart and sets their properties
         NumberAxis x = new NumberAxis(0, dur, 1);
         x.setLabel("Time (period)");
         NumberAxis y = new NumberAxis(0, totalE, 1);
         y.setLabel("energy");
 
-        r = new LineChart<>(x, y);
-        r.setMaxHeight(350);
-        r.setLayoutX(kineticGraph.getLayoutX());
-        r.setLayoutY(kineticGraph.getLayoutY());
+        //instantiates the LineChart and adds its axis
+        chart = new LineChart<>(x, y);
+        chart.setMaxHeight(350);
+
+        //uses an empty chart in order to properly position the graph in the right place.
+        chart.setLayoutX(kineticGraph.getLayoutX());
+        chart.setLayoutY(kineticGraph.getLayoutY());
+
         //creating arrayList for time values for creating energy graphs
         time = new ArrayList<>();
         for (double i = 0; i < dur; i += 0.017) {
             time.add(i);
         }
 
-        //Potential energy values according to the time values created above
+        //instantiates the series that will store the potential energy changes in one period of motion
         series = new XYChart.Series<>();
         series.setName("Potential Energy");
 
-        //Total energy value: TotalE
-        //Kinetic energy values according to the time values created above
+        //instantiates the series that will store the kinetic energy changes in one period of motion
         series2 = new XYChart.Series<>();
         series2.setName("Kinetic Energy");
 
-        r.getData().add(series);
-        r.getData().add(series2);
-        r.setCreateSymbols(false);
-        back.getChildren().add(r);
+        //adds the series/lines to the chart
+        chart.getData().add(series);
+        chart.getData().add(series2);
+        chart.setCreateSymbols(false);
+        back.getChildren().add(chart);
     }
 
+    /**
+     * using an AnimationTimer, gradually adds energy values to the line chart, which displays the energy changes in the motion in one period in order to prevent any stuttering in the program.
+     * @param time Arraylist containing the time from 0s to the seconds in one period, which is used as the x-coordinates in the chart.
+     * @param series series that creates the potential energy line of the chart.
+     * @param series2 series that creates the kinetic energy line of the chart.
+     */
     public void addEnergy(ArrayList<Double> time, XYChart.Series<Number, Number> series, XYChart.Series<Number, Number> series2) {
         if (t < time.size()) {
             double displacement = amplitude * Math.sin(((2 * Math.PI) / dur) * time.get(t));

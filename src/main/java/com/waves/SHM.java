@@ -23,7 +23,7 @@ public class SHM extends Application {
         //creates scene
         Scene scene = new Scene(root);
 
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Physics");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

@@ -49,9 +49,9 @@ public class VisualController implements Initializable {
     private Label period;
     @FXML
     public Button exit;
-    ArrayList<Circle> dots = new ArrayList<>();
-    String angularF;
-    boolean cont = true;
+    private ArrayList<Circle> dots = new ArrayList<>();
+    private  String angularF;
+    private  boolean cont = true;
 
 
     @Override
@@ -116,6 +116,9 @@ public class VisualController implements Initializable {
 
     }
 
+    /**
+     * with the use of an AnimationTimer, creates circles based on the simple harmonic motion that moves horizontally in order to create sinusoidal wave
+     */
     public void dotCreation() {
         Platform.runLater(() -> {
             if (cont) {
@@ -134,6 +137,10 @@ public class VisualController implements Initializable {
         });
     }
 
+    /**
+     * calculates and displays the angular velocity and period of the motion on the application
+     * @param pathTransition the path transition used to create the circular motion.
+     */
     public void setAngularVelocityAndPeriod(PathTransition pathTransition) {
         if (pathTransition.getRate() == 0) {
             period.setText("no movement");
@@ -147,6 +154,7 @@ public class VisualController implements Initializable {
         }
     }
 
+    //computes the equation based on the information obtained through static variables.
     public void equationCreation() {
         String equ = Math.round((border.getRadius()) * 100.0) / 100.0 + "sin" + "(" + angularF + "t" + " + π/2)";
         equation.setText(equ);

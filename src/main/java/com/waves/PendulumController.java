@@ -61,13 +61,6 @@ public class PendulumController implements Initializable {
     private LineChart<?, ?> EChart;
     @FXML
     private Button exit;
-
-    double angleVal;
-    double length;
-    double period;
-    double angularF;
-    double mass;
-    LineChart<Number, Number> r;
     @FXML
     private Button Shape2;
     @FXML
@@ -79,13 +72,19 @@ public class PendulumController implements Initializable {
     @FXML
     private Circle object4;
 
+
+    double angleVal;
+    double length;
+    double period;
+    double angularF;
+    double mass= 1;;
+    LineChart<Number, Number> chart;
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ropeSetCircle(object);
-        mass = 1;
         angleVal = angleSlider.getValue();
         length = lengthSlider.getValue();
         period = (2 * Math.PI) * (Math.sqrt((length) / 9.81));
@@ -96,45 +95,59 @@ public class PendulumController implements Initializable {
         arcPathCreation(length * 500, angleSlider.getValue(), pathTransition);
         equationCreation();
 
+        //detects and uses the changes made to the length slider by the user
         lengthSlider.valueProperty().addListener((observable, oldvalue, newvalue) -> {
             length = (double) newvalue;
             period = (2 * Math.PI) * (Math.sqrt((length) / 9.81));
             angularF = (2 * Math.PI) / period;
+            //since one cycle of transition is hald of a period of the motion, we make the duration of the animation period/2
             pathTransition.setDuration(Duration.seconds(period / 2));
             arcPathCreation(length * 500, angleVal, pathTransition);
+
             lengthSlider.setOnMouseReleased(e -> equationCreation());
         });
+
+        //detects and uses the changes made to the angle slider by the user
         angleSlider.valueProperty().addListener((observable, oldvalue, newvalue) -> {
             angleVal = (double) newvalue;
             arcPathCreation(length * 500, angleVal, pathTransition);
             angleSlider.setOnMouseReleased(e -> equationCreation());
         });
 
+        //changes the object attached to the pendulum string when clicking on the specified buttons
         Shape1.setOnAction(e -> setNewObjectCircle(pathTransition, object));
         Shape2.setOnAction(e -> setNewObjectCircle(pathTransition, object2));
         Shape3.setOnAction(e -> setNewObjectCircle(pathTransition, object3));
         Shape4.setOnAction(e -> setNewObjectCircle(pathTransition, object4));
 
+        //exits the physics simulation
         exit.setOnAction(e -> {
             try {
-                //changes the root of the scene to direct the user to the slideshow before the race starts
                 exit.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("menu.fxml"))));
             } catch (IOException ignored) {
             }
         });
     }
 
+    /**
+     * changes the object that is attrached to the string of the pendulum
+     * @param pathTransition the path transition used to simulate the motion of the pendulum
+     * @param shape the shape that will be used as the object of the pendulum/node of the transition.
+     */
     public void setNewObjectCircle(PathTransition pathTransition, Circle shape) {
         if (!pathTransition.getNode().equals(shape)) {
             pathTransition.getNode().setVisible(false);
         }
         ropeSetCircle(shape);
-        mass = 2;
         pathTransition.setNode(shape);
         pathTransition.stop();
         pathTransition.play();
     }
 
+    /**
+     * binds the rope of the pendulum to the new object
+     * @param obj object that is used for the pendulum
+     */
     public void ropeSetCircle(Circle obj) {
         rope.startXProperty().bind(pivot.centerXProperty());
         rope.startYProperty().bind(pivot.centerYProperty());
@@ -143,6 +156,12 @@ public class PendulumController implements Initializable {
         obj.setVisible(true);
     }
 
+    /**
+     * creates the arc that is used as the path of the path transition.
+     * @param length the length of the string of the pendulum
+     * @param angle the starting/maximum angle that is chosen by the user using the angle slider
+     * @param pathTransition the path transition that is used for the motion of the pendulum
+     */
     public void arcPathCreation(double length, double angle, PathTransition pathTransition) {
         double rad = angle * (Math.PI / 180);
         double yDifference = length - (length * Math.cos(rad));
@@ -158,6 +177,9 @@ public class PendulumController implements Initializable {
         pathTransition.play();
     }
 
+    /**
+     *  Uses the static methods that are instantiated whenever the sliders are changed by the user in order to create the equation for the simple harmonic motion
+     */
     public void equationCreation() {
         angularVelocityText.setText(Math.round(angularF * 100.0) / 100.0 + " rad/s");
         periodText.setText(Math.round(period * 100.0) / 100.0 + " seconds");
@@ -167,23 +189,39 @@ public class PendulumController implements Initializable {
         graphCreation();
     }
 
+    /**
+     * creates the graph that shows the changes in potential and kinetic energy in a single cycle
+     */
     public void graphCreation() {
-        back.getChildren().remove(r);
+        //removes the previous data that is displayed on the chart
+        back.getChildren().remove(chart);
+
+        //stores the time it takes for the pendulum to make one cycle as a double with 2 decimal places
         double dur = Math.round(period * 100.0) / 100.0;
+
+        //calculates the total energy of the system using a mathematical equation
         double totalE = (length - (length * Math.cos((angleVal * (Math.PI / 180))))) * 9.81 * mass;
+
+        //creates the array lists needed to store all the data of the graph
         ArrayList<Double> potential = new ArrayList<>();
         ArrayList<Double> kinetic = new ArrayList<>();
         ArrayList<Double> time = new ArrayList<>();
+
+        //creates the axis of the graph and sets their values + names
         NumberAxis x = new NumberAxis(0, dur, 1);
         x.setLabel("Time (period)");
         NumberAxis y = new NumberAxis(0, totalE, 1);
         y.setLabel("energy");
 
-        r = new LineChart<>(x, y);
-        r.setMaxHeight(350);
-        r.setMaxWidth(400);
-        r.setLayoutX(EChart.getLayoutX() - 20);
-        r.setLayoutY(EChart.getLayoutY() - 20);
+        //instantiates the LineChart and establishes their dimensions
+        chart = new LineChart<>(x, y);
+        chart.setMaxHeight(350);
+        chart.setMaxWidth(400);
+
+        //using an empty line chart to set its position in the right place
+        chart.setLayoutX(EChart.getLayoutX() - 20);
+        chart.setLayoutY(EChart.getLayoutY() - 20);
+
         //creating arrayList for time values for creating energy graphs
         for (double i = 0; i < dur * 2; i += 0.01) {
             time.add(i);
@@ -195,8 +233,9 @@ public class PendulumController implements Initializable {
             double heightDifference = length - (length * Math.cos(angle));
             double val = mass * 9.81 * heightDifference;
             potential.add(val);
-            System.out.println(val);
         }
+
+        //creates the line that represents the potential energy changes and adds the data.
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.setName("Potential Energy");
         for (int i = 0; i < time.size(); i++) {
@@ -209,15 +248,18 @@ public class PendulumController implements Initializable {
             double val = totalE - potential.get(i);
             kinetic.add(val);
         }
+
+        //creates the line that represents the kinetic energy changes and adds the data.
         XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
         series2.setName("Kinetic Energy");
         for (int i = 0; i < time.size(); i++) {
             series2.getData().add(new XYChart.Data<>(time.get(i), kinetic.get(i)));
         }
 
-        r.getData().add(series);
-        r.getData().add(series2);
-        r.setCreateSymbols(false);
-        back.getChildren().add(r);
+        //adds the lines to the chart.
+        chart.getData().add(series);
+        chart.getData().add(series2);
+        chart.setCreateSymbols(false);
+        back.getChildren().add(chart);
     }
 }
