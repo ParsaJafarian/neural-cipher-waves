@@ -294,4 +294,271 @@ public class SpringController implements Initializable {
         }
 
     }
+
+    //GETTERS AND SETTERS
+
+
+    public AnchorPane getBack() {
+        return back;
+    }
+
+    public void setBack(AnchorPane back) {
+        this.back = back;
+    }
+
+    public Slider getFreq() {
+        return freq;
+    }
+
+    public void setFreq(Slider freq) {
+        this.freq = freq;
+    }
+
+    public Slider getAmp() {
+        return amp;
+    }
+
+    public void setAmp(Slider amp) {
+        this.amp = amp;
+    }
+
+    public Rectangle getBlock() {
+        return block;
+    }
+
+    public void setBlock(Rectangle block) {
+        this.block = block;
+    }
+
+    public Line getPath() {
+        return path;
+    }
+
+    public void setPath(Line path) {
+        this.path = path;
+    }
+
+    public Label getEquation() {
+        return equation;
+    }
+
+    public void setEquation(Label equation) {
+        this.equation = equation;
+    }
+
+    public Label getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(Label period) {
+        this.period = period;
+    }
+
+    public Label getConstant() {
+        return constant;
+    }
+
+    public void setConstant(Label constant) {
+        this.constant = constant;
+    }
+
+    public LineChart<?, ?> getKineticGraph() {
+        return kineticGraph;
+    }
+
+    public void setKineticGraph(LineChart<?, ?> kineticGraph) {
+        this.kineticGraph = kineticGraph;
+    }
+
+    public Label getAngF() {
+        return angF;
+    }
+
+    public void setAngF(Label angF) {
+        this.angF = angF;
+    }
+
+    public Button getExit() {
+        return exit;
+    }
+
+    public void setExit(Button exit) {
+        this.exit = exit;
+    }
+
+    public Line getSpringPartB() {
+        return springPartB;
+    }
+
+    public void setSpringPartB(Line springPartB) {
+        this.springPartB = springPartB;
+    }
+
+    public Line getSpringPartA() {
+        return springPartA;
+    }
+
+    public void setSpringPartA(Line springPartA) {
+        this.springPartA = springPartA;
+    }
+
+    public Line getSpringPartD() {
+        return springPartD;
+    }
+
+    public void setSpringPartD(Line springPartD) {
+        this.springPartD = springPartD;
+    }
+
+    public Line getSpringPartC() {
+        return springPartC;
+    }
+
+    public void setSpringPartC(Line springPartC) {
+        this.springPartC = springPartC;
+    }
+
+    public Line getSpringPartE() {
+        return springPartE;
+    }
+
+    public void setSpringPartE(Line springPartE) {
+        this.springPartE = springPartE;
+    }
+
+    public Line getSpringPartF() {
+        return springPartF;
+    }
+
+    public void setSpringPartF(Line springPartF) {
+        this.springPartF = springPartF;
+    }
+
+    public Line getSpringPartG() {
+        return springPartG;
+    }
+
+    public void setSpringPartG(Line springPartG) {
+        this.springPartG = springPartG;
+    }
+
+    public Rectangle getStand() {
+        return stand;
+    }
+
+    public void setStand(Rectangle stand) {
+        this.stand = stand;
+    }
+
+    public String getAngularF() {
+        return angularF;
+    }
+
+    public void setAngularF(String angularF) {
+        this.angularF = angularF;
+    }
+
+    public boolean isCont() {
+        return cont;
+    }
+
+    public void setCont(boolean cont) {
+        this.cont = cont;
+    }
+
+    public ArrayList<Circle> getDots() {
+        return dots;
+    }
+
+    public void setDots(ArrayList<Circle> dots) {
+        this.dots = dots;
+    }
+
+    public double getAmplitude() {
+        return amplitude;
+    }
+
+    public void setAmplitude(double amplitude) {
+        this.amplitude = amplitude;
+    }
+
+    public double getEndSpring() {
+        return endSpring;
+    }
+
+    public void setEndSpring(double endSpring) {
+        this.endSpring = endSpring;
+    }
+
+    public double getTotalE() {
+        return totalE;
+    }
+
+    public void setTotalE(double totalE) {
+        this.totalE = totalE;
+    }
+
+    public double getSpringConstant() {
+        return springConstant;
+    }
+
+    public void setSpringConstant(double springConstant) {
+        this.springConstant = springConstant;
+    }
+
+    public double getDur() {
+        return dur;
+    }
+
+    public void setDur(double dur) {
+        this.dur = dur;
+    }
+
+    public LineChart<Number, Number> getChart() {
+        return chart;
+    }
+
+    public void setChart(LineChart<Number, Number> chart) {
+        this.chart = chart;
+    }
+
+    public XYChart.Series<Number, Number> getSeries() {
+        return series;
+    }
+
+    public void setSeries(XYChart.Series<Number, Number> series) {
+        this.series = series;
+    }
+
+    public XYChart.Series<Number, Number> getSeries2() {
+        return series2;
+    }
+
+    public void setSeries2(XYChart.Series<Number, Number> series2) {
+        this.series2 = series2;
+    }
+
+    public int getT() {
+        return t;
+    }
+
+    public void setT(int t) {
+        this.t = t;
+    }
+
+    public ArrayList<Double> getTime() {
+        return time;
+    }
+
+    public void setTime(ArrayList<Double> time) {
+        this.time = time;
+    }
+
+    public PathTransition getPathTransition() {
+        return pathTransition;
+    }
+
+    public void setPathTransition(PathTransition pathTransition) {
+        this.pathTransition = pathTransition;
+    }
 }

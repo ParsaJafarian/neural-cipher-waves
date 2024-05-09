@@ -278,4 +278,216 @@ public class PendulumController implements Initializable {
         chart.setCreateSymbols(false);
         back.getChildren().add(chart);
     }
+
+
+
+    //GETTERS AND SETTERS
+
+    public Line getRope() {
+        return rope;
+    }
+
+    public void setRope(Line rope) {
+        this.rope = rope;
+    }
+
+    public Arc getPath() {
+        return path;
+    }
+
+    public void setPath(Arc path) {
+        this.path = path;
+    }
+
+    public Circle getPivot() {
+        return pivot;
+    }
+
+    public void setPivot(Circle pivot) {
+        this.pivot = pivot;
+    }
+
+    public Circle getObject2() {
+        return object2;
+    }
+
+    public void setObject2(Circle object2) {
+        this.object2 = object2;
+    }
+
+    public Button getShape1() {
+        return Shape1;
+    }
+
+    public void setShape1(Button shape1) {
+        Shape1 = shape1;
+    }
+
+    public Slider getLengthSlider() {
+        return lengthSlider;
+    }
+
+    public void setLengthSlider(Slider lengthSlider) {
+        this.lengthSlider = lengthSlider;
+    }
+
+    public Slider getAngleSlider() {
+        return angleSlider;
+    }
+
+    public void setAngleSlider(Slider angleSlider) {
+        this.angleSlider = angleSlider;
+    }
+
+    public Line getLineReference() {
+        return lineReference;
+    }
+
+    public void setLineReference(Line lineReference) {
+        this.lineReference = lineReference;
+    }
+
+    public AnchorPane getBack() {
+        return back;
+    }
+
+    public void setBack(AnchorPane back) {
+        this.back = back;
+    }
+
+    public Label getAngularVelocityText() {
+        return angularVelocityText;
+    }
+
+    public void setAngularVelocityText(Label angularVelocityText) {
+        this.angularVelocityText = angularVelocityText;
+    }
+
+    public Label getPeriodText() {
+        return periodText;
+    }
+
+    public void setPeriodText(Label periodText) {
+        this.periodText = periodText;
+    }
+
+    public Label getLengthText() {
+        return lengthText;
+    }
+
+    public void setLengthText(Label lengthText) {
+        this.lengthText = lengthText;
+    }
+
+    public Label getEquationText() {
+        return equationText;
+    }
+
+    public void setEquationText(Label equationText) {
+        this.equationText = equationText;
+    }
+
+    public LineChart<?, ?> getEChart() {
+        return EChart;
+    }
+
+    public void setEChart(LineChart<?, ?> EChart) {
+        this.EChart = EChart;
+    }
+
+    public Button getExit() {
+        return exit;
+    }
+
+    public void setExit(Button exit) {
+        this.exit = exit;
+    }
+
+    public Button getShape2() {
+        return Shape2;
+    }
+
+    public void setShape2(Button shape2) {
+        Shape2 = shape2;
+    }
+
+    public Button getShape3() {
+        return Shape3;
+    }
+
+    public void setShape3(Button shape3) {
+        Shape3 = shape3;
+    }
+
+    public Button getShape4() {
+        return Shape4;
+    }
+
+    public void setShape4(Button shape4) {
+        Shape4 = shape4;
+    }
+
+    public Circle getObject3() {
+        return object3;
+    }
+
+    public void setObject3(Circle object3) {
+        this.object3 = object3;
+    }
+
+    public Circle getObject4() {
+        return object4;
+    }
+
+    public void setObject4(Circle object4) {
+        this.object4 = object4;
+    }
+
+    public double getAngleVal() {
+        return angleVal;
+    }
+
+    public void setAngleVal(double angleVal) {
+        this.angleVal = angleVal;
+    }
+
+    public double getLength() {
+        return length;
+    }
+
+    public void setLength(double length) {
+        this.length = length;
+    }
+
+    public double getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(double period) {
+        this.period = period;
+    }
+
+    public double getAngularF() {
+        return angularF;
+    }
+
+    public void setAngularF(double angularF) {
+        this.angularF = angularF;
+    }
+
+    public double getMass() {
+        return mass;
+    }
+
+    public void setMass(double mass) {
+        this.mass = mass;
+    }
+
+    public LineChart<Number, Number> getChart() {
+        return chart;
+    }
+
+    public void setChart(LineChart<Number, Number> chart) {
+        this.chart = chart;
+    }
 }

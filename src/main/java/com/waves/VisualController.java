@@ -160,4 +160,111 @@ public class VisualController implements Initializable {
         equation.setText(equ);
     }
 
+
+    //GETTERS AND SETTERS
+
+
+    public Circle getNode() {
+        return node;
+    }
+
+    public void setNode(Circle node) {
+        this.node = node;
+    }
+
+    public Circle getPath() {
+        return path;
+    }
+
+    public void setPath(Circle path) {
+        this.path = path;
+    }
+
+    public AnchorPane getBack() {
+        return back;
+    }
+
+    public void setBack(AnchorPane back) {
+        this.back = back;
+    }
+
+    public Slider getFreq() {
+        return freq;
+    }
+
+    public void setFreq(Slider freq) {
+        this.freq = freq;
+    }
+
+    public Slider getAmp() {
+        return amp;
+    }
+
+    public void setAmp(Slider amp) {
+        this.amp = amp;
+    }
+
+    public Circle getBorder() {
+        return border;
+    }
+
+    public void setBorder(Circle border) {
+        this.border = border;
+    }
+
+    public Label getEquation() {
+        return equation;
+    }
+
+    public void setEquation(Label equation) {
+        this.equation = equation;
+    }
+
+    public Label getAngF() {
+        return angF;
+    }
+
+    public void setAngF(Label angF) {
+        this.angF = angF;
+    }
+
+    public Label getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(Label period) {
+        this.period = period;
+    }
+
+    public Button getExit() {
+        return exit;
+    }
+
+    public void setExit(Button exit) {
+        this.exit = exit;
+    }
+
+    public ArrayList<Circle> getDots() {
+        return dots;
+    }
+
+    public void setDots(ArrayList<Circle> dots) {
+        this.dots = dots;
+    }
+
+    public String getAngularF() {
+        return angularF;
+    }
+
+    public void setAngularF(String angularF) {
+        this.angularF = angularF;
+    }
+
+    public boolean isCont() {
+        return cont;
+    }
+
+    public void setCont(boolean cont) {
+        this.cont = cont;
+    }
 }

@@ -35,4 +35,12 @@ public class SHM extends Application {
         launch(args);
     }
 
+
+    public Parent getRoot() {
+        return root;
+    }
+
+    public void setRoot(Parent root) {
+        this.root = root;
+    }
 }

@@ -63,5 +63,47 @@ public class MenuController implements Initializable {
         exit.setOnAction(e -> switchToScene(exit, "selection-menu.fxml"));
     }
 
+
+    //GETTERS AND SETTERS
+
+    public Button getCircular() {
+        return circular;
+    }
+
+    public void setCircular(Button circular) {
+        this.circular = circular;
+    }
+
+    public Button getPendulum() {
+        return pendulum;
+    }
+
+    public void setPendulum(Button pendulum) {
+        this.pendulum = pendulum;
+    }
+
+    public Button getSpring() {
+        return spring;
+    }
+
+    public void setSpring(Button spring) {
+        this.spring = spring;
+    }
+
+    public VisualController getVisual() {
+        return visual;
+    }
+
+    public void setVisual(VisualController visual) {
+        this.visual = visual;
+    }
+
+    public Button getExit() {
+        return exit;
+    }
+
+    public void setExit(Button exit) {
+        this.exit = exit;
+    }
 }
 
