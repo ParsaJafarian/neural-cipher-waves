@@ -40,7 +40,7 @@
         </Label>
         <Rectangle fx:id="block" arcHeight="5.0" arcWidth="5.0" fill="#8d662c" height="120.0" stroke="WHITE" strokeType="INSIDE" width="120.0" />
         <Rectangle fx:id="stand" arcHeight="5.0" arcWidth="5.0" fill="#b9955f" height="200.0" layoutX="47.0" layoutY="127.0" stroke="BLACK" strokeType="INSIDE" width="18.0" />
-        <Line fx:id="path" endX="300.0" endY="-0.5" layoutX="248.0" layoutY="232.0" startX="-108.0" startY="-0.5" stroke="RED" />
+        <Line fx:id="path" endX="300.0" endY="-0.5" layoutX="248.0" layoutY="232.0" startX="-108.0" startY="-0.5" stroke="#d01414" />
         <Label fx:id="equation" layoutX="957.0" layoutY="348.0" prefHeight="49.0" prefWidth="368.0" textFill="#b9955f">
             <font>
                 <Font name="System Bold" size="33.0" />
