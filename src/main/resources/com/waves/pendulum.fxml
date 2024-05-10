@@ -1,23 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Arc?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="back" maxWidth="800.0" minWidth="1500.0" prefHeight="800.0" prefWidth="1500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.waves.PendulumController">
+<AnchorPane id="AnchorPane" fx:id="back" maxWidth="800.0" minWidth="1500.0" prefHeight="800.0" prefWidth="1500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.waves.PendulumController">
     <children>
         <Rectangle fx:id="border" arcHeight="5.0" arcWidth="5.0" fill="#a19e9c" height="760.0" stroke="#6f5327" strokeType="INSIDE" strokeWidth="5.0" width="722.0" x="23.0" y="21.0" />
 
@@ -96,7 +86,7 @@
                 <Font name="System Bold Italic" size="24.0" />
             </font>
         </Label>
-        <Arc fx:id="path" fill="#ffffff00" layoutX="392.0" layoutY="583.0" length="180.0" radiusX="314.0" radiusY="211.0" rotate="180.0" stroke="BLACK" strokeLineJoin="ROUND" strokeType="INSIDE" />
+        <Arc fx:id="path" fill="#ffffff00" layoutX="392.0" layoutY="583.0" length="180.0" radiusX="314.0" radiusY="211.0" rotate="180.0" stroke="BLACK" strokeLineJoin="ROUND" strokeType="INSIDE" visible="false" />
         <Circle fx:id="pivot" centerX="392.0" centerY="34.0" fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
         <Line fx:id="rope2" endX="-11.0" layoutX="10.0" layoutY="10.0" startX="-11.0" startY="411.0" strokeWidth="5.0" />
         <Circle fx:id="object2" fill="#362424" radius="59.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" visible="false" />
