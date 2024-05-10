@@ -121,17 +121,17 @@ public class PendulumController implements Initializable {
             equationCreation();
         });
         Shape2.setOnAction(e -> {
-            setNewObjectCircle(pathTransition, object);
+            setNewObjectCircle(pathTransition, object2);
             mass =10;
             equationCreation();
         });
         Shape3.setOnAction(e -> {
-            setNewObjectCircle(pathTransition, object);
+            setNewObjectCircle(pathTransition, object3);
             mass =50;
             equationCreation();
         });
         Shape4.setOnAction(e -> {
-            setNewObjectCircle(pathTransition, object);
+            setNewObjectCircle(pathTransition, object4);
             mass =100;
             equationCreation();
         });
