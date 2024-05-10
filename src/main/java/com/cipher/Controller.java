@@ -15,6 +15,9 @@ import java.util.Scanner;
 
 import static com.SceneSwitcher.switchToScene;
 
+/**
+ * The controller is where the back-end and the front-end of the program are connected
+ */
 
 public class Controller {
     public File inputFile;
@@ -36,14 +39,15 @@ public class Controller {
     private ImageView inner;
 
     @FXML
-    private MenuItem back;
+    private Button back;
 
     @FXML
     private ImageView outer;
 
-    public void Init(){
-        //back.setOnAction(e -> switchToScene(back,"selection-menu.fxml"));
-    }
+    /**
+     * function to grab mouse coordinates when clicked on the inner circle
+     * @param e the mouseAction event
+     */
     @FXML
     public void onMousePressedI(MouseEvent e){
         double mouseDeltaX = e.getX();
@@ -52,6 +56,10 @@ public class Controller {
         startI = Math.toDegrees(radAngle);
         startII = inner.getRotate();
     }
+    /**
+     * function to grab mouse coordinates when clicked on the outer circle
+     * @param e the mouseAction event
+     */
     @FXML
     public void onMousePressedO(MouseEvent e){
         double mouseDeltaX = e.getX();
@@ -60,6 +68,11 @@ public class Controller {
         startO = Math.toDegrees(radAngle);
         startOO = outer.getRotate();
     }
+
+    /**
+     * Function to continuously track the mouse movement and rotates the inner circle accordingly
+     * @param t MouseDrag event
+     */
     @FXML
     public void onDraggedI(MouseEvent t){
         double mouseDeltaX = t.getX();
@@ -90,6 +103,10 @@ public class Controller {
         }
         Preview.setText(CC_Engine.CC_encrypt(Input.getText(),key,Ensy.isSelected(),decrypt.isSelected()));
     }
+    /**
+     * Function to continuously track the mouse movement and rotates the outer circle accordingly
+     * @param t MouseDrag event
+     */
     @FXML
     public void onDraggedO(MouseEvent t){
         double mouseDeltaX = t.getX();
@@ -120,6 +137,11 @@ public class Controller {
         }
         Preview.setText(CC_Engine.CC_encrypt(Input.getText(),key,Ensy.isSelected(),decrypt.isSelected()));
     }
+
+    /**
+     * File explorer launch to save decrypted/encrypted into text files
+     * @throws FileNotFoundException error handling for non-existing directories
+     */
     public void onsavB() throws FileNotFoundException {
         Stage pupop = new Stage();
         FileChooser fileChooser = new FileChooser();
@@ -131,12 +153,24 @@ public class Controller {
             saveTextToFile(Preview.getText(), file);
         }
     }
+
+    /**
+     * this function writes the content of the program's output textfield into a .txt file
+     * @param content the content of the programs textfield
+     * @param file    the file to be saved
+     * @throws FileNotFoundException non-existing directories error handling
+     */
     private void saveTextToFile(String content, File file) throws FileNotFoundException {
         PrintWriter writer;
         writer = new PrintWriter(file);
         writer.println(content);
         writer.close();
     }
+
+    /**
+     * Function to select text files as input parameters
+     * @throws FileNotFoundException error handling of non-existing files
+     */
     public void onselB() throws FileNotFoundException {
         Stage pupop = new Stage();
         FileChooser fileChooser = new FileChooser();
@@ -152,6 +186,17 @@ public class Controller {
             Input.setText(Input.getText()+scanner.next());
         }
     }
+
+    /**
+     * back button to go back to the main menu
+     */
+    public void onBack(){
+        switchToScene(back,"main-menu.fxml");
+    }
+
+    /**
+     * reset button function to reset the cipher wheel
+     */
     @FXML
     public void resetClicked(){
         inner.setRotate(0);

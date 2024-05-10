@@ -14,6 +14,11 @@ public class GUI extends Application {
         show(stage);
     }
 
+    /**
+     * The GUI simply launches a scene according to the FXML file
+     * @param stage
+     * @throws IOException
+     */
     public static void show(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(GUI.class.getResource("caesar.fxml"));
         var scene = new Scene(fxmlLoader.load(), 1100, 770);
