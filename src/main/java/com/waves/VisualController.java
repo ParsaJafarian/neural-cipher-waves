@@ -73,13 +73,13 @@ public class VisualController implements Initializable {
         pathTransition.setInterpolator(Interpolator.LINEAR);
         pathTransition.play();
 
-        setAngularVelocityAndPeriod(pathTransition);
+        setAngularFrequencyAndPeriod(pathTransition);
         equationCreation();
 
         freq.valueProperty().addListener((observable, oldvalue, newvalue) -> {
             cont = false;
             pathTransition.setRate((double) newvalue);
-            setAngularVelocityAndPeriod(pathTransition);
+            setAngularFrequencyAndPeriod(pathTransition);
             freq.setOnMouseReleased(e->{
                 equationCreation();
                 cont = true;
@@ -141,7 +141,7 @@ public class VisualController implements Initializable {
      * calculates and displays the angular velocity and period of the motion on the application
      * @param pathTransition the path transition used to create the circular motion.
      */
-    public void setAngularVelocityAndPeriod(PathTransition pathTransition) {
+    public void setAngularFrequencyAndPeriod(PathTransition pathTransition) {
         if (pathTransition.getRate() == 0) {
             period.setText("no movement");
             angF.setText("no movement");
