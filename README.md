@@ -11,8 +11,5 @@ NCPS is a collection of mathematical/scientific simulations that teach users thr
 * Classical Caesar Cipher - Implementation of one of the first crypotgraphy algorithms
 * Physics (Waves) - Demonstration of simple harmonic motion through a spring, pendulum and wave
 
-## Neural Network UML Diagram
-![image](./images/neural-network.png)
-
-## Physics UML Diagram
-![image](./images/physics.png)
+## Neural Network Demo
+https://github.com/ParsaJafarian/neural-cipher-waves/assets/108084316/e35f1721-1266-461a-9648-8aaf520631ba
