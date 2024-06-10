@@ -1,9 +1,6 @@
 # NCPS (Neural Network - Cipher - Physics - Simulation)
 
 ## How to get started
-### Prerequisites
-Before you can build and run this project, ensure you have the following software installed on your system:
-- [Oracle OpenJDK 21.0.2](https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html)
 
 1. Clone the repository
 `git clone https://github.com/ParsaJafarian/neural-cipher-waves.git`
