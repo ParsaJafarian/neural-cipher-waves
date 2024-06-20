@@ -1,6 +1,9 @@
 # NCPS (Neural Network - Cipher - Physics - Simulation)
 
-## How to get started
+## How to get started (Production Environment)
+Head to releases section of this repository and download `neural-cipher-waves.jar`. Then, run it. 
+
+## How to get started (Dev Environment)
 
 1. Clone the repository
 `git clone https://github.com/ParsaJafarian/neural-cipher-waves.git`
