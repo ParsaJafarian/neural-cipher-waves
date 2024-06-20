@@ -13,10 +13,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import static com.SceneSwitcher.switchToScene;
-import static com.nn.utils.Alerts.showFirstLayerAlert;
-import static com.nn.utils.Alerts.showLastLayerAlert;
 import static com.nn.display.NeuralNetworkConfig.FIRST_LAYER_NEURONS;
 import static com.nn.display.NeuralNetworkConfig.LAST_LAYER_NEURONS;
+import static com.nn.utils.Alerts.*;
 
 public class Controller {
     public HBox inputSection;
@@ -30,6 +29,7 @@ public class Controller {
     public VBox inputDisplay, outputDisplay;
     public HBox inputBtns, outputBtns;
     public Button backBtn;
+    public MenuItem aboutMenuItem;
     private NeuralNetwork network;
     private NeuralNetworkDisplay networkDisplay;
     private LossSection lossSection;
@@ -38,6 +38,9 @@ public class Controller {
     @FXML
     public void initialize() {
         initializeInputSection();
+
+        //menu item
+        aboutMenuItem.setOnAction(e -> showAboutAlert());
 
         network = new NeuralNetwork(0.001, FIRST_LAYER_NEURONS.get());
         networkDisplay = new NeuralNetworkDisplay(network, networkContainer);
